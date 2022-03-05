@@ -1,4 +1,3 @@
-import './DataController.css';
 import {testDataRequest} from '../../data-services/pcex-backend.js'
 
 

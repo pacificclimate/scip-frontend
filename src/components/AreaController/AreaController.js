@@ -1,4 +1,3 @@
-import './AreaController.css';
 import {fetchWatersheds} from '../../data-services/regions.js'
 import AreaSelector from '../AreaSelector/AreaSelector.js'
 import React, {useState} from 'react';

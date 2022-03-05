@@ -1,4 +1,3 @@
-import './DataMap.css';
 import { BCBaseMap, SetView } from 'pcic-react-leaflet-components';
 import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 
