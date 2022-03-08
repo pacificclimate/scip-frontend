@@ -10,8 +10,7 @@ export function fetchWatersheds() {
         version: '1.0.0',
         service: 'WFS',
         request: 'GetFeature',
-//        typeName: 'watersheds:watershed polygons',
-        typeName: 'watersheds:watershed-degrees',
+        typeName: process.env.REACT_APP_WATERSHED_TYPENAME,
         maxFeatures: 500,
         outputFormat: 'application/json',
       }

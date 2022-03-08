@@ -5,7 +5,7 @@ function AreaSelector({regionNames, onChange, currentRegion}) {
 
   return (
     <div className="AreaSelector">
-        Here is a selector. You can select an area.
+        Select a watershed.
         <Select
             isSearchable
             isLoading={regionNames === null}

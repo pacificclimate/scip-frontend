@@ -14,7 +14,6 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
   if (regionNames.length === 0){
     fetchWatersheds().then(
         data => {
-            console.log(data.features);
             var names = [];
             var boundaries = [];
             for (const feature of data.features){
@@ -28,31 +27,17 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
   }
   
   function setRegion(event) {
-      console.log("setting region");
-      console.log(event);
       setCurrentRegionName(event);
       onChangeRegionName(event);
       const index = findIndex(regionNames, (n) => {return n == event;});
-      console.log("regionNames in setRegion");
-      console.log(regionNames);
-      console.log("index is");
-      console.log(event);
       const boundary = regionBoundaries[findIndex(regionNames, (n) => {return n == event;})];
-      console.log("boundary is");
-      console.log(boundary);
       setCurrentRegionBoundary(boundary);
       onChangeRegionBoundary(boundary);
   };
-  
-  console.log("regionNames");
-  console.log(regionNames);
-  console.log("regionBoundaries");
-  console.log(regionBoundaries);
-  
+    
   return (
     <div className="AreaController">
-        This will let you select and see categorical metadata about an area.
-        Currently slected Region: {currentRegionName}
+        Currently selected Region: {currentRegionName}
         <AreaSelector
             regionNames={regionNames}
             onChange={setRegion}

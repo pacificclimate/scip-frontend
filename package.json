@@ -11,6 +11,7 @@
     "axios": "^0.24.0",
     "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "pcic-react-components": "git+https://git@github.com/pacificclimate/pcic-react-components.git",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.2",

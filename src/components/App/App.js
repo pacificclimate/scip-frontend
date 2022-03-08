@@ -11,14 +11,10 @@ function App() {
   const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null);
   
   function setRegionName(event) {
-      console.log("setting region name in App");
-      console.log(event);
       setCurrentRegionName(event);
   }
   
   function setRegionBoundary(event) {
-      console.log("setting region boundary in App");
-      console.log(event);
       setCurrentRegionBoundary(event);
   }
 
