@@ -1,4 +1,5 @@
 import {testDataRequest} from '../../data-services/pcex-backend.js'
+import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import React, {useState} from 'react';
 import moment from 'moment/moment';
 
@@ -31,10 +32,11 @@ function DataController({currentRegionBoundary}) {
         return dataStrings;
       }
   }  
+
   return (
     <div className="DataController">
         <br/>
-        {monthlyTimeseriesText()}
+        {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Data Available"}
     </div>
   );
 }

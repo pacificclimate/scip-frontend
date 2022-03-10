@@ -13,10 +13,12 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "pcic-react-components": "git+https://git@github.com/pacificclimate/pcic-react-components.git",
+    "plotly.js": "^2.10.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.2",
     "react-dom": "^17.0.2",
     "react-leaflet": "^3.1.0",
+    "react-plotly.js": "^2.5.1",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
   },
