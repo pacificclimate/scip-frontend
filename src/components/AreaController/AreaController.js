@@ -8,7 +8,9 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
   const [regionNames, setRegionNames] = useState([]);
   const [regionBoundaries, setRegionBoundaries] = useState([]);
   const [currentRegionName, setCurrentRegionName] = useState("No Region Selected");
-  const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null)
+  const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null);
+  const [regionAreas, setRegionAreas] = useState();
+  const [currentRegionArea, setCurrentRegionArea] = useState();
 
   //fetch region list from geoserver if we don't already have it.
   if (regionNames.length === 0){
@@ -16,28 +18,33 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
         data => {
             var names = [];
             var boundaries = [];
+            var areas = [];
             for (const feature of data.features){
                 names.push(feature.properties.WTRSHDGRPN);
-                boundaries.push(feature.geometry)
+                boundaries.push(feature.geometry);
+                areas.push(feature.properties.AREA_SQM);
             } 
             setRegionNames(names);
-            setRegionBoundaries(boundaries);        
+            setRegionBoundaries(boundaries);
+            setRegionAreas(areas);
         }
     );
   }
   
   function setRegion(event) {
-      setCurrentRegionName(event);
-      onChangeRegionName(event);
-      const index = findIndex(regionNames, (n) => {return n == event;});
-      const boundary = regionBoundaries[findIndex(regionNames, (n) => {return n == event;})];
+      setCurrentRegionName(event.value);
+      onChangeRegionName(event.value);
+      const boundary = regionBoundaries[findIndex(regionNames, (n) => {return n == event.value;})];
       setCurrentRegionBoundary(boundary);
       onChangeRegionBoundary(boundary);
+      
+      setCurrentRegionArea(regionAreas[findIndex(regionNames, (n) => {return n == event.value;})]);
   };
     
   return (
     <div className="AreaController">
-        Currently selected Region: {currentRegionName}
+        <p>Currently selected Region: {currentRegionName}</p>
+        {currentRegionArea ? <p>Drainage Area: {currentRegionArea} square meters</p> : ""}
         <AreaSelector
             regionNames={regionNames}
             onChange={setRegion}

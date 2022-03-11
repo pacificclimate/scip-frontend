@@ -24,7 +24,7 @@ function DataMap({currentRegionBoundary}) {
             url={"https://services.pacificclimate.org/ncwms"}
             format={'image/png'}
             noWrap={true}
-            opacity={0.7}
+            opacity={0.3}
             transparent={true}
             version={'1.1.1'}
             layers={"x/storage/data/projects/comp_support/climate_explorer_data_prep/climatological_means/pcic12/tasmax_aClimMean_BCCAQv2_PCIC12_historical+rcp85_rXi1p1_19610101-19901231_Canada.nc/tasmax"}
