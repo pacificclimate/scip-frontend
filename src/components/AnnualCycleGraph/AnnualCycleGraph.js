@@ -35,7 +35,7 @@ function AnnualCycleGraph({annualData}) {
                     marker: {color: 'red'},
                 },
             ]}
-            layout={ {width: 500, height: 500, title: 'Monthly Maximum Temperature'} }
+            layout={ {width: 500, height: 500, title: 'Mean Daily Maximum Temperature'} }
         />
       );
 }

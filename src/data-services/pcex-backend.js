@@ -36,7 +36,7 @@ export function testDataRequest(area) {
     process.env.REACT_APP_PCEX_API_URL + "/timeseries",
     {
       params: {
-        id_: "tasmax_mClimMean_BCCAQv2_PCIC12_historical-rcp85_rXi1p1_19610101-19901231_Canada",
+        id_: process.env.REACT_APP_TEST_API_FILE,
         variable: "tasmax",
         area: geoJSONtoWKT(area),
       }
