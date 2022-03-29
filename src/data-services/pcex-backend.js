@@ -54,13 +54,13 @@ export function testLongTermAverageDataRequest(area) {
     process.env.REACT_APP_PCEX_API_URL + "/data",
         {
             params: {
-                model: "PCIC12",
-                emission: "historical+rcp85",
-                time: 5,
-                area: geoJSONtoWKT(area),
-                variable: "tasmax",
-                timescale: "monthly",
                 ensemble_name: "scip_files",
+                model: "PCIC12",
+                variable: "tasmax",
+                emission: "historical,rcp85",
+                timescale: "monthly",
+                time: "5",
+                area: geoJSONtoWKT(area),
             }
         }
     )
