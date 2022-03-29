@@ -8,7 +8,7 @@ function geoJSONtoWKT(area) {
         wkt = "";
     }
     else if (area.type === "MultiPolygon") {
-        var wkt = "MULTIPOLYGON ((";
+        wkt = "MULTIPOLYGON ((";
         area.coordinates.forEach(function(polygon, index){
             wkt = wkt.concat("(");
                 polygon[0].forEach(function(point, index) {
@@ -43,4 +43,26 @@ export function testDataRequest(area) {
     }
   )
   .then(response => response.data);
+}
+
+export function testLongTermAverageDataRequest(area) {
+    // accept only a specified area -
+    // always gets data from the same file.
+    // used for testing/development only
+
+    return axios.get(
+    process.env.REACT_APP_PCEX_API_URL + "/data",
+        {
+            params: {
+                model: "PCIC12",
+                emission: "historical+rcp85",
+                time: 5,
+                area: geoJSONtoWKT(area),
+                variable: "tasmax",
+                timescale: "monthly",
+                ensemble_name: "scip_files",
+            }
+        }
+    )
+    .then(response => response.data);
 }

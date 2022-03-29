@@ -1,5 +1,6 @@
 import {testDataRequest} from '../../data-services/pcex-backend.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
+import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import React, {useState} from 'react';
 import moment from 'moment/moment';
 
@@ -7,12 +8,14 @@ import moment from 'moment/moment';
 function DataController({currentRegionBoundary}) {
   
   const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
+  const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
   const [prevRegion, setPrevRegion] = useState(null);
   
   // fetch data and format it  - currently just displaying as text.
   if(prevRegion !== currentRegionBoundary){ 
     testDataRequest(currentRegionBoundary).then(data => {
         setMonthlyTimeSeries(data);
+        setLongTermTimeSeries(data);
         }
     );
     setPrevRegion(currentRegionBoundary);
@@ -37,6 +40,8 @@ function DataController({currentRegionBoundary}) {
     <div className="DataController">
         <br/>
         {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Data Available"}
+        <br/>
+        {longTermTimeSeries ? <LongTermAverageGraph longTermData={longTermTimeSeries}/> : "No Data Available"}
     </div>
   );
 }
