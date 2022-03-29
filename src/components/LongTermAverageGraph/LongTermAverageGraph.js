@@ -1,5 +1,5 @@
 import React from 'react';
-import {values} from 'lodash';
+import {values, keys} from 'lodash';
 
 
 //this weird sequence avoids crashing npm when plotly is loaded.
@@ -9,10 +9,11 @@ const Plot = createPlotlyComponent(Plotly);
 
 
 function LongTermAverageGraph({longTermData}) {
-    const years = [
+    const years = keys(longTermData.data)
+    /*const years = [
         "1977", "1986", "1997",
         "2025", "2055", "2085"];
-    
+    */
     function longTermTimeSeries() {
         if(longTermData === null){
             return []

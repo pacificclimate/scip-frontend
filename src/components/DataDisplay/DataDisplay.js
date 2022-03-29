@@ -1,4 +1,4 @@
-import {testDataRequest} from '../../data-services/pcex-backend.js'
+import {testDataRequest, testLongTermAverageDataRequest} from '../../data-services/pcex-backend.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import React, {useState} from 'react';
@@ -15,6 +15,9 @@ function DataDisplay({currentRegionBoundary}) {
   if(prevRegion !== currentRegionBoundary){ 
     testDataRequest(currentRegionBoundary).then(data => {
         setMonthlyTimeSeries(data);
+        }
+    );
+    testLongTermAverageDataRequest(currentRegionBoundary).then(data => {
         setLongTermTimeSeries(data);
         }
     );
