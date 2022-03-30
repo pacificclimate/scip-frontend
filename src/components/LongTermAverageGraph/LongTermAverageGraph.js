@@ -9,7 +9,8 @@ const Plot = createPlotlyComponent(Plotly);
 
 
 function LongTermAverageGraph({longTermData}) {
-    const years = keys(longTermData.data)
+
+    const years = keys(longTermData.rXi1p1.data);
     /*const years = [
         "1977", "1986", "1997",
         "2025", "2055", "2085"];
@@ -20,7 +21,7 @@ function LongTermAverageGraph({longTermData}) {
         }
         else {
             //TODO: fix this, order is not guarenteed
-            return values(longTermData.data);
+            return values(longTermData.rXi1p1.data);
         }
     }
 
