@@ -2,7 +2,7 @@ import {testDataRequest, testLongTermAverageDataRequest} from '../../data-servic
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import React, {useState} from 'react';
-import moment from 'moment/moment';
+//import moment from 'moment/moment';
 
 
 function DataDisplay({currentRegionBoundary}) {
@@ -24,7 +24,7 @@ function DataDisplay({currentRegionBoundary}) {
     setPrevRegion(currentRegionBoundary);
   }
   
-  function monthlyTimeseriesText() {
+  /* function monthlyTimeseriesText() {
       //test function that just dispays data as text.
       if(monthlyTimeSeries === null) {
           return "No data available";
@@ -37,7 +37,7 @@ function DataDisplay({currentRegionBoundary}) {
         }
         return dataStrings;
       }
-  }  
+  }  */
 
   return (
     <div className="DataDisplay">
