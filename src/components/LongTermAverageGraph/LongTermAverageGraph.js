@@ -10,18 +10,34 @@ const Plot = createPlotlyComponent(Plotly);
 
 function LongTermAverageGraph({longTermData}) {
 
-    const years = keys(longTermData.rXi1p1.data);
-    /*const years = [
-        "1977", "1986", "1997",
-        "2025", "2055", "2085"];
-    */
+    /* data is a temporary variable that represents the data, which are
+     key value pairs. The keys are the date of the measurement, the values
+     are the temperature at that date. The keys will be sorted, and then the
+     temperatures will be matched to the correct years. */
+    let data = longTermData.rXi1p1.data;   
+    const years = keys(data).sort();
+
+    // now need to match the values to the keys
+    function matchValues(keys, values) {
+        let orderedValues = [];
+        years.forEach((year) => {
+            for(let i in keys) {
+                if (year === keys[i]) {
+                    orderedValues.push(values[i]);
+                }
+            }
+        })
+        return orderedValues;
+    }
+
     function longTermTimeSeries() {
         if(longTermData === null){
             return []
         }
         else {
             //TODO: fix this, order is not guarenteed
-            return values(longTermData.rXi1p1.data);
+            return matchValues(keys(data), values(data));
+            //return values(data).sort();
         }
     }
 
@@ -36,7 +52,22 @@ function LongTermAverageGraph({longTermData}) {
                     marker: {color: 'red'},
                 },
             ]}
-            layout={ {width: 500, height: 500, title: 'Mean Long Term Maximum Temperature'} }
+            layout={
+                { 
+                    width: 500, 
+                    height: 500, 
+                    title: 'Mean Long Term Maximum Temperature', 
+                    xaxis: {
+                        title: 'Year',
+                        type: 'date',
+                        tickvals: ['1970-01-01', '1990-01-01', '2010-01-01', '2030-01-01', '2050-01-01', '2070-01-01', '2090-01-01'],
+                        ticktext: ['1970', '1990', '2010', '2030', '2050', '2070', '2090'],
+                    },
+                    yaxis: {
+                        title: 'Mean Maximum Temperature',
+                    },
+                } 
+            }
         />
       );
 }
