@@ -5,10 +5,18 @@ function AreaSelector({regionNames, onChange, currentRegion}) {
   var valueOptions = [];
   regionNames.forEach(name => valueOptions.push({"value": name, "label": name}));
 
+  const customStyles = {
+    option: (provided) => ({
+      ...provided,
+      color: 'grey'
+    })
+  } 
+
   return (
     <div className="AreaSelector">
         Select a watershed.
         <Select
+            styles={customStyles}
             isSearchable
             isLoading={regionNames === null}
             options={valueOptions || []}
