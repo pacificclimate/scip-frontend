@@ -1,9 +1,9 @@
-import './MapController.css';
+import './MapDisplay.css';
 import DataMap from '../DataMap/DataMap.js'
 
-function MapController({currentRegionBoundary}) {
+function MapDisplay({currentRegionBoundary}) {
   return (
-    <div className="MapController">
+    <div className="MapDisplay">
         <DataMap
           currentRegionBoundary={currentRegionBoundary}
         />
@@ -11,4 +11,4 @@ function MapController({currentRegionBoundary}) {
   );
 }
 
-export default MapController;
+export default MapDisplay;

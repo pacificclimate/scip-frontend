@@ -1,9 +1,9 @@
 import './App.css';
 
 import {Container, Row, Col} from 'react-bootstrap';
-import DataController from '../DataController/DataController.js'
-import MapController from '../MapController/MapController.js'
-import AreaController from '../AreaController/AreaController.js'
+import DataDisplay from '../DataDisplay/DataDisplay.js'
+import MapDisplay from '../MapDisplay/MapDisplay.js'
+import AreaDisplay from '../AreaDisplay/AreaDisplay.js'
 import React, {useState} from 'react'
 
 function App() {
@@ -25,16 +25,16 @@ function App() {
         <Container fluid>
           <Row>
             <Col lg={6} md={6}>
-              <MapController
+              <MapDisplay
                 currentRegionBoundary={currentRegionBoundary}
               />
-              <AreaController
+              <AreaDisplay
                 onChangeRegionName={setRegionName}
                 onChangeRegionBoundary={setRegionBoundary}
               />
             </Col>
             <Col lg={6} md={6}>
-              <DataController
+              <DataDisplay
                 currentRegionBoundary={currentRegionBoundary}
               />
             </Col> 
