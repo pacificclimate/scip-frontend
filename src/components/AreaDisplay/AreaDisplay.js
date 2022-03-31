@@ -3,7 +3,7 @@ import AreaSelector from '../AreaSelector/AreaSelector.js'
 import React, {useState} from 'react';
 import {findIndex} from 'lodash';
 
-function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
+function AreaDisplay({onChangeRegionName, onChangeRegionBoundary}) {
 
   const [regionNames, setRegionNames] = useState([]);
   const [regionBoundaries, setRegionBoundaries] = useState([]);
@@ -42,7 +42,7 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
   };
     
   return (
-    <div className="AreaController">
+    <div className="AreaDisplay">
         <p>Currently selected Region: {currentRegionName}</p>
         {currentRegionArea ? <p>Drainage Area: {currentRegionArea} square meters</p> : ""}
         <AreaSelector
@@ -54,4 +54,4 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
   );
 }
 
-export default AreaController;
+export default AreaDisplay;
