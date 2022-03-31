@@ -17,7 +17,8 @@ function LongTermAverageGraph({longTermData}) {
     let data = longTermData.rXi1p1.data;   
     const years = keys(data).sort();
 
-    // now need to match the values to the keys
+    /* function that returns an array of values, which are in the same order as
+     the sorted keys */
     function matchValues(keys, values) {
         let orderedValues = [];
         years.forEach((year) => {
@@ -37,7 +38,6 @@ function LongTermAverageGraph({longTermData}) {
         else {
             //TODO: fix this, order is not guarenteed
             return matchValues(keys(data), values(data));
-            //return values(data).sort();
         }
     }
 
