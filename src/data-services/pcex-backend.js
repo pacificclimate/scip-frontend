@@ -47,7 +47,7 @@ export function testDataRequest(area) {
 
 export function testLongTermAverageDataRequest(area) {
     // accept only a specified area -
-    // always gets data from the same file.
+    // always gets data from the same set of files.
     // used for testing/development only
 
     return axios.get(

@@ -1,5 +1,5 @@
 import React from 'react';
-import {values, keys} from 'lodash';
+import {entries, keys} from 'lodash';
 
 
 //this weird sequence avoids crashing npm when plotly is loaded.
@@ -14,30 +14,37 @@ function LongTermAverageGraph({longTermData}) {
      key value pairs. The keys are the date of the measurement, the values
      are the temperature at that date. The keys will be sorted, and then the
      temperatures will be matched to the correct years. */
-    let data = longTermData.rXi1p1.data;   
+    
+    var dataArray = entries(longTermData);
+    var data = [];
+    var graphTitle = "Mean Long Term Maximum Temperature: ";
+    
+    // Assert that longTermData is formatted as expected and extract important info
+    if (dataArray.length >= 1) {
+        if (dataArray[0].length == 2){
+            data = dataArray[0][1].data;
+            graphTitle = graphTitle.concat(dataArray[0][0].toUpperCase());
+        }
+    }
     const years = keys(data).sort();
-
     /* function that returns an array of values, which are in the same order as
      the sorted keys */
-    function matchValues(keys, values) {
+    function matchValues(entries) {
         let orderedValues = [];
         years.forEach((year) => {
-            for(let i in keys) {
-                if (year === keys[i]) {
-                    orderedValues.push(values[i]);
-                }
+            for(const [key, value] of entries) {
+                if (year === key) orderedValues.push(value);
             }
         })
         return orderedValues;
     }
 
     function longTermTimeSeries() {
-        if(longTermData === null){
-            return []
+        if(data === []){
+            return [];
         }
         else {
-            //TODO: fix this, order is not guarenteed
-            return matchValues(keys(data), values(data));
+            return matchValues(entries(data));
         }
     }
 
@@ -56,7 +63,7 @@ function LongTermAverageGraph({longTermData}) {
                 { 
                     width: 500, 
                     height: 500, 
-                    title: 'Mean Long Term Maximum Temperature', 
+                    title: graphTitle, 
                     xaxis: {
                         title: 'Year',
                         type: 'date',

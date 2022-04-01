@@ -42,9 +42,9 @@ function DataDisplay({currentRegionBoundary}) {
   return (
     <div className="DataDisplay">
         <br/>
-        {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Data Available"}
+        {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Annual Data Available"}
         <br/>
-        {longTermTimeSeries ? <LongTermAverageGraph longTermData={longTermTimeSeries}/> : "No Data Available"}
+        {longTermTimeSeries ? <LongTermAverageGraph longTermData={longTermTimeSeries}/> : "No Long Term Data Available"}
     </div>
   );
 }
