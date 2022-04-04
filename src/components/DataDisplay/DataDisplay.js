@@ -1,12 +1,14 @@
-import {testDataRequest} from '../../data-services/pcex-backend.js'
+import {testDataRequest, testLongTermAverageDataRequest} from '../../data-services/pcex-backend.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
+import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import React, {useState} from 'react';
-import moment from 'moment/moment';
+//import moment from 'moment/moment';
 
 
 function DataDisplay({currentRegionBoundary}) {
   
   const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
+  const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
   const [prevRegion, setPrevRegion] = useState(null);
   
   // fetch data and format it  - currently just displaying as text.
@@ -15,10 +17,14 @@ function DataDisplay({currentRegionBoundary}) {
         setMonthlyTimeSeries(data);
         }
     );
+    testLongTermAverageDataRequest(currentRegionBoundary).then(data => {
+        setLongTermTimeSeries(data);
+        }
+    );
     setPrevRegion(currentRegionBoundary);
   }
   
-  function monthlyTimeseriesText() {
+  /* function monthlyTimeseriesText() {
       //test function that just dispays data as text.
       if(monthlyTimeSeries === null) {
           return "No data available";
@@ -31,12 +37,14 @@ function DataDisplay({currentRegionBoundary}) {
         }
         return dataStrings;
       }
-  }  
+  }  */
 
   return (
     <div className="DataDisplay">
         <br/>
-        {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Data Available"}
+        {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Annual Data Available"}
+        <br/>
+        {longTermTimeSeries ? <LongTermAverageGraph longTermData={longTermTimeSeries}/> : "No Long Term Data Available"}
     </div>
   );
 }
