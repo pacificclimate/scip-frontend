@@ -17,13 +17,18 @@ function LongTermAverageGraph({longTermData}) {
     
     var dataArray = entries(longTermData);
     var data = [];
-    var graphTitle = "Mean Long Term Maximum Temperature: ";
+    var graphTitle =  `Mean Long Term Maximum Temperature: ${ 
+        dataArray.length >= 1 ? (dataArray[0].length == 2 ? dataArray[0][0].toUpperCase() : "") : ""
+    }`;
+    var yAxisTitle = `Mean Maximum Temperature (${
+        dataArray.length >= 1 ? (dataArray[0].length == 2 ? dataArray[0][1].units : "") : ""
+    })`;
     
-    // Assert that longTermData is formatted as expected and extract important info
+
+    // Assert that longTermData is formatted as expected
     if (dataArray.length >= 1) {
         if (dataArray[0].length == 2){
             data = dataArray[0][1].data;
-            graphTitle = graphTitle.concat(dataArray[0][0].toUpperCase());
         }
     }
     const years = keys(data).sort();
@@ -71,7 +76,7 @@ function LongTermAverageGraph({longTermData}) {
                         ticktext: ['1970', '1990', '2010', '2030', '2050', '2070', '2090'],
                     },
                     yaxis: {
-                        title: 'Mean Maximum Temperature',
+                        title: yAxisTitle,
                     },
                 } 
             }
