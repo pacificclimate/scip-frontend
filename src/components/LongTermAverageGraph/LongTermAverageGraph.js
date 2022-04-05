@@ -1,6 +1,6 @@
 import React from 'react';
 import {entries, keys} from 'lodash';
-
+import {matchValues} from '../Helpers/GraphHelpers.js'
 
 //this weird sequence avoids crashing npm when plotly is loaded.
 import Plotly from 'plotly.js';
@@ -24,7 +24,6 @@ function LongTermAverageGraph({longTermData}) {
         dataArray.length >= 1 ? (dataArray[0].length == 2 ? dataArray[0][1].units : "") : ""
     })`;
     
-
     // Assert that longTermData is formatted as expected
     if (dataArray.length >= 1) {
         if (dataArray[0].length == 2){
@@ -32,24 +31,13 @@ function LongTermAverageGraph({longTermData}) {
         }
     }
     const years = keys(data).sort();
-    /* function that returns an array of values, which are in the same order as
-     the sorted keys */
-    function matchValues(entries) {
-        let orderedValues = [];
-        years.forEach((year) => {
-            for(const [key, value] of entries) {
-                if (year === key) orderedValues.push(value);
-            }
-        })
-        return orderedValues;
-    }
 
     function longTermTimeSeries() {
         if(data === []){
             return [];
         }
         else {
-            return matchValues(entries(data));
+            return matchValues(entries(data), years);
         }
     }
 
@@ -62,6 +50,7 @@ function LongTermAverageGraph({longTermData}) {
                     type: 'scatter',
                     mode: 'lines+markers',
                     marker: {color: 'red'},
+                    hovertemplate: '%{y:.2f}\u00B0C<extra></extra>',
                 },
             ]}
             layout={
