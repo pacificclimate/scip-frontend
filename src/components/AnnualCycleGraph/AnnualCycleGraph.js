@@ -13,6 +13,7 @@ function AnnualCycleGraph({annualData}) {
     var yAxisTitle = `Mean Maximum Temperature (${ annualData.units })`;
 
     const months = keys(annualData.data).sort();
+    const units = Array(months.length).fill(annualData.units);
         
     function monthlyTimeSeries() {
         if(annualData === null){
@@ -30,10 +31,11 @@ function AnnualCycleGraph({annualData}) {
                 {
                     x: months,
                     y: monthlyTimeSeries(),
+                    text: units,
                     type: 'scatter',
                     mode: 'lines+markers',
                     marker: {color: 'red'},
-                    hovertemplate: '%{y:.2f}\u00B0C<extra></extra>',
+                    hovertemplate: '%{y:.2f}%{text}<extra></extra>',
                 },
             ]}
             layout={

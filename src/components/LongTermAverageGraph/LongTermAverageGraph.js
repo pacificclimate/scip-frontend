@@ -31,6 +31,7 @@ function LongTermAverageGraph({longTermData}) {
         }
     }
     const years = keys(data).sort();
+    const units = Array(years.length).fill(dataArray[0][1].units);
 
     function longTermTimeSeries() {
         if(data === []){
@@ -47,10 +48,11 @@ function LongTermAverageGraph({longTermData}) {
                 {
                     x: years,
                     y: longTermTimeSeries(),
+                    text: units,
                     type: 'scatter',
                     mode: 'lines+markers',
                     marker: {color: 'red'},
-                    hovertemplate: '%{y:.2f}\u00B0C<extra></extra>',
+                    hovertemplate: '%{y:.2f}%{text}<extra></extra>',
                 },
             ]}
             layout={
