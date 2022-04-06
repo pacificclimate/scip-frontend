@@ -5,7 +5,7 @@ import React, {useState} from 'react';
 //import moment from 'moment/moment';
 
 
-function DataController({currentRegionBoundary}) {
+function DataDisplay({currentRegionBoundary}) {
   
   const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
@@ -40,7 +40,7 @@ function DataController({currentRegionBoundary}) {
   }  */
 
   return (
-    <div className="DataController">
+    <div className="DataDisplay">
         <br/>
         {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Annual Data Available"}
         <br/>
@@ -49,4 +49,4 @@ function DataController({currentRegionBoundary}) {
   );
 }
 
-export default DataController;
+export default DataDisplay;

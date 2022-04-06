@@ -1,6 +1,6 @@
 import React from 'react';
-import {values} from 'lodash';
-
+import {entries, keys} from 'lodash';
+import {matchValues} from '../Helpers/GraphHelpers.js'
 
 //this weird sequence avoids crashing npm when plotly is loaded.
 import Plotly from 'plotly.js';
@@ -9,18 +9,19 @@ const Plot = createPlotlyComponent(Plotly);
 
 
 function AnnualCycleGraph({annualData}) {
-    const monthAbbrev = [
-        "Jan", "Feb", "Mar", "Apr", 
-        "May", "Jun", "Jul", "Aug", 
-        "Sep", "Oct", "Nov", "Dec"];
     
+    var yAxisTitle = `Mean Maximum Temperature (${ annualData.units })`;
+
+    const months = keys(annualData.data).sort();
+    const units = Array(months.length).fill(annualData.units);
+        
     function monthlyTimeSeries() {
         if(annualData === null){
             return []
         }
         else {
             //TODO: fix this, order is not guarenteed
-            return values(annualData.data);
+            return matchValues(entries(annualData.data), months);
         }
     }
 
@@ -28,14 +29,31 @@ function AnnualCycleGraph({annualData}) {
         <Plot
             data={[
                 {
-                    x: monthAbbrev,
+                    x: months,
                     y: monthlyTimeSeries(),
+                    text: units,
                     type: 'scatter',
                     mode: 'lines+markers',
                     marker: {color: 'red'},
+                    hovertemplate: '%{y:.2f}%{text}<extra></extra>',
                 },
             ]}
-            layout={ {width: 500, height: 500, title: 'Mean Daily Maximum Temperature'} }
+            layout={
+                { 
+                    width: 500, 
+                    height: 500, 
+                    title: "Mean Daily Maximum Temperature", 
+                    xaxis: {
+                        title: 'Month',
+                        type: 'date',
+                        tickvals: months,
+                        ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    },
+                    yaxis: {
+                        title: yAxisTitle,
+                    },
+                } 
+            }
         />
       );
 }

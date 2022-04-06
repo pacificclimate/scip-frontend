@@ -3,7 +3,7 @@ import AreaSelector from '../AreaSelector/AreaSelector.js'
 import React, {useState} from 'react';
 import {findIndex} from 'lodash';
 
-function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
+function AreaDisplay({onChangeRegionName, onChangeRegionBoundary}) {
 
   const [regionNames, setRegionNames] = useState([]);
   const [regionBoundaries, setRegionBoundaries] = useState([]);
@@ -22,7 +22,15 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
             for (const feature of data.features){
                 names.push(feature.properties.WTRSHDGRPN);
                 boundaries.push(feature.geometry);
-                areas.push(feature.properties.AREA_SQM);
+                
+                let area = feature.properties.AREA_SQM;
+                if (typeof(area) === 'number'){
+                  let areaKM = area / 1000000;
+                  areas.push(areaKM);
+                }
+                else {
+                  areas.push(0)
+                }
             } 
             setRegionNames(names);
             setRegionBoundaries(boundaries);
@@ -42,9 +50,9 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
   };
     
   return (
-    <div className="AreaController">
+    <div className="AreaDisplay">
         <p>Currently selected Region: {currentRegionName}</p>
-        {currentRegionArea ? <p>Drainage Area: {currentRegionArea} square meters</p> : ""}
+        {currentRegionArea ? <p>Drainage Area: {currentRegionArea.toExponential(2)} km&sup2;</p> : ""}
         <AreaSelector
             regionNames={regionNames}
             onChange={setRegion}
@@ -54,4 +62,4 @@ function AreaController({onChangeRegionName, onChangeRegionBoundary}) {
   );
 }
 
-export default AreaController;
+export default AreaDisplay;
