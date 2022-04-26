@@ -18,15 +18,15 @@ function LongTermAverageGraph({longTermData}) {
     var dataArray = entries(longTermData);
     var data = [];
     var graphTitle =  `Mean Long Term Maximum Temperature: ${ 
-        dataArray.length >= 1 ? (dataArray[0].length == 2 ? dataArray[0][0].toUpperCase() : "") : ""
+        dataArray.length >= 1 ? (dataArray[0].length === 2 ? dataArray[0][0].toUpperCase() : "") : ""
     }`;
     var yAxisTitle = `Mean Maximum Temperature (${
-        dataArray.length >= 1 ? (dataArray[0].length == 2 ? dataArray[0][1].units : "") : ""
+        dataArray.length >= 1 ? (dataArray[0].length === 2 ? dataArray[0][1].units : "") : ""
     })`;
     
     // Assert that longTermData is formatted as expected
     if (dataArray.length >= 1) {
-        if (dataArray[0].length == 2){
+        if (dataArray[0].length === 2){
             data = dataArray[0][1].data;
         }
     }
