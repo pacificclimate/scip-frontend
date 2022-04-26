@@ -3,7 +3,7 @@ import AreaSelector from '../AreaSelector/AreaSelector.js'
 import React, {useState} from 'react';
 import {findIndex} from 'lodash';
 
-function AreaDisplay({onChangeRegionName, onChangeRegionBoundary}) {
+function AreaDisplay({onChangeRegionName, onChangeRegionBoundary, onChangeWatershedMouth}) {
 
   const [regionNames, setRegionNames] = useState([]);
   const [regionBoundaries, setRegionBoundaries] = useState([]);
@@ -11,6 +11,7 @@ function AreaDisplay({onChangeRegionName, onChangeRegionBoundary}) {
   const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null);
   const [regionAreas, setRegionAreas] = useState();
   const [currentRegionArea, setCurrentRegionArea] = useState();
+  const [currentWatershedMouth, setCurrentWatershedMouth] = useState();
 
   //fetch region list from geoserver if we don't already have it.
   if (regionNames.length === 0){
@@ -45,6 +46,9 @@ function AreaDisplay({onChangeRegionName, onChangeRegionBoundary}) {
       const boundary = regionBoundaries[findIndex(regionNames, (n) => {return n == event.value;})];
       setCurrentRegionBoundary(boundary);
       onChangeRegionBoundary(boundary);
+
+      setCurrentWatershedMouth({"type": "Point", "coordinates": [-126.1, 53.9]});
+      onChangeWatershedMouth({"type": "Point", "coordinates": [-126.1, 53.9]});
       
       setCurrentRegionArea(regionAreas[findIndex(regionNames, (n) => {return n == event.value;})]);
   };

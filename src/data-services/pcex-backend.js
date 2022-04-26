@@ -19,6 +19,9 @@ function geoJSONtoWKT(area) {
         });
         wkt = wkt.concat("))");
     }
+    else if (area.type === "Point"){
+        wkt = `POINT (${area.coordinates[0]} ${area.coordinates[1]})`
+    }
     else{
         console.log("other conversions not implemented yet.");
         wkt = ""
@@ -61,6 +64,21 @@ export function testLongTermAverageDataRequest(area) {
                 timescale: "monthly",
                 time: "5",
                 area: geoJSONtoWKT(area),
+            }
+        }
+    )
+    .then(response => response.data);
+}
+
+export function getWatershedStreams(point) {
+    // accepts only a specified point, gets data from the same
+    // set of files
+    return axios.get(
+    process.env.REACT_APP_PCEX_API_URL + "/streamflow/watershed_streams",
+        {
+            params: {
+                station: geoJSONtoWKT(point),
+                ensemble_name: "fraser_watershed"
             }
         }
     )
