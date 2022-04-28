@@ -9,7 +9,7 @@ import React, {useState} from 'react'
 function App() {
   const [currentRegionName, setCurrentRegionName] = useState(null);
   const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null);
-  const [currentWatershedMouth, setCurrentWatershedMouth] = useState(null);
+  const [currentWatershedStreams, setCurrentWatershedStreams] = useState(null);
   
   function setRegionName(event) {
       setCurrentRegionName(event);
@@ -20,7 +20,7 @@ function App() {
   }
 
   function setWatershedMouth(event) {
-      setCurrentWatershedMouth(event);
+      setCurrentWatershedStreams(event);
   }
 
   return (
@@ -32,7 +32,7 @@ function App() {
             <Col lg={6} md={6}>
               <MapDisplay
                 currentRegionBoundary={currentRegionBoundary}
-                currentWatershedMouth={currentWatershedMouth}
+                currentWatershedStreams={currentWatershedStreams}
               />
               <AreaDisplay
                 onChangeRegionName={setRegionName}
