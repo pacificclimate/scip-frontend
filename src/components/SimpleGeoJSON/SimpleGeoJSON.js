@@ -6,7 +6,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Polygon } from 'react-leaflet';
+import { Polygon, Polyline } from 'react-leaflet';
 import isArray from 'lodash/fp/isArray';
 
 
@@ -26,6 +26,7 @@ function GeoJSONFeature({ feature, ...rest }) {
   const geometryType2Component = {
     Polygon: Polygon,
     MultiPolygon: Polygon,
+    MultiLineString: Polyline,
   };
   const Component = geometryType2Component[feature.geometry.type];
   if (!Component) {

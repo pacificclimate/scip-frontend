@@ -11,7 +11,7 @@ function AreaDisplay({onChangeRegionName, onChangeRegionBoundary, onChangeWaters
   const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null);
   const [regionAreas, setRegionAreas] = useState();
   const [currentRegionArea, setCurrentRegionArea] = useState();
-  const [currentWatershedMouth, setCurrentWatershedMouth] = useState();
+  const [currentWatershedStreams, setCurrentWatershedStreams] = useState();
 
   //fetch region list from geoserver if we don't already have it.
   if (regionNames.length === 0){
@@ -47,8 +47,8 @@ function AreaDisplay({onChangeRegionName, onChangeRegionBoundary, onChangeWaters
       setCurrentRegionBoundary(boundary);
       onChangeRegionBoundary(boundary);
 
-      setCurrentWatershedMouth({"type": "Point", "coordinates": [-126.1, 53.9]});
-      onChangeWatershedMouth({"type": "Point", "coordinates": [-126.1, 53.9]});
+      setCurrentWatershedStreams({"type": "Point", "coordinates": [-120.0, 53.2]});
+      onChangeWatershedMouth({"type": "Point", "coordinates": [-120.0, 53.2]});
       
       setCurrentRegionArea(regionAreas[findIndex(regionNames, (n) => {return n == event.value;})]);
   };

@@ -1,13 +1,29 @@
 import './MapDisplay.css';
 import DataMap from '../DataMap/DataMap.js'
+import {getWatershedStreams} from '../../data-services/pcex-backend.js'
+import React, {useState} from 'react';
 
-function MapDisplay({currentRegionBoundary, currentWatershedMouth}) {
+function MapDisplay({currentRegionBoundary, currentWatershedStreams}) {
+  
+  const [watershedStreams, setWatershedStreams] = useState(null);
+  const [prevStreams, setPrevStreams] = useState(null);
+  
+  if(prevStreams !== currentWatershedStreams){ 
+    getWatershedStreams(currentWatershedStreams).then(data => {
+        setWatershedStreams(data);
+        }
+    );
+    /*if(watershedStreams){
+      alert(watershedStreams.streams.geometry.coordinates);
+    }*/
+    setPrevStreams(currentWatershedStreams);
+  }
+
   return (
     <div className="MapDisplay">
-        {currentWatershedMouth ? `${currentWatershedMouth.coordinates[0]} , ${currentWatershedMouth.coordinates[1]}` : "no coordinates"}
         <DataMap
           currentRegionBoundary={currentRegionBoundary}
-          currentWatershedMouth={currentWatershedMouth}
+          currentWatershedStreams={watershedStreams}
         />
     </div>
   );
