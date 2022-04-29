@@ -9,13 +9,15 @@ function MapDisplay({currentRegionBoundary, currentWatershedStreams}) {
   const [prevStreams, setPrevStreams] = useState(null);
   
   if(prevStreams !== currentWatershedStreams){ 
-    getWatershedStreams(currentWatershedStreams).then(data => {
-        setWatershedStreams(data);
-        }
-    );
-    /*if(watershedStreams){
-      alert(watershedStreams.streams.geometry.coordinates);
-    }*/
+    if (currentWatershedStreams === null) {
+      setWatershedStreams("");
+    }
+    else{
+      getWatershedStreams(currentWatershedStreams).then(data => {
+          setWatershedStreams(data);
+          }
+      );
+    }
     setPrevStreams(currentWatershedStreams);
   }
 
