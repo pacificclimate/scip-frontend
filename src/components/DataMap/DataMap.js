@@ -3,9 +3,6 @@ import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 import { WMSTileLayer } from 'react-leaflet';
 
 function DataMap({currentRegionBoundary, currentWatershedStreams}) {
-  /*if(currentRegionBoundary){
-    alert(currentRegionBoundary.coordinates)
-  }*/
   const viewport = BCBaseMap.initialViewport;
   //convert the geoJSON to a Feature so it can be displayed on the map.
   const boundaryFeature = currentRegionBoundary ? {
