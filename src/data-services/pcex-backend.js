@@ -84,3 +84,18 @@ export function getWatershedStreams(point) {
     )
     .then(response => response.data);
 }
+
+export function getDownstream(point) {
+    // accepts only a specified point, gets data from the same
+    // set of files
+    return axios.get(
+    process.env.REACT_APP_PCEX_DEV_API_URL + "/streamflow/downstream",
+        {
+            params: {
+                station: geoJSONtoWKT(point),
+                ensemble_name: "upper_fraser_watershed"
+            }
+        }
+    )
+    .then(response => response.data);
+}

@@ -27,6 +27,7 @@ function GeoJSONFeature({ feature, ...rest }) {
     Polygon: Polygon,
     MultiPolygon: Polygon,
     MultiLineString: Polyline,
+    LineString: Polyline
   };
   const Component = geometryType2Component[feature.geometry.type];
   if (!Component) {
@@ -52,6 +53,9 @@ function geoJSON2Layers(geoJSON, rest) {
     case 'FeatureCollection':
       console.log('geoJSON2Layers: FeatureCollection');
       return geoJSON.features.map(geoJSON2Layers);
+    case 'LineString':
+        console.log('geoJSON2Layers: LineString');
+        return <GeoJSONPolyLine polyline={geoJSON} {...rest}/>;
     default:
       console.log('geoJSON2Layers: unknown', geoJSON && geoJSON.type);
       return null;

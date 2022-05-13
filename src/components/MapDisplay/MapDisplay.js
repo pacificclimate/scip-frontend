@@ -1,13 +1,14 @@
 import './MapDisplay.css';
 import DataMap from '../DataMap/DataMap.js'
-import {getWatershedStreams} from '../../data-services/pcex-backend.js'
+import {getWatershedStreams, getDownstream} from '../../data-services/pcex-backend.js'
 import React, {useState} from 'react';
 
 function MapDisplay({currentRegionBoundary, currentWatershedStreams}) {
   
   const [watershedStreams, setWatershedStreams] = useState(null);
+  const [downstream, setDownstream] = useState(null);
   const [prevStreams, setPrevStreams] = useState(null);
-  
+
   if(prevStreams !== currentWatershedStreams){ 
     if (currentWatershedStreams === null) {
       setWatershedStreams("");
@@ -17,6 +18,9 @@ function MapDisplay({currentRegionBoundary, currentWatershedStreams}) {
           setWatershedStreams(data);
           }
       );
+      getDownstream(currentWatershedStreams).then(data => {
+          setDownstream(data);
+      });
     }
     setPrevStreams(currentWatershedStreams);
   }
@@ -26,6 +30,7 @@ function MapDisplay({currentRegionBoundary, currentWatershedStreams}) {
         <DataMap
           currentRegionBoundary={currentRegionBoundary}
           currentWatershedStreams={watershedStreams}
+          currentDownstream={downstream}
         />
     </div>
   );
