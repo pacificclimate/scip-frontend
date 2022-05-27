@@ -2,15 +2,33 @@ import { BCBaseMap, SetView } from 'pcic-react-leaflet-components';
 import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 import { WMSTileLayer } from 'react-leaflet';
 
-function DataMap({currentRegionBoundary}) {
+function DataMap({currentRegionBoundary, currentWatershedStreams, currentDownstream}) {
   const viewport = BCBaseMap.initialViewport;
-
   //convert the geoJSON to a Feature so it can be displayed on the map.
   const boundaryFeature = currentRegionBoundary ? {
       type: "Feature",
       geometry: currentRegionBoundary
   } : {};
-    
+
+  const watershedMouth = currentWatershedStreams ? {
+      type: "Feature",
+      geometry: currentWatershedStreams.streams.geometry
+  } : {};
+  
+  const featureCollection = (boundaryFeature.geometry && watershedMouth.geometry) ? {
+    type: "FeatureCollection",
+    features: [boundaryFeature, watershedMouth]
+  } : {};
+
+  const downstream = currentDownstream ? {
+      type: "Feature",
+      properties: {test: "test"},
+      geometry: {
+          type: "LineString",
+          coordinates: currentDownstream.boundary.geometry.coordinates
+      }
+  } : {};
+
   return (
     <div className="DataMap">
         <BCBaseMap
@@ -19,7 +37,9 @@ function DataMap({currentRegionBoundary}) {
           center={viewport.center}
         >
           <SetView view={viewport}/>
-          <SimpleGeoJSON data={boundaryFeature} fill={false}/>
+          <SimpleGeoJSON data={boundaryFeature} fill={false} color="#ffffff"/>
+          <SimpleGeoJSON data={watershedMouth} fill={false} color="#6699FF"/>
+          <SimpleGeoJSON data={downstream} fill={false} color="#6699FF"/>
           <WMSTileLayer
             url={"https://services.pacificclimate.org/ncwms"}
             format={'image/png'}
