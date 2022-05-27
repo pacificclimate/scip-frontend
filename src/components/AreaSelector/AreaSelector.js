@@ -1,3 +1,5 @@
+// dropdown selector user picks an area of interest with
+
 import {SelectWithValueReplacement as Select} from 'pcic-react-components'
 import React from 'react'
 

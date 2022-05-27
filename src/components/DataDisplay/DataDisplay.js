@@ -1,9 +1,13 @@
+// receives the user-selected area of interest, queries the PCEX API to retrieve data
+// about indicators in that area, displays graphs of the results. Currently only displays
+// maximum temperature graphs.
+// currently the graphs are AnnualCycleGraph (timeseries API) and LongTermAverageGraph (data API).
+
+
 import {testDataRequest, testLongTermAverageDataRequest} from '../../data-services/pcex-backend.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import React, {useState} from 'react';
-//import moment from 'moment/moment';
-
 
 function DataDisplay({currentRegionBoundary}) {
   
@@ -11,7 +15,8 @@ function DataDisplay({currentRegionBoundary}) {
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
   const [prevRegion, setPrevRegion] = useState(null);
   
-  // fetch data and format it  - currently just displaying as text.
+  // fetch data and format it as graphs.
+  // currently one call to each of the 'data' and 'timeseries' APIs. 
   if(prevRegion !== currentRegionBoundary){ 
     testDataRequest(currentRegionBoundary).then(data => {
         setMonthlyTimeSeries(data);
@@ -24,21 +29,6 @@ function DataDisplay({currentRegionBoundary}) {
     setPrevRegion(currentRegionBoundary);
   }
   
-  /* function monthlyTimeseriesText() {
-      //test function that just dispays data as text.
-      if(monthlyTimeSeries === null) {
-          return "No data available";
-      }
-      else {
-        var dataStrings = [];
-        for (const timestamp in monthlyTimeSeries.data) {
-            const month = moment(timestamp, moment.ISO_8601).format("MMMM");
-            dataStrings.push(<p>{month}: {monthlyTimeSeries.data[timestamp]} {monthlyTimeSeries.units}</p>)
-        }
-        return dataStrings;
-      }
-  }  */
-
   return (
     <div className="DataDisplay">
         <br/>

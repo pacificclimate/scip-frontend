@@ -1,3 +1,15 @@
+// App.js - highest level component of the SCIP system. 
+// Has three children:  
+// AreaDisplay helps the user specify the area of interest (watershed, conservation unit, etc)
+//     and displays categorical data about the selected area
+// DataDisplay displays graphs showing qualitative data about the indictoars of the
+//     selected area
+// MapDisplay displays visual information about the area - colour coded indicators, 
+//    boundaries, etc.
+// 
+// App.js lays out the three main components and passes updates about the selected area
+// between them.
+
 import './App.css';
 
 import {Container, Row, Col} from 'react-bootstrap';

@@ -1,8 +1,13 @@
+// AnnualCycleGraph - provides a plotly visualization of how the value an indicator changes
+// until 2100. Visualizes the output of the "data" PCEX API.
+
 import React from 'react';
 import {entries, keys} from 'lodash';
 import {matchValues} from '../Helpers/GraphHelpers.js'
 
-//this weird sequence avoids crashing npm when plotly is loaded.
+//this piecewise loading of plotly avoids an issue where loading 
+//the whole thing at once crashes npm due to memory issues.
+//see https://prachij012017.medium.com/react-plotly-crashes-on-npm-start-41e2568ce6e3p
 import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 const Plot = createPlotlyComponent(Plotly);

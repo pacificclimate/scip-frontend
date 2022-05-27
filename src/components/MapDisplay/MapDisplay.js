@@ -1,3 +1,5 @@
+// Handles map state and data fetching.
+
 import './MapDisplay.css';
 import DataMap from '../DataMap/DataMap.js'
 import {getWatershedStreams, getDownstream} from '../../data-services/pcex-backend.js'

@@ -1,3 +1,8 @@
+// Displays a leaflet map with an ncWMS data layer. 
+// Upon receiving a watershed, displays a data overlay (ncWMS), and geoJSON objects
+// representing the watershed boundary (from watershed object), as well as
+// path to the sea and stream connectivity within the watershed (from PCEX API).
+
 import { BCBaseMap, SetView } from 'pcic-react-leaflet-components';
 import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 import { WMSTileLayer } from 'react-leaflet';

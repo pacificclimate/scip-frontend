@@ -1,3 +1,8 @@
+// AreaDisplay - interfaces with geoserver to get information about predefined areas
+// (watersheds, conservation units, drainage basins, etc); lets the user select the
+// area they care about; displays categorical data about the selected area (accessed from
+//  geoserver).
+
 import {fetchWatersheds} from '../../data-services/regions.js'
 import AreaSelector from '../AreaSelector/AreaSelector.js'
 import React, {useState} from 'react';
