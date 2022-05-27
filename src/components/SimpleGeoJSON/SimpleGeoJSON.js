@@ -53,9 +53,6 @@ function geoJSON2Layers(geoJSON, rest) {
     case 'FeatureCollection':
       console.log('geoJSON2Layers: FeatureCollection');
       return geoJSON.features.map(geoJSON2Layers);
-    case 'LineString':
-        console.log('geoJSON2Layers: LineString');
-        return <GeoJSONPolyLine polyline={geoJSON} {...rest}/>;
     default:
       console.log('geoJSON2Layers: unknown', geoJSON && geoJSON.type);
       return null;

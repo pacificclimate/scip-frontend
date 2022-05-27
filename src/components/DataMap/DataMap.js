@@ -14,11 +14,6 @@ function DataMap({currentRegionBoundary, currentWatershedStreams, currentDownstr
       type: "Feature",
       geometry: currentWatershedStreams.streams.geometry
   } : {};
-  
-  const featureCollection = (boundaryFeature.geometry && watershedMouth.geometry) ? {
-    type: "FeatureCollection",
-    features: [boundaryFeature, watershedMouth]
-  } : {};
 
   const downstream = currentDownstream ? {
       type: "Feature",

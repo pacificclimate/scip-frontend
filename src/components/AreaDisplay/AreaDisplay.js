@@ -51,15 +51,15 @@ function AreaDisplay({onChangeRegionName, onChangeRegionBoundary, onChangeWaters
   function setRegion(event) {
       setCurrentRegionName(event.value);
       onChangeRegionName(event.value);
-      const boundary = regionBoundaries[findIndex(regionNames, (n) => {return n == event.value;})];
+      const boundary = regionBoundaries[findIndex(regionNames, (n) => {return n === event.value;})];
       setCurrentRegionBoundary(boundary);
       onChangeRegionBoundary(boundary);
 
-      const mouth = watershedStreams[findIndex(regionNames, (n) => {return n == event.value;})];
+      const mouth = watershedStreams[findIndex(regionNames, (n) => {return n === event.value;})];
       setCurrentWatershedStreams(mouth);
       onChangeWatershedMouth(mouth);
 
-      setCurrentRegionArea(regionAreas[findIndex(regionNames, (n) => {return n == event.value;})]);
+      setCurrentRegionArea(regionAreas[findIndex(regionNames, (n) => {return n === event.value;})]);
   };
     
   return (
