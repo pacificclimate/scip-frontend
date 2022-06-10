@@ -3,78 +3,38 @@
 // area they care about; displays categorical data about the selected area (accessed from
 //  geoserver).
 
-import {fetchWatersheds} from '../../data-services/regions.js'
-import AreaSelector from '../AreaSelector/AreaSelector.js'
+import {fetchWatersheds} from '../../data-services/regions.js';
+import AreaSelector from '../AreaSelector/AreaSelector.js';
 import React, {useState} from 'react';
-import {findIndex} from 'lodash';
+import {map, find} from 'lodash';
+import {parseRegion} from '../../helpers/RegionHelpers.js';
 
-function AreaDisplay({onChangeRegionName, onChangeRegionBoundary, onChangeWatershedMouth}) {
-
-  const [regionNames, setRegionNames] = useState([]);
-  const [regionBoundaries, setRegionBoundaries] = useState([]);
-  const [currentRegionName, setCurrentRegionName] = useState("No Region Selected");
-  const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null);
-  const [regionAreas, setRegionAreas] = useState();
-  const [currentRegionArea, setCurrentRegionArea] = useState();
-  const [watershedStreams, setWatershedStreams] = useState([]);
-  const [currentWatershedStreams, setCurrentWatershedStreams] = useState(null);
+function AreaDisplay({onChangeRegion, region}) {
+  const [regions, setRegions] = useState([]);
 
   //fetch region list from geoserver if we don't already have it.
-  if (regionNames.length === 0){
+  if (regions.length === 0){
     fetchWatersheds().then(
         data => {
-            var names = [];
-            var boundaries = [];
-            var areas = [];
-            var streams = [];
-            for (const feature of data.features){
-                names.push(feature.properties.WTRSHDGRPN);
-                boundaries.push(feature.geometry);
-
-                if(feature.properties.OUTLET === ""){
-                  streams.push(null);
-                }
-                else streams.push(JSON.parse(feature.properties.OUTLET));
-                
-                let area = feature.properties.AREA_SQM;
-                if (typeof(area) === 'number'){
-                  let areaKM = area / 1000000;
-                  areas.push(areaKM);
-                }
-                else {
-                  areas.push(0)
-                }
-            } 
-            setRegionNames(names);
-            setRegionBoundaries(boundaries);
-            setRegionAreas(areas);
-            setWatershedStreams(streams);
+            setRegions(map( data.features, parseRegion));
         }
     );
   }
   
   function setRegion(event) {
-      setCurrentRegionName(event.value);
-      onChangeRegionName(event.value);
-      const boundary = regionBoundaries[findIndex(regionNames, (n) => {return n === event.value;})];
-      setCurrentRegionBoundary(boundary);
-      onChangeRegionBoundary(boundary);
-
-      const mouth = watershedStreams[findIndex(regionNames, (n) => {return n === event.value;})];
-      setCurrentWatershedStreams(mouth);
-      onChangeWatershedMouth(mouth);
-
-      setCurrentRegionArea(regionAreas[findIndex(regionNames, (n) => {return n === event.value;})]);
+      const region = find(regions, function(r) {return r.name === event.value});
+      
+      onChangeRegion(region);
   };
     
   return (
     <div className="AreaDisplay">
-        <p>Currently selected Region: {currentRegionName}</p>
-        {currentRegionArea ? <p>Drainage Area: {currentRegionArea.toExponential(2)} km&sup2;</p> : ""}
+        <p>Currently Selected Region: {region ? region.name : "none"}</p>
+        {region ? <p>Drainage Area: {(region.area_meters / 1000000).toExponential(2)} km&sup2;</p> : ""}
         <AreaSelector
-            regionNames={regionNames}
+            regionNames={map(regions, 'name')}
             onChange={setRegion}
-            currentRegion={currentRegionName}
+            currentRegion={region ? region.name : null}
         />
     </div>
   );

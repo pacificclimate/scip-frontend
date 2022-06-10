@@ -5,34 +5,35 @@ import DataMap from '../DataMap/DataMap.js'
 import {getWatershedStreams, getDownstream} from '../../data-services/pcex-backend.js'
 import React, {useState} from 'react';
 
-function MapDisplay({currentRegionBoundary, currentWatershedStreams}) {
+function MapDisplay({region}) {
   
   const [watershedStreams, setWatershedStreams] = useState(null);
   const [downstream, setDownstream] = useState(null);
-  const [prevStreams, setPrevStreams] = useState(null);
+  const [prevRegion, setPrevRegion] = useState(null);
 
-  if(prevStreams !== currentWatershedStreams){ 
-    if (currentWatershedStreams === null) {
+  if(prevRegion !== region){
+    if (region === null) {
       setWatershedStreams("");
+      setDownstream("");
     }
-    else{
-      getWatershedStreams(currentWatershedStreams).then(data => {
+    else if(region) {
+      getWatershedStreams(JSON.parse(region.outlet)).then(data => {
           setWatershedStreams(data);
           }
       );
-      getDownstream(currentWatershedStreams).then(data => {
+      getDownstream(JSON.parse(region.outlet)).then(data => {
           setDownstream(data);
       });
     }
-    setPrevStreams(currentWatershedStreams);
+    setPrevRegion(region);
   }
 
   return (
     <div className="MapDisplay">
         <DataMap
-          currentRegionBoundary={currentRegionBoundary}
-          currentWatershedStreams={watershedStreams}
-          currentDownstream={downstream}
+          regionBoundary={region ? region.geometry : null}
+          watershedStreams={watershedStreams}
+          downstream={downstream}
         />
     </div>
   );

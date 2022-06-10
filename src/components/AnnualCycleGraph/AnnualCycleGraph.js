@@ -3,7 +3,7 @@
 
 import React from 'react';
 import {entries, keys} from 'lodash';
-import {matchValues} from '../Helpers/GraphHelpers.js'
+import {matchValues} from '../../helpers/GraphHelpers.js'
 
 //this piecewise loading of plotly avoids an issue where loading 
 //the whole thing at once crashe npm due to memory issues.

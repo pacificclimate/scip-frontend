@@ -7,8 +7,8 @@
 // MapDisplay displays visual information about the area - colour coded indicators, 
 //    boundaries, etc.
 // 
-// App.js lays out the three main components and passes updates about the selected area
-// between them.
+// App.js lays out the three main components and keeps track of the selected region, updating
+// them when it changes.
 
 import './App.css';
 
@@ -19,21 +19,8 @@ import AreaDisplay from '../AreaDisplay/AreaDisplay.js'
 import React, {useState} from 'react'
 
 function App() {
-  const [currentRegionName, setCurrentRegionName] = useState(null);
-  const [currentRegionBoundary, setCurrentRegionBoundary] = useState(null);
-  const [currentWatershedStreams, setCurrentWatershedStreams] = useState(null);
-  
-  function setRegionName(event) {
-      setCurrentRegionName(event);
-  }
-  
-  function setRegionBoundary(event) {
-      setCurrentRegionBoundary(event);
-  }
+  const [region, setRegion] = useState(null);
 
-  function setWatershedMouth(event) {
-      setCurrentWatershedStreams(event);
-  }
 
   return (
     <div className="App">
@@ -43,18 +30,16 @@ function App() {
           <Row>
             <Col lg={6} md={6}>
               <MapDisplay
-                currentRegionBoundary={currentRegionBoundary}
-                currentWatershedStreams={currentWatershedStreams}
+                region={region}
               />
               <AreaDisplay
-                onChangeRegionName={setRegionName}
-                onChangeRegionBoundary={setRegionBoundary}
-                onChangeWatershedMouth={setWatershedMouth}
+                onChangeRegion={setRegion}
+                region={region}
               />
             </Col>
             <Col lg={6} md={6}>
               <DataDisplay
-                currentRegionBoundary={currentRegionBoundary}
+                region={region}
               />
             </Col> 
           </Row>

@@ -9,7 +9,7 @@ import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import React, {useState} from 'react';
 
-function DataDisplay({currentRegionBoundary}) {
+function DataDisplay({region}) {
   
   const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
@@ -17,16 +17,16 @@ function DataDisplay({currentRegionBoundary}) {
   
   // fetch data and format it as graphs.
   // currently one call to each of the 'data' and 'timeseries' APIs. 
-  if(prevRegion !== currentRegionBoundary){ 
-    testDataRequest(currentRegionBoundary).then(data => {
+  if(prevRegion !== region){
+    testDataRequest(region.geometry).then(data => {
         setMonthlyTimeSeries(data);
         }
     );
-    testLongTermAverageDataRequest(currentRegionBoundary).then(data => {
+    testLongTermAverageDataRequest(region.geometry).then(data => {
         setLongTermTimeSeries(data);
         }
     );
-    setPrevRegion(currentRegionBoundary);
+    setPrevRegion(region);
   }
   
   return (
