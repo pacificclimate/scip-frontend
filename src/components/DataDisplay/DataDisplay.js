@@ -7,27 +7,30 @@
 import {testDataRequest, testLongTermAverageDataRequest} from '../../data-services/pcex-backend.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 function DataDisplay({region}) {
   
   const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
-  const [prevRegion, setPrevRegion] = useState(null);
   
   // fetch data and format it as graphs.
   // currently one call to each of the 'data' and 'timeseries' APIs. 
-  if(prevRegion !== region){
-    testDataRequest(region.geometry).then(data => {
-        setMonthlyTimeSeries(data);
-        }
-    );
-    testLongTermAverageDataRequest(region.geometry).then(data => {
-        setLongTermTimeSeries(data);
-        }
-    );
-    setPrevRegion(region);
-  }
+  useEffect(() => {
+      if(region) {
+        testDataRequest(region.geometry).then(data => {
+            setMonthlyTimeSeries(data);
+        });
+      }
+  }, [region]);
+  
+    useEffect(() => {
+      if(region) {
+        testLongTermAverageDataRequest(region.geometry).then(data => {
+            setLongTermTimeSeries(data);
+        });
+      }
+  }, [region]);
   
   return (
     <div className="DataDisplay">

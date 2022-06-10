@@ -5,21 +5,24 @@
 
 import {fetchWatersheds} from '../../data-services/regions.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
 import {parseRegion} from '../../helpers/RegionHelpers.js';
 
 function AreaDisplay({onChangeRegion, region}) {
   const [regions, setRegions] = useState([]);
 
-  //fetch region list from geoserver if we don't already have it.
-  if (regions.length === 0){
-    fetchWatersheds().then(
-        data => {
-            setRegions(map( data.features, parseRegion));
-        }
-    );
-  }
+  //fetch region list from geoserver.
+  // this only needs to be done once, when the component is loaded
+  useEffect(() => {
+    if(regions.length === 0) {
+        fetchWatersheds().then(
+            data => {
+                setRegions(map( data.features, parseRegion));
+            }
+        );
+    }
+  });
   
   function setRegion(event) {
       const region = find(regions, function(r) {return r.name === event.value});
