@@ -88,9 +88,7 @@ docker-compose up
 
 ### Setting up the PCEX backend
 
-The PCEX backend isn't affected by CORS, so you don't have to run a special one. 
-
-At the time of writing this README, you need two seperate instances of the PCEX API - one 3.4.0 instance to do indicator access and one 3.5.0 instance to do watershed analysis, due to a weird rasterio conflict, but this should be very temporary. 
+The PCEX backend isn't affected by CORS, so you don't have to run a special one; any PCEX backend with spare capacity (IE, not production) will work.
 
 ### Setting up ncWMS
 
@@ -104,9 +102,8 @@ tileserver is not affected by CORS, and you don't need to run a special one.
 Clone the repository and then install it with `npm install`. Before you run it you need to set environment variables to tell it where all the data sources are:
 
 ```bash
-# two PCEX APIS
-export REACT_APP_PCEX_API_URL=https://services.pacificclimate.org/pcex/api
-export REACT_APP_PCEX_DEV_API_URL=http://docker-dev02.pcic.uvic.ca:30050/api
+# PCEX API
+export REACT_APP_PCEX_API_URL=https://services.pacificclimate.org/dev/pcex/api
 
 # shapefile name - change if you changed it in the geoserver setup
 export REACT_APP_WATERSHED_TYPENAME=watersheds:watershed-degrees
