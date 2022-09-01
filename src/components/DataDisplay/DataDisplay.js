@@ -4,7 +4,7 @@
 // currently the graphs are AnnualCycleGraph (timeseries API) and LongTermAverageGraph (data API).
 
 
-import {testDataRequest, testLongTermAverageDataRequest} from '../../data-services/pcex-backend.js'
+import {testDataRequest, testLongTermAverageDataRequest, getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import React, {useState, useEffect} from 'react';
@@ -13,6 +13,21 @@ function DataDisplay({region}) {
   
   const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
+  const [rasterMetadata, setRasterMetadata] = useState(null);
+  
+  // fetch list of available datasets
+  useEffect(() => {
+    //only needs to be done once
+    if(!rasterMetadata) {
+        getMultimeta().then(data => {
+            setRasterMetadata(flattenMultimeta(data));
+            console.log("updating rasterMetadata");
+            console.log(rasterMetadata);      
+        })
+        }
+    }
+  );
+  
   
   // fetch data and format it as graphs.
   // currently one call to each of the 'data' and 'timeseries' APIs. 
