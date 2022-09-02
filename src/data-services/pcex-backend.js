@@ -102,27 +102,27 @@ export function testDataRequest(area) {
   .then(response => response.data);
 }
 
-export function testLongTermAverageDataRequest(area) {
-    // accept only a specified area -
-    // always gets data from the same set of files.
-    // used for testing/development only
-
+export function longTermAverageDataRequest(area, variable="apf_flow", model="CanESM2",
+                                           emission="historical, rcp85", timescale="yearly", 
+                                           time="0", ensemble_name="scip_files") {
     return axios.get(
     process.env.REACT_APP_PCEX_API_URL + "/data",
         {
             params: {
-                ensemble_name: "scip_files",
-                model: "CanESM2",
-                variable: "apf_flow",
-                emission: "historical, rcp85",
-                timescale: "yearly",
-                time: "0",
+                ensemble_name: ensemble_name,
+                model: model,
+                variable: variable,
+                emission: emission,
+                timescale: timescale,
+                time: time,
                 area: geoJSONtoWKT(area),
             }
         }
     )
     .then(response => response.data);
+                                               
 }
+
 
 // Functions that access the hydrological APIs, "watershedStreams"
 // and "downstream". These accept a WKT point and return a geoJSON

@@ -13,7 +13,7 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 const Plot = createPlotlyComponent(Plotly);
 
 
-function LongTermAverageGraph({longTermData}) {
+function LongTermAverageGraph({longTermData, variableInfo}) {
 
     /* data is a temporary variable that represents the data, which are
      key value pairs. The keys are the date of the measurement, the values
@@ -22,10 +22,10 @@ function LongTermAverageGraph({longTermData}) {
     
     var dataArray = entries(longTermData);
     var data = [];
-    var graphTitle =  `Mean Long Term Maximum Temperature: ${ 
+    var graphTitle =  `Mean Long Term ${variableInfo.representative.variable_description}: ${ 
         dataArray.length >= 1 ? (dataArray[0].length === 2 ? dataArray[0][0].toUpperCase() : "") : ""
     }`;
-    var yAxisTitle = `Mean Maximum Temperature (${
+    var yAxisTitle = `Mean ${variableInfo.representative.variable_id} (${
         dataArray.length >= 1 ? (dataArray[0].length === 2 ? dataArray[0][1].units : "") : ""
     })`;
     

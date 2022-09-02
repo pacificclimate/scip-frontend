@@ -4,9 +4,10 @@
 // currently the graphs are AnnualCycleGraph (timeseries API) and LongTermAverageGraph (data API).
 
 
-import {testDataRequest, testLongTermAverageDataRequest, getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.js'
+import {testDataRequest, longTermAverageDataRequest, getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
+import VariableSelector from '../selectors/VariableSelector.js';
 import React, {useState, useEffect} from 'react';
 
 function DataDisplay({region}) {
@@ -14,6 +15,7 @@ function DataDisplay({region}) {
   const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
   const [rasterMetadata, setRasterMetadata] = useState(null);
+  const [variable, setVariable] = useState(null);
   
   // fetch list of available datasets
   useEffect(() => {
@@ -21,13 +23,20 @@ function DataDisplay({region}) {
     if(!rasterMetadata) {
         getMultimeta().then(data => {
             setRasterMetadata(flattenMultimeta(data));
-            console.log("updating rasterMetadata");
-            console.log(rasterMetadata);      
         })
         }
     }
   );
   
+  function selectVariable(event) {
+      console.log(`selecting variable`)
+      console.log(event.value);
+      setVariable(event.value);
+  }
+  
+  function dontSelectVariable(event){
+      console.log(`not selecting variable ${event}`);
+  }
   
   // fetch data and format it as graphs.
   // currently one call to each of the 'data' and 'timeseries' APIs. 
@@ -40,19 +49,33 @@ function DataDisplay({region}) {
   }, [region]);
   
     useEffect(() => {
-      if(region) {
-        testLongTermAverageDataRequest(region.geometry).then(data => {
+      if(region && variable) {
+        longTermAverageDataRequest(region.geometry, variable.representative.variable_id).then(data => {
             setLongTermTimeSeries(data);
         });
       }
-  }, [region]);
+  }, [region, variable]);
   
   return (
     <div className="DataDisplay">
         <br/>
-        {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Annual Data Available"}
+        {rasterMetadata ? 
+          <VariableSelector 
+            metadata={rasterMetadata}
+            constraint={{}}
+            value={variable ? variable.representative : null}
+            canReplace={false}
+            onChange={selectVariable}
+            onNoChange={dontSelectVariable}
+          /> : 
+          "Loading Available Datasets"}
         <br/>
-        {longTermTimeSeries ? <LongTermAverageGraph longTermData={longTermTimeSeries}/> : "No Long Term Data Available"}
+        {longTermTimeSeries ? 
+          <LongTermAverageGraph 
+            longTermData={longTermTimeSeries}
+            variableInfo={variable}
+          /> : 
+          "Select a watershed and a variable"}
     </div>
   );
 }
