@@ -27,7 +27,7 @@ RUN npm install
 RUN npm install -g serve
 COPY --chown=node:node . /app
 
-EXPOSE 3000
+EXPOSE 8080
 
 # Move the build arg REACT_APP_VERSION into an
 # environment variable of the same name, for consumption
