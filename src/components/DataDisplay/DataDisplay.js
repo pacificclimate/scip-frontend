@@ -29,13 +29,11 @@ function DataDisplay({region}) {
   );
   
   function selectVariable(event) {
-      console.log(`selecting variable`)
-      console.log(event.value);
       setVariable(event.value);
   }
   
   function dontSelectVariable(event){
-      console.log(`not selecting variable ${event}`);
+    //TODO: put something here. Ask Rod what.
   }
   
   // fetch data and format it as graphs.
@@ -74,6 +72,7 @@ function DataDisplay({region}) {
           <LongTermAverageGraph 
             longTermData={longTermTimeSeries}
             variableInfo={variable}
+            region={region}
           /> : 
           "Select a watershed and a variable"}
     </div>
