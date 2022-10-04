@@ -1,0 +1,35 @@
+version: '3.2'
+services:
+  geoserver:
+    image: docker.osgeo.org/geoserver:2.21.1
+    container_name: geoserver
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: ./shp
+        target: /opt/geoserver_data/watersheds/
+      - type: bind
+        source: ./watersheds
+        target: /opt/geoserver_data/workspaces
+    environment:
+      # FIXME: This feature hasn't made it into the latest release of geoserver
+      # SKIP_DEMO_DATA: 'true'
+      CORS_ENABLED: 'true'
+  nginx:
+    image: nginx
+    container_name: salmon-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+  frontend:
+    image: scip
+    container_name: scip
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend.env

@@ -5,4 +5,4 @@
 # so it doesn't matter.
 
 npm run build
-serve -s build -l 8080
+serve -s build -l 3000

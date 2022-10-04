@@ -115,3 +115,58 @@ npm start
 ```
 
 That command automatically opens a browser window pointing at localhost:3000/frontend , but that URL won't work - it will get CORS errors when trying to access geoserver. You need to open your own window to nginx's version of the frontend at http://127.0.0.1:5000/frontend/ instead.
+
+## How to set up SCIP for production
+
+### Setting up the frontend
+
+Running a nodejs frontend in development vs. production varies
+slightly. In development, one wants full access to the source code,
+whereas in production, one wants the js files to be bundled and
+compressed to minimize network transfer and client RAM usage.
+
+Do use Node's static server, we do something like this (found in the
+entrypoint.sh script)
+
+```
+# Install Node's static server
+npm install -g serve
+# Build the bundle
+npm run build
+# Serve the files from the build directory on port 3000
+# routing unfound files to index.html (-s)
+serve -l 3000 -s build
+```
+
+Depending on to where you are deploying, you will *probably* need to
+change the `homepage` in the `package.json` file, setting it to the
+app's [root
+url](https://create-react-app.dev/docs/deployment#building-for-relative-paths). Otherwise,
+your app is liable to generate 404's.
+
+After editing the `package.json` file, you should be able to build the
+docker container as follows from the repository root:
+
+```bash
+docker build -t scip -f docker/Dockerfile
+```
+
+### Executing all components
+
+After building the `scip` docker image, you should be able to run the
+`docker-compose.yaml` setup, which creates 3 containers: geoserver,
+scip, and nginx to be the main frontend.
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+After a few minutes of create-react-app building, one should be able
+to access the frontend at:
+
+http://localhost/frontend
+
+and geoserver at:
+
+http://localhost/geoserver
