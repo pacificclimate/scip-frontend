@@ -58,11 +58,16 @@ function LongTermAverageGraph({longTermData, variableInfo}) {
                     mode: 'lines+markers',
                     marker: {color: 'red'},
                     hovertemplate: '%{y:.2f}%{text}<extra></extra>',
+                    error_x: {
+                        type: 'data',
+                        array: [25, 15, 15, 15],
+                        visible: true
+                    },
                 },
             ]}
             layout={
                 { 
-                    width: 500, 
+                    width: 700, 
                     height: 500, 
                     title: graphTitle, 
                     xaxis: {
