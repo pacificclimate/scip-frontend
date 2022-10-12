@@ -3,10 +3,10 @@
 // and sends them to display components for each group.
 // also handles user selection of model and sceanrio.
 
-import {testDataRequest, getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.js'
-import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
+import {getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.js'
 import React, {useState, useEffect} from 'react';
 import YearlyDataDisplay from '../YearlyDataDisplay/YearlyDataDisplay.js'
+import MonthlyDataDisplay from '../MonthlyDataDisplay/MonthlyDataDisplay.js'
 import _ from 'lodash';
 
 function DataDisplay({region}) {
@@ -25,24 +25,21 @@ function DataDisplay({region}) {
     }
   );
   
-  // fetch data and format it as graphs.
-  // currently one call to each of the 'data' and 'timeseries' APIs. 
-  useEffect(() => {
-      if(region) {
-        testDataRequest(region.geometry).then(data => {
-            setMonthlyTimeSeries(data);
-        });
-      }
-  }, [region]);
-  
   return (
     <div className="DataDisplay">
         {<YearlyDataDisplay
           region={region}
           model={"CanESM2"}
-          scenario={"rcp85"}
+          emission={"historical, rcp85"}
           rasterMetadata={_.filter(rasterMetadata, {"timescale": "yearly"})}
         />}
+        {<MonthlyDataDisplay
+          region={region}
+          model={"CanESM2"}
+          emission={"historical, rcp85"}
+          rasterMetadata={_.filter(rasterMetadata, {"timescale": "monthly"})}
+        />}
+
     </div>
   );
 }

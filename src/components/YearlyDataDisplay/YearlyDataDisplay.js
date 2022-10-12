@@ -8,7 +8,7 @@ import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.j
 import VariableSelector from '../selectors/VariableSelector.js';
 import React, {useState, useEffect} from 'react';
 
-function YearlyDataDisplay({region, rasterMetadata, model, scenario}){
+function YearlyDataDisplay({region, rasterMetadata, model, emission}){
 
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
   const [variable, setVariable] = useState(null);
@@ -23,11 +23,16 @@ function YearlyDataDisplay({region, rasterMetadata, model, scenario}){
   
     useEffect(() => {
       if(region && variable) {
-        longTermAverageDataRequest(region.geometry, variable.representative.variable_id).then(data => {
+        longTermAverageDataRequest(region.geometry, 
+                                   variable.representative.variable_id,
+                                   model,
+                                   emission,
+                                   "yearly",
+                                   0).then(data => {
             setLongTermTimeSeries(data);
         });
       }
-  }, [region, variable]);
+  }, [region, variable, model, emission]);
 
   return (
     <div className="YearlyDataDisplay">
