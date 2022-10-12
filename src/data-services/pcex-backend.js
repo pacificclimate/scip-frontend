@@ -84,17 +84,13 @@ function geoJSONtoWKT(area) {
 }
 
 
-export function testDataRequest(area) {
-    // accepts only a specified area - 
-    // always gets data from the same file.
-    // used for testing/development only
-    
+export function annualCycleDataRequest(area, datafile, variable) {    
     return axios.get(
     process.env.REACT_APP_PCEX_API_URL + "/timeseries",
     {
       params: {
-        id_: process.env.REACT_APP_TEST_API_FILE,
-        variable: "apf_flow",
+        id_: datafile,
+        variable: variable,
         area: geoJSONtoWKT(area),
       }
     }
@@ -102,9 +98,9 @@ export function testDataRequest(area) {
   .then(response => response.data);
 }
 
-export function longTermAverageDataRequest(area, variable="apf_flow", model="CanESM2",
-                                           emission="historical, rcp85", timescale="yearly", 
-                                           time="0", ensemble_name="scip_files") {
+export function longTermAverageDataRequest(area, variable, model,
+                                           emission, timescale, 
+                                           time, ensemble_name="scip_files") {
     return axios.get(
     process.env.REACT_APP_PCEX_API_URL + "/data",
         {
