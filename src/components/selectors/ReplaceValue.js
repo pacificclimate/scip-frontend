@@ -7,7 +7,6 @@
 // in some cases, but at present it always renders its children.
 
 import { find, isNull, isUndefined } from 'lodash/fp';
-import React from 'react';
 
 export default function ReplaceValue({
   name,
