@@ -25,17 +25,18 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
   
     useEffect(() => {
       if(region && variable && rasterMetadata) {
-        let datafiles = _.filter(rasterMetadata, {
+        const datafiles = _.filter(rasterMetadata, {
             'variable_id': variable.representative.variable_id,
             'experiment': emission,
             'model_id': model
             });
-        const temp_datafile = datafiles[0].file_id;
-
-        // to start with, just find one - any - fileid that matches our criteria
-        annualCycleDataRequest(region.geometry, temp_datafile, variable.representative.variable_id).then(data => {
-            setAnnualCycleTimeSeries(data);
-        });
+        
+        var api_calls = [];
+        _.forEach(datafiles, function(datafile) {
+            api_calls.push( annualCycleDataRequest(region.geometry, 
+                                                   datafile.file_id, 
+                                                   variable.representative.variable_id))});
+        Promise.all(api_calls).then((api_responses)=> setAnnualCycleTimeSeries(api_responses));
       }
   }, [region, variable, model, emission, rasterMetadata]);
   
@@ -70,6 +71,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         {annualCycleTimeSeries ? 
           <AnnualCycleGraph 
             annualData={annualCycleTimeSeries}
+            variableInfo={variable}
           /> : 
           noGraphMessage()}
     </div>

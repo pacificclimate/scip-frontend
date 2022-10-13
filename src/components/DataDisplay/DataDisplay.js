@@ -11,7 +11,6 @@ import ModelSelector from '../selectors/ModelSelector.js'
 import EmissionSelector from '../selectors/EmissionSelector.js'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
-import Label from 'react-bootstrap'
 import _ from 'lodash';
 
 function DataDisplay({region}) {

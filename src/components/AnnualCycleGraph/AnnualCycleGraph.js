@@ -2,8 +2,8 @@
 // over the course of a year. Visualizes the output of the "timeseries" PCEX API.
 
 import React from 'react';
-import {entries, keys} from 'lodash';
-import {matchValues} from '../../helpers/GraphHelpers.js'
+import {makeMonthlyTimeseries} from '../../helpers/GraphHelpers.js';
+import _ from 'lodash';
 
 //this piecewise loading of plotly avoids an issue where loading 
 //the whole thing at once crashe npm due to memory issues.
@@ -13,45 +13,30 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 const Plot = createPlotlyComponent(Plotly);
 
 
-function AnnualCycleGraph({annualData}) {
+function AnnualCycleGraph({annualData, variableInfo}) {
     
-    var yAxisTitle = `Mean Maximum Temperature (${ annualData.units })`;
-
-    const months = keys(annualData.data).sort();
-    const units = Array(months.length).fill(annualData.units);
-        
-    function monthlyTimeSeries() {
-        if(annualData === null){
+    var yAxisTitle = `Mean ${variableInfo.representative.variable_id} (${ annualData[0].units })`;
+    
+    function makeDataSeries() {
+        if(annualData == null) {
             return []
         }
         else {
-            //TODO: fix this, order is not guarenteed
-            return matchValues(entries(annualData.data), months);
+            return _.map(annualData, makeMonthlyTimeseries);
         }
     }
 
     return (
         <Plot
-            data={[
-                {
-                    x: months,
-                    y: monthlyTimeSeries(),
-                    text: units,
-                    type: 'scatter',
-                    mode: 'lines+markers',
-                    marker: {color: 'red'},
-                    hovertemplate: '%{y:.2f}%{text}<extra></extra>',
-                },
-            ]}
+            data={makeDataSeries()}
             layout={
                 { 
                     width: 500, 
                     height: 500, 
-                    title: "Mean Daily Maximum Temperature", 
+                    title: variableInfo.representative.variable_desrciption, 
                     xaxis: {
                         title: 'Month',
-                        type: 'date',
-                        tickvals: months,
+                        tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                         ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     },
                     yaxis: {
