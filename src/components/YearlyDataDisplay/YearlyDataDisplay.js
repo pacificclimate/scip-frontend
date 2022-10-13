@@ -33,6 +33,21 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
         });
       }
   }, [region, variable, model, emission]);
+  
+  function noGraphMessage() {
+      if(!region && !variable) {
+          return("Select a watershed and an indicator to view data");
+      }
+      else if(!region){
+          return("Select a watershed to view data.");
+      }
+      else if(!variable){
+          return("Select an indicator to view data");
+      }
+      else {
+          return("Loading data...");
+      }
+  }
 
   return (
     <div className="YearlyDataDisplay">
@@ -53,7 +68,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
             variableInfo={variable}
             region={region}
           /> : 
-          "Select a watershed and a variable"}
+          noGraphMessage()}
     </div>
   );  
 }
