@@ -11,7 +11,7 @@ It relies on four backend data services.
 
 ## How to set up SCIP for development
 
-Currently there's not much support infrastructure for SCIP. You currently have to run some of the components on your own workstation for development. A less cumbersome setup process will hopefully be available soon.
+Currently you have to run geoserver on your desktop along with the SCIP front end and an nginx docker to facilitate them talking to eachother. A less cumbersome setup process will hopefully be available soon.
 
 ### Setting up geoserver
 Geoserver has to be run on your workstation at present. You can download it and set it up according to its documentation. You may also need to install a JDK. By default, geoserver uses port 8080; the rest of these instructions will assume you have not changed the port. Geoserver uses a default admin password; you should change this.
@@ -86,27 +86,13 @@ Start the nginx docker
 docker-compose up
 ```
 
-### Setting up the PCEX backend
-
-The PCEX backend isn't affected by CORS, so you don't have to run a special one. 
-
-At the time of writing this README, you need two seperate instances of the PCEX API - one 3.4.0 instance to do indicator access and one 3.5.0 instance to do watershed analysis, due to a weird rasterio conflict, but this should be very temporary. 
-
-### Setting up ncWMS
-
-ncWMS is also not affected by CORS, and you don't need to run a special one.
-
-### Setting up tileserver
-tileserver is not affected by CORS, and you don't need to run a special one.
-
 ### Setting up the frontend
 
 Clone the repository and then install it with `npm install`. Before you run it you need to set environment variables to tell it where all the data sources are:
 
 ```bash
-# two PCEX APIS
-export REACT_APP_PCEX_API_URL=https://services.pacificclimate.org/pcex/api
-export REACT_APP_PCEX_DEV_API_URL=http://docker-dev02.pcic.uvic.ca:30050/api
+# PCEX API - use an intance that is not in production
+export REACT_APP_PCEX_API_URL=https://services.pacificclimate.org/dev/pcex/api
 
 # shapefile name - change if you changed it in the geoserver setup
 export REACT_APP_WATERSHED_TYPENAME=watersheds:watershed-degrees

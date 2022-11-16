@@ -1,6 +1,6 @@
 // dropdown selector user picks an area of interest with
 
-import {SelectWithValueReplacement as Select} from 'pcic-react-components'
+import Select from 'react-select'
 import React from 'react'
 
 function AreaSelector({regionNames, onChange, currentRegion}) {
