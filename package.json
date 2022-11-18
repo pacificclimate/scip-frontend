@@ -1,8 +1,7 @@
 {
   "name": "scip",
   "version": "0.1.0",
-  # For production builds, homepage must be changed to the absolute URL of the portal
-  "homepage": "http://localhost/frontend",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@react-leaflet/core": "^1.0.2",
