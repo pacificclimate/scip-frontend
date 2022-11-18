@@ -57,7 +57,7 @@ export function testLongTermAverageDataRequest(area) {
     process.env.REACT_APP_PCEX_API_URL + "/data",
         {
             params: {
-                ensemble_name: "scip_files",
+                ensemble_name: "ce_files",
                 model: "PCIC12",
                 variable: "tasmax",
                 emission: "historical,rcp85",
