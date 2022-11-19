@@ -1,0 +1,25 @@
+<dataStore>
+  <id>DataStoreInfoImpl-78695e0f:183a0dc9393:-7ffd</id>
+  <name>watersheds</name>
+  <type>Shapefile</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-78695e0f:183a0dc9393:-7fff</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="charset">ISO-8859-1</entry>
+    <entry key="filetype">shapefile</entry>
+    <entry key="create spatial index">true</entry>
+    <entry key="memory mapped buffer">false</entry>
+    <entry key="timezone">GMT</entry>
+    <entry key="enable spatial index">true</entry>
+    <entry key="namespace">watersheds</entry>
+    <entry key="cache and reuse memory maps">true</entry>
+    <entry key="skipScan">true</entry>
+    <entry key="url">file:watersheds/watershed-degrees.shp</entry>
+    <entry key="fstype">shape</entry>
+  </connectionParameters>
+  <__default>false</__default>
+  <dateCreated>2022-10-04 02:53:47.452 UTC</dateCreated>
+  <dateModified>2022-10-04 02:56:24.184 UTC</dateModified>
+</dataStore>

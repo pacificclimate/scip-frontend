@@ -9,7 +9,7 @@ It relies on four backend data services.
 * Tilesever provides map backgrounds (city names, roads, rivers etc) for the map
 * ncWMS provides colour-coded data overlays for the maps
 
-## How to set up SCIP for development
+## How to set up SCIP for development to run directly on your workstation
 
 Currently you have to run geoserver on your desktop along with the SCIP front end and an nginx docker to facilitate them talking to eachother. A less cumbersome setup process will hopefully be available soon.
 
@@ -115,3 +115,67 @@ npm start
 ```
 
 That command automatically opens a browser window pointing at localhost:3000/frontend , but that URL won't work - it will get CORS errors when trying to access geoserver. You need to open your own window to nginx's version of the frontend at http://127.0.0.1:5000/frontend/ instead.
+
+
+## How to run SCIP in production-style dockers on your workstation
+
+### Setting up the frontend
+
+Running a nodejs frontend in development vs. production varies
+slightly. In development, one wants full access to the source code,
+whereas in production, one wants the js files to be bundled and
+compressed to minimize network transfer and client RAM usage.
+
+Do use Node's static server, we do something like this (found in the
+entrypoint.sh script)
+
+```
+# Install Node's static server
+npm install -g serve
+# Build the bundle
+npm run build
+# Serve the files from the build directory on port 3000
+# routing unfound files to index.html (-s)
+serve -l 3000 -s build
+```
+
+You should be able to build the docker container as follows from the
+repository root:
+
+```bash
+docker build -t scip -f docker/Dockerfile
+```
+
+### Executing all components
+
+After building the `scip` docker image, you should be able to run the
+`docker-compose.yaml` setup included in the repository, which creates 3 containers: geoserver,
+scip, and nginx to be the main frontend.
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+After a few minutes of create-react-app building, one should be able
+to access the frontend at:
+
+http://localhost/frontend
+
+and geoserver at:
+
+http://localhost/geoserver
+
+
+## How to update the SCIP demo instance
+
+This application has not yet had a full release, and has no production instances, but there is a semipermanent demo instance running on docker-dev02. You will not need to worry about CORS or proxies when working with this instance, as a proxy is already set up for it.
+
+1. Clone this repository to anywhere on docker-dev02 and check out whatever branch you want to demo 
+2. Build the docker image with `docker build -t scip:your-branch-name -f docker/Dockerfile .`
+3. Make a new dated directory in `/storage/data/projects/comp_support/bc-srif/dev/` for your demo and copy files into it from the most recent existing directory (note these are not the same as the docker-compose files files in this repository)
+4. Update `docker-compose.yaml` in your new directory with the name of the image you built
+5. Update `fe.env` if needed
+6. Do `docker-compose down` in the directory of the current demo to bring down the current containers
+7. Do `docker-compose up -d` in your new directory to launch your containers
+8. Demo will be available at https://services.pacificclimate.org/dev/scip/app/
