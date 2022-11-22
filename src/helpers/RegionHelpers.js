@@ -1,3 +1,4 @@
+import _ from 'lodash'
 // helper functions for parsing and formatting region metadata
 // this metadata is received as part of the geoserver list of regions (watersheds)
 
@@ -27,4 +28,22 @@ export function parseRegion(geoserverData) {
             geoserverData.properties[att];
     }
     return region;
+}
+
+// for temporary use while only some data is available.
+const upper_fraser_watersheds = [
+    'Lower Chilako River', 'Lower Salmon River', 'Quesnel River',
+    'Salmon River', 'Cottonwood River', 'Euchiniko River', 
+    'Herrick Creek', 'Muskeg River', 'Nazko River', 'Morkill River', 
+    'Cariboo River', 'Bowron', 'Blackwater River', 'Willow River', 
+    'Tabor River', 'Narcosli Creek', 'Upper Fraser River', 
+    'Chilako River', 'McGregor River', 'Stuart River'
+    ];
+
+export function filterRegions(regions) {
+    return _.filter(regions, region => {
+    console.log("here is a region");
+    console.log(region);
+    return(_.includes(upper_fraser_watersheds, region.name)); 
+    })
 }
