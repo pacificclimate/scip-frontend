@@ -5,6 +5,7 @@
 // and a graph (AnnualCycleGraph).
 
 import {annualCycleDataRequest} from '../../data-services/pcex-backend.js'
+import {noGraphMessage} from '../../helpers/GraphHelpers.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import VariableSelector from '../selectors/VariableSelector.js';
 import React, {useState, useEffect} from 'react';
@@ -40,20 +41,6 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
       }
   }, [region, variable, model, emission, rasterMetadata]);
   
-    function noGraphMessage() {
-      if(!region && !variable) {
-          return("Select a watershed and an indicator to view data");
-      }
-      else if(!region){
-          return("Select a watershed to view data.");
-      }
-      else if(!variable){
-          return("Select an indicator to view data");
-      }
-      else {
-          return("Loading data...");
-      }
-  }
 
   return (
     <div className="MonthlyDataDisplay">
@@ -73,7 +60,10 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
             annualData={annualCycleTimeSeries}
             variableInfo={variable}
           /> : 
-          noGraphMessage()}
+          noGraphMessage({
+              "watershed": region,
+              "indicator": variable
+          })}
     </div>
   );  
 }

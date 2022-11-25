@@ -60,3 +60,30 @@ export function makeGraphTimeseries(data, index, collection) {
         name: `${climo[0]}-${climo[1]}`
     };
 }
+
+// returns text describing what user selections are missing in order to generate
+// the graph.
+export function noGraphMessage(needed_data) {
+    let missing_metadata = [];
+    for(let metadata in needed_data) {
+        if(!needed_data[metadata]) {
+            missing_metadata.push(metadata);
+        }
+    }
+    if(missing_metadata.length === 0) {
+        return("Loading data...");
+    }
+    if(missing_metadata.length === 1) {
+        return(`Select a ${missing_metadata[0]} to view data.`);
+    }
+    else if (missing_metadata.length === 2) {
+        return(`Select a ${missing_metadata[0]} and a ${missing_metadata[1]} to view data.`);
+    }
+    else {
+        let text = "Select ";
+        for (var i = 0; i < missing_metadata.length-1 ; i++) {
+            text = text.concat(`a ${missing_metadata[i]}, `)
+        }
+        return(text.concat(`and a ${missing_metadata[missing_metadata.length - 1]} to view data.`));
+    }
+}

@@ -6,6 +6,7 @@
 // and a graph (AnnualCycleGraph).
 
 import {annualCycleDataRequest} from '../../data-services/pcex-backend.js'
+import {noGraphMessage} from '../../helpers/GraphHelpers.js'
 import DailyGraph from '../DailyGraph/DailyGraph.js'
 import VariableSelector from '../selectors/VariableSelector.js';
 import ClimatologySelector from '../selectors/ClimatologySelector.js';
@@ -52,21 +53,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
         Promise.all(api_calls).then((api_responses)=> setDailyTimeSeries(api_responses));
       }
   }, [region, variable, model, emission, rasterMetadata, climatology]);
-  
-    function noGraphMessage() {
-      if(!region && !variable) {
-          return("Select a watershed and an indicator to view data");
-      }
-      else if(!region){
-          return("Select a watershed to view data.");
-      }
-      else if(!variable){
-          return("Select an indicator to view data");
-      }
-      else {
-          return("Loading data...");
-      }
-  }
+
 
   return (
     <div className="DailyDataDisplay">
@@ -96,7 +83,11 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
             annualData={dailyTimeSeries}
             variableInfo={variable}
           /> : 
-          noGraphMessage()}
+          noGraphMessage({
+                "climatology": climatology,
+                "indicator": variable,
+                "watershed": region,
+                })}
     </div>
   );  
 }
