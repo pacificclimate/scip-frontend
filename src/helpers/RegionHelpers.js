@@ -42,8 +42,6 @@ const upper_fraser_watersheds = [
 
 export function filterRegions(regions) {
     return _.filter(regions, region => {
-    console.log("here is a region");
-    console.log(region);
     return(_.includes(upper_fraser_watersheds, region.name)); 
     })
 }

@@ -7,6 +7,7 @@ import {getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.j
 import React, {useState, useEffect} from 'react';
 import YearlyDataDisplay from '../YearlyDataDisplay/YearlyDataDisplay.js'
 import MonthlyDataDisplay from '../MonthlyDataDisplay/MonthlyDataDisplay.js'
+import DailyDataDisplay from '../DailyDataDisplay/DailyDataDisplay.js'
 import ModelSelector from '../selectors/ModelSelector.js'
 import EmissionSelector from '../selectors/EmissionSelector.js'
 import Tab from 'react-bootstrap/Tab'
@@ -68,7 +69,12 @@ function DataDisplay({region}) {
             />}
           </Tab>
           <Tab eventKey="day" title="Daily Indicators">
-            Daily data is not implemented yet.
+            {<DailyDataDisplay
+              region={region}
+              model={model ? model.representative.model_id : "PCIC-HYDRO"}
+              emission={emission ? emission.representative.experiment : "historical, rcp85"}
+              rasterMetadata={_.filter(rasterMetadata, {"timescale": "other"})}
+            />}
           </Tab>
         </Tabs>
         {rasterMetadata ? 
