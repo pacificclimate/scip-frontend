@@ -19,7 +19,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
   }
   
   function dontSelectVariable(event){
-    //TODO: put something here. Ask Rod what.
+    //nothing happens here, as we are not using cascading selection
   }
   
     useEffect(() => {

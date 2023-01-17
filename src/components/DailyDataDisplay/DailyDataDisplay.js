@@ -28,11 +28,11 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
   }
   
   function dontSelectVariable(event){
-    //TODO: put something here. Ask Rod what.
+    //nothing happens here, as cascading selection is not in use
   }
   
   function dontSelectClimatology(event) {
-      // TODO: put something here. Ask Rod what.
+    // nothing happens here, as cascaing selection is not in use
   }
   
     useEffect(() => {
@@ -45,11 +45,10 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
             'end_date': climatology.representative.end_date
             });
         
-        var api_calls = [];
-        _.forEach(datafiles, function(datafile) {
-            api_calls.push( annualCycleDataRequest(region.geometry, 
-                                                   datafile.file_id, 
-                                                   variable.representative.variable_id))});
+        const api_calls = _.map(datafiles, datafile => {
+            return annualCycleDataRequest(region.geometry, datafile.file_id, 
+                                   variable.representative.variable_id)
+        });
         Promise.all(api_calls).then((api_responses)=> setDailyTimeSeries(api_responses));
       }
   }, [region, variable, model, emission, rasterMetadata, climatology]);

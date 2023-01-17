@@ -21,7 +21,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
   }
   
   function dontSelectVariable(event){
-    //TODO: put something here. Ask Rod what.
+    //nothing happens here, as we are not using cascading selection
   }
   
     useEffect(() => {
@@ -32,11 +32,11 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
             'model_id': model
             });
         
-        var api_calls = [];
-        _.forEach(datafiles, function(datafile) {
-            api_calls.push( annualCycleDataRequest(region.geometry, 
-                                                   datafile.file_id, 
-                                                   variable.representative.variable_id))});
+        
+        const api_calls = _.map(datafiles, datafile => {
+            return annualCycleDataRequest(region.geometry, datafile.file_id, 
+                                   variable.representative.variable_id)
+        });        
         Promise.all(api_calls).then((api_responses)=> setAnnualCycleTimeSeries(api_responses));
       }
   }, [region, variable, model, emission, rasterMetadata]);

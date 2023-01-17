@@ -105,12 +105,12 @@ export function longTermAverageDataRequest(area, variable, model,
     process.env.REACT_APP_PCEX_API_URL + "/data",
         {
             params: {
-                ensemble_name: ensemble_name,
-                model: model,
-                variable: variable,
-                emission: emission,
-                timescale: timescale,
-                time: time,
+                ensemble_name,
+                model,
+                variable,
+                emission,
+                timescale,
+                time,
                 area: geoJSONtoWKT(area),
             }
         }
