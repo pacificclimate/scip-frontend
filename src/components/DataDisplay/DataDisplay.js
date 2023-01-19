@@ -1,43 +1,106 @@
-// receives the user-selected area of interest, queries the PCEX API to retrieve data
-// about indicators in that area, displays graphs of the results. Currently only displays
-// maximum temperature graphs.
-// currently the graphs are AnnualCycleGraph (timeseries API) and LongTermAverageGraph (data API).
+// receives the user-selected area of interest, queries the PCEX API to retrieve a list
+// of available, and then filters the variables by timescale (yearly, monthly, daily)
+// and sends them to display components for each group.
+// also handles user selection of model and scenario.
 
-
-import {testDataRequest, testLongTermAverageDataRequest} from '../../data-services/pcex-backend.js'
-import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
-import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
+import {getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.js'
 import React, {useState, useEffect} from 'react';
+import YearlyDataDisplay from '../YearlyDataDisplay/YearlyDataDisplay.js'
+import MonthlyDataDisplay from '../MonthlyDataDisplay/MonthlyDataDisplay.js'
+import DailyDataDisplay from '../DailyDataDisplay/DailyDataDisplay.js'
+import ModelSelector from '../selectors/ModelSelector.js'
+import EmissionSelector from '../selectors/EmissionSelector.js'
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
+import _ from 'lodash';
 
 function DataDisplay({region}) {
+
+  const [rasterMetadata, setRasterMetadata] = useState(null);
+  const [model, setModel] = useState(null);
+  const [emission, setEmission] = useState(null);
   
-  const [monthlyTimeSeries, setMonthlyTimeSeries] = useState(null);
-  const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
-  
-  // fetch data and format it as graphs.
-  // currently one call to each of the 'data' and 'timeseries' APIs. 
+  // fetch list of available datasets
   useEffect(() => {
-      if(region) {
-        testDataRequest(region.geometry).then(data => {
-            setMonthlyTimeSeries(data);
-        });
-      }
-  }, [region]);
+    //only needs to be done once
+    if(!rasterMetadata) {
+        getMultimeta().then(data => {
+            setRasterMetadata(flattenMultimeta(data));
+        })
+        }
+    }
+  );
   
-    useEffect(() => {
-      if(region) {
-        testLongTermAverageDataRequest(region.geometry).then(data => {
-            setLongTermTimeSeries(data);
-        });
-      }
-  }, [region]);
+  function selectModel(event) {
+      setModel(event.value);
+  }
+  
+  function dontSelectModel(event){
+    //TODO: put something here. Ask Rod what.
+  }
+  
+  function selectEmission(event) {
+      setEmission(event.value);
+  }
+  
+  function dontSelectEmission(event){
+    //TODO: put something here. Ask Rod what.
+  }
   
   return (
     <div className="DataDisplay">
-        <br/>
-        {monthlyTimeSeries ? <AnnualCycleGraph annualData={monthlyTimeSeries}/> : "No Annual Data Available"}
-        <br/>
-        {longTermTimeSeries ? <LongTermAverageGraph longTermData={longTermTimeSeries}/> : "No Long Term Data Available"}
+        <Tabs
+          id="data-display-tabs"
+          >
+          <Tab eventKey="year" title="Yearly Indicators">
+            {<YearlyDataDisplay
+              region={region}
+              model={model ? model.representative.model_id : "PCIC-HYDRO"}
+              emission={emission? emission.representative.experiment : "historical, rcp85"}
+              rasterMetadata={_.filter(rasterMetadata, {"timescale": "yearly"})}
+            />}
+          </Tab>
+          <Tab eventKey="month" title="Monthly Indicators">
+            {<MonthlyDataDisplay
+              region={region}
+              model={model ? model.representative.model_id : "PCIC-HYDRO"}
+              emission={emission ? emission.representative.experiment : "historical, rcp85"}
+              rasterMetadata={_.filter(rasterMetadata, {"timescale": "monthly"})}
+            />}
+          </Tab>
+          <Tab eventKey="day" title="Daily Indicators">
+            {<DailyDataDisplay
+              region={region}
+              model={model ? model.representative.model_id : "PCIC-HYDRO"}
+              emission={emission ? emission.representative.experiment : "historical, rcp85"}
+              rasterMetadata={_.filter(rasterMetadata, {"timescale": "other"})}
+            />}
+          </Tab>
+        </Tabs>
+        {rasterMetadata ? 
+          <div>
+            <span>Climate Model</span>
+            <ModelSelector 
+              metadata={rasterMetadata}
+              value={model ? model.representative : null}
+              canReplace={false}
+              onChange={selectModel}
+              onNoChange={dontSelectModel}
+            /> 
+          </div> : 
+          "Loading Available Datasets"}
+        {rasterMetadata ?
+          <div>
+            <span> Emmissions Scenario</span> 
+            <EmissionSelector 
+              metadata={rasterMetadata}
+              value={emission ? emission.representative : null}
+              canReplace={false}
+              onChange={selectEmission}
+              onNoChange={dontSelectEmission}
+            />
+          </div> : 
+          "Loading Available Datasets"}
     </div>
   );
 }

@@ -6,25 +6,30 @@ import {makeGraphTimeseries} from '../../helpers/GraphHelpers.js';
 import _ from 'lodash';
 
 //this piecewise loading of plotly avoids an issue where loading 
-//the whole thing at once crashe npm due to memory issues.
+//the whole thing at once crashes npm due to memory issues.
 // see https://prachij012017.medium.com/react-plotly-crashes-on-npm-start-41e2568ce6e3p
 import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 const Plot = createPlotlyComponent(Plotly);
 
 
-function AnnualCycleGraph({annualData, variableInfo}) {
+function DailyGraph({annualData, variableInfo}) {
     
     var yAxisTitle = `Mean ${variableInfo.representative.variable_id} (${ annualData[0].units })`;
     
     function makeDataSeries() {
         if(annualData == null) {
+            console.log("returning null");
             return []
         }
         else {
+            console.log("returning data");
             return _.map(annualData, makeGraphTimeseries);
         }
     }
+    
+    console.log("makeDataSeries result is");
+    console.log(makeDataSeries());
 
     return (
         <Plot
@@ -33,10 +38,10 @@ function AnnualCycleGraph({annualData, variableInfo}) {
                 { 
                     width: 500, 
                     height: 500, 
-                    title: variableInfo.representative.variable_desrciption, 
+                    title: variableInfo.representative.variable_description, 
                     xaxis: {
                         title: 'Month',
-                        tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                        tickvals: [15, 45, 75, 105, 135, 167, 197, 228, 259, 288, 319, 350],
                         ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     },
                     yaxis: {
@@ -48,4 +53,4 @@ function AnnualCycleGraph({annualData, variableInfo}) {
       );
 }
 
-export default AnnualCycleGraph;
+export default DailyGraph;
