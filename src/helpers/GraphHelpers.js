@@ -28,6 +28,28 @@ function last(tuple) {
     return tuple[tuple.length - 1];
 }
 
+// Function that accepts an output from the 'data' PCEX API
+// and outputs a Plotly object describing how to graph the timeseries
+// and label it with its run.
+// Intended for use inside a lodash map call - uses the "index" argument 
+// to assign a differnt colour each time it is called. Accepts lodash map's
+// "collection" argument, but doesn't do anything with it.
+export function makeGraphData(data, index, collection) {    
+    const pairs = _.sortBy(_.toPairs(data.data), first);
+    
+    return {
+        x: _.map(pairs, first),
+        y: _.map(pairs, last),
+        text: Array(pairs.length).fill(data.units),
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: {color: colourNames[index]},
+        hovertemplate: '%{y:.2f}%{text}<extra></extra>',
+        name: data.run,
+    };
+}
+
+
 // Function that accepts an output from the 'timeseries' PCEX API
 // and outputs a Plotly object descrtibing how to graph the timeseries
 // and label it with its climatology.
