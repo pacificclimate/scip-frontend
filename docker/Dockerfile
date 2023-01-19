@@ -23,6 +23,10 @@ RUN chown node /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY --chown=node:node  package.json /app/package.json
 
+RUN npm config get proxy
+RUN npm config rm proxy
+RUN npm config rm https-proxy
+
 RUN npm install
 RUN npm install -g serve
 COPY --chown=node:node . /app
