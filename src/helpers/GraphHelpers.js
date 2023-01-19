@@ -87,6 +87,15 @@ export function makeGraphTimeseries(data, index, collection) {
 // the graph.
 export function noGraphMessage(needed_data) {
     let missing_metadata = [];
+    
+    function noun_with_article(noun) {
+        //doesn't attempt to tackle words that start with h
+        if (noun.match('^[aeiouAEIOU]') ) {
+            return("an " + noun);
+        }
+        else return("a " + noun);
+    }
+
     for(let metadata in needed_data) {
         if(!needed_data[metadata]) {
             missing_metadata.push(metadata);
@@ -96,16 +105,16 @@ export function noGraphMessage(needed_data) {
         return("Loading data...");
     }
     if(missing_metadata.length === 1) {
-        return(`Select a ${missing_metadata[0]} to view data.`);
+        return(`Select ${noun_with_article(missing_metadata[0])} to view data.`);
     }
     else if (missing_metadata.length === 2) {
-        return(`Select a ${missing_metadata[0]} and a ${missing_metadata[1]} to view data.`);
+        return(`Select ${noun_with_article(missing_metadata[0])} and ${noun_with_article(missing_metadata[1])} to view data.`);
     }
     else {
         let text = "Select ";
         for (var i = 0; i < missing_metadata.length-1 ; i++) {
-            text = text.concat(`a ${missing_metadata[i]}, `)
+            text = text.concat(`${noun_with_article(missing_metadata[i])}, `)
         }
-        return(text.concat(`and a ${missing_metadata[missing_metadata.length - 1]} to view data.`));
+        return(text.concat(`and ${noun_with_article(missing_metadata[missing_metadata.length - 1])} to view data.`));
     }
 }
