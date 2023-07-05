@@ -19,17 +19,12 @@ function DailyGraph({annualData, variableInfo}) {
     
     function makeDataSeries() {
         if(annualData == null) {
-            console.log("returning null");
             return []
         }
         else {
-            console.log("returning data");
             return _.map(annualData, makeGraphTimeseries);
         }
     }
-    
-    console.log("makeDataSeries result is");
-    console.log(makeDataSeries());
 
     return (
         <Plot

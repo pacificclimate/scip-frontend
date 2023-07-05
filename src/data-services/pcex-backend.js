@@ -3,6 +3,7 @@
 // responses from the API.
 import axios from 'axios';
 import {map, keys, pick} from 'lodash';
+import {geoJSONtoWKT} from '../helpers/GeographyHelpers.js'
 
 // Functions for accessing the multimeta API, which returns a list of
 // available datafiles, and some metadata about each one
@@ -53,35 +54,6 @@ export function flattenMultimeta(response) {
 
 // Functions for accessing the raster data retrieval APIs, "timeseries" and "data".
 
-function geoJSONtoWKT(area) {
-    // formats geoJSON (used inside SCIP and in leaflet) to WKT (used by
-    // the PCEX data-retreival APIs)
-    // todo: more elegant parsing here.
-    var wkt;
-    if (area === null) {
-        wkt = "";
-    }
-    else if (area.type === "MultiPolygon") {
-        wkt = "MULTIPOLYGON ((";
-        area.coordinates.forEach(function(polygon, index){
-            wkt = wkt.concat("(");
-                polygon[0].forEach(function(point, index) {
-                    wkt = wkt.concat(`${point[0]} ${point[1]},`);
-                });
-            wkt = wkt.slice(0, -1); //remove final comma
-            wkt = wkt.concat(")");
-        });
-        wkt = wkt.concat("))");
-    }
-    else if (area.type === "Point"){
-        wkt = `POINT (${area.coordinates[0]} ${area.coordinates[1]})`
-    }
-    else{
-        console.log("other conversions not implemented yet.");
-        wkt = ""
-    }
-    return wkt;
-}
 
 
 export function annualCycleDataRequest(area, datafile, variable) {    
