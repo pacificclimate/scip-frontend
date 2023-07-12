@@ -55,8 +55,8 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
             region={region}
           /> : 
           noGraphMessage({
-              "watershed": region,
-              "indicator": variable
+              watershed: region,
+              indicator: variable
           })}
     </div>
   );  

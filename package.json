@@ -5,8 +5,8 @@
   "private": true,
   "license": "GPL-3.0",  
   "contributors": [
-    "James Hiebert <hiebert@uvic.ca>",
     "Lee Zeman <lzeman@uvic.ca>",
+    "James Hiebert <hiebert@uvic.ca>",
     "Johnathan Helfrich <jhelfric@uvic.ca>"
   ],  
   "dependencies": {

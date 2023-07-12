@@ -61,8 +61,8 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
             variableInfo={variable}
           /> : 
           noGraphMessage({
-              "watershed": region,
-              "indicator": variable
+              watershed: region,
+              indicator: variable
           })}
     </div>
   );  

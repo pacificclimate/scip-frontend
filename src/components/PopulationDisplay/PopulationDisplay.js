@@ -8,7 +8,7 @@ function PopulationDisplay({region}) {
     
     useEffect(() => {
       if(region) {
-        Promise.all([getSalmonPopulation(region.boundary)]).then((api_response) => setSalmonPopulations(api_response));
+        getSalmonPopulation(region.boundary).then((api_response) => setSalmonPopulations(api_response));
         }        
   }, [region]);
 
@@ -21,7 +21,7 @@ function PopulationDisplay({region}) {
                 populations={salmonPopulations}
             />
             : noGraphMessage({
-              "watershed": region,
+              watershed: region,
           })}
     </div>
     );

@@ -83,9 +83,9 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
             variableInfo={variable}
           /> : 
           noGraphMessage({
-                "climatology": climatology,
-                "indicator": variable,
-                "watershed": region,
+                climatology: climatology,
+                indicator: variable,
+                watershed: region,
                 })}
     </div>
   );  
