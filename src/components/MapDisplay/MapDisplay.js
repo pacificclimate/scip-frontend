@@ -27,11 +27,12 @@ function MapDisplay({region}) {
         });
       }
   }, [region]);
+  
 
   return (
     <div className="MapDisplay">
         <DataMap
-          regionBoundary={region ? region.geometry : null}
+          regionBoundary={region ? region.boundary : null}
           watershedStreams={watershedStreams}
           downstream={downstream}
         />

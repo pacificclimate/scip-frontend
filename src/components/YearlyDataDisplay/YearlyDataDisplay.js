@@ -24,7 +24,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
   
     useEffect(() => {
       if(region && variable) {
-        longTermAverageDataRequest(region.geometry, 
+        longTermAverageDataRequest(region.boundary, 
                                    variable.representative.variable_id,
                                    model,
                                    emission,
@@ -55,8 +55,8 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
             region={region}
           /> : 
           noGraphMessage({
-              "watershed": region,
-              "indicator": variable
+              watershed: region,
+              indicator: variable
           })}
     </div>
   );  

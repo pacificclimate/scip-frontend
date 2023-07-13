@@ -8,6 +8,7 @@ import React, {useState, useEffect} from 'react';
 import YearlyDataDisplay from '../YearlyDataDisplay/YearlyDataDisplay.js'
 import MonthlyDataDisplay from '../MonthlyDataDisplay/MonthlyDataDisplay.js'
 import DailyDataDisplay from '../DailyDataDisplay/DailyDataDisplay.js'
+import PopulationDisplay from '../PopulationDisplay/PopulationDisplay.js'
 import ModelSelector from '../selectors/ModelSelector.js'
 import EmissionSelector from '../selectors/EmissionSelector.js'
 import Tab from 'react-bootstrap/Tab'
@@ -47,6 +48,7 @@ function DataDisplay({region}) {
     //TODO: put something here. Ask Rod what.
   }
   
+
   return (
     <div className="DataDisplay">
         <Tabs
@@ -74,6 +76,11 @@ function DataDisplay({region}) {
               model={model ? model.representative.model_id : "PCIC-HYDRO"}
               emission={emission ? emission.representative.experiment : "historical, rcp85"}
               rasterMetadata={_.filter(rasterMetadata, {"timescale": "other"})}
+            />}
+          </Tab>
+          <Tab eventKey="population" title="Salmon Populations">
+            {<PopulationDisplay
+              region={region}
             />}
           </Tab>
         </Tabs>

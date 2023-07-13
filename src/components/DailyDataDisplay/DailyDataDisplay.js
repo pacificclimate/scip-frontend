@@ -46,7 +46,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
             });
         
         const api_calls = _.map(datafiles, datafile => {
-            return annualCycleDataRequest(region.geometry, datafile.file_id, 
+            return annualCycleDataRequest(region.boundary, datafile.file_id, 
                                    variable.representative.variable_id)
         });
         Promise.all(api_calls).then((api_responses)=> setDailyTimeSeries(api_responses));
@@ -83,9 +83,9 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
             variableInfo={variable}
           /> : 
           noGraphMessage({
-                "climatology": climatology,
-                "indicator": variable,
-                "watershed": region,
+                climatology: climatology,
+                indicator: variable,
+                watershed: region,
                 })}
     </div>
   );  
