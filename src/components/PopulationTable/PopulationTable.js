@@ -18,11 +18,10 @@ export function PopulationTable({populations}) {
         };
     }
 
-    
     const ColumnDefs = [
         {field: 'species'},
         {field: 'code'},
-        {field: 'name'}
+        {field: 'name', flex: 1} //grant extra horizonal space to this column.
     ];
     
     //this is different than merely waiting for data to load.
@@ -32,7 +31,7 @@ export function PopulationTable({populations}) {
     const noSalmonHere = Array.isArray(populations) && populations.length===0;
     
     return (
-        <div class="ag-theme-alpine" style={{height: "400px"}}>
+        <div class="ag-theme-alpine" style={{height: "400px", "text-align": "left"}}>
         {noSalmonHere ? "No salmon populations recorded at this location" : 
             <AgGridReact
                 rowData={_.map(populations, tableizePop)}
