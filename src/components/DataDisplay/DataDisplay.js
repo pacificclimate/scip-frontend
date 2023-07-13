@@ -33,7 +33,7 @@ function DataDisplay({region}) {
   );
   
   function selectModel(event) {
-      setModel(event.value);
+      setModel(event);
   }
   
   function dontSelectModel(event){
@@ -41,7 +41,7 @@ function DataDisplay({region}) {
   }
   
   function selectEmission(event) {
-      setEmission(event.value);
+      setEmission(event);
   }
   
   function dontSelectEmission(event){
@@ -57,24 +57,24 @@ function DataDisplay({region}) {
           <Tab eventKey="year" title="Yearly Indicators">
             {<YearlyDataDisplay
               region={region}
-              model={model ? model.representative.model_id : "PCIC-HYDRO"}
-              emission={emission? emission.representative.experiment : "historical, rcp85"}
+              model={model ? model.value.representative.model_id : "PCIC-HYDRO"}
+              emission={emission? emission.value.representative.experiment : "historical, rcp85"}
               rasterMetadata={_.filter(rasterMetadata, {"timescale": "yearly"})}
             />}
           </Tab>
           <Tab eventKey="month" title="Monthly Indicators">
             {<MonthlyDataDisplay
               region={region}
-              model={model ? model.representative.model_id : "PCIC-HYDRO"}
-              emission={emission ? emission.representative.experiment : "historical, rcp85"}
+              model={model ? model.value.representative.model_id : "PCIC-HYDRO"}
+              emission={emission ? emission.value.representative.experiment : "historical, rcp85"}
               rasterMetadata={_.filter(rasterMetadata, {"timescale": "monthly"})}
             />}
           </Tab>
           <Tab eventKey="day" title="Daily Indicators">
             {<DailyDataDisplay
               region={region}
-              model={model ? model.representative.model_id : "PCIC-HYDRO"}
-              emission={emission ? emission.representative.experiment : "historical, rcp85"}
+              model={model ? model.value.representative.model_id : "PCIC-HYDRO"}
+              emission={emission ? emission.value.representative.experiment : "historical, rcp85"}
               rasterMetadata={_.filter(rasterMetadata, {"timescale": "other"})}
             />}
           </Tab>
@@ -89,7 +89,7 @@ function DataDisplay({region}) {
             <span>Climate Model</span>
             <ModelSelector 
               metadata={rasterMetadata}
-              value={model ? model.representative : null}
+              value={model ? model : null}
               canReplace={false}
               onChange={selectModel}
               onNoChange={dontSelectModel}
@@ -101,7 +101,7 @@ function DataDisplay({region}) {
             <span> Emmissions Scenario</span> 
             <EmissionSelector 
               metadata={rasterMetadata}
-              value={emission ? emission.representative : null}
+              value={emission ? emission : null}
               canReplace={false}
               onChange={selectEmission}
               onNoChange={dontSelectEmission}

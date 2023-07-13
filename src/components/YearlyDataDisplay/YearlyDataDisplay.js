@@ -15,7 +15,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
   const [variable, setVariable] = useState(null);
 
   function selectVariable(event) {
-      setVariable(event.value);
+      setVariable(event);
   }
   
   function dontSelectVariable(event){
@@ -25,7 +25,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
     useEffect(() => {
       if(region && variable) {
         longTermAverageDataRequest(region.boundary, 
-                                   variable.representative.variable_id,
+                                   variable.value.representative.variable_id,
                                    model,
                                    emission,
                                    "yearly",
@@ -41,7 +41,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <VariableSelector 
             metadata={rasterMetadata}
-            value={variable ? variable.representative : null}
+            value={variable ? variable : null}
             canReplace={false}
             onChange={selectVariable}
             onNoChange={dontSelectVariable}
@@ -51,7 +51,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
         {longTermTimeSeries ? 
           <LongTermAverageGraph 
             longTermData={longTermTimeSeries}
-            variableInfo={variable}
+            variableInfo={variable.value}
             region={region}
           /> : 
           noGraphMessage({

@@ -17,7 +17,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
   const [variable, setVariable] = useState(null);
 
   function selectVariable(event) {
-      setVariable(event.value);
+      setVariable(event);
   }
   
   function dontSelectVariable(event){
@@ -27,7 +27,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
     useEffect(() => {
       if(region && variable && rasterMetadata) {
         const datafiles = _.filter(rasterMetadata, {
-            'variable_id': variable.representative.variable_id,
+            'variable_id': variable.value.representative.variable_id,
             'experiment': emission,
             'model_id': model
             });
@@ -35,7 +35,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         
         const api_calls = _.map(datafiles, datafile => {
             return annualCycleDataRequest(region.boundary, datafile.file_id, 
-                                   variable.representative.variable_id)
+                                   variable.value.representative.variable_id)
         });        
         Promise.all(api_calls).then((api_responses)=> setAnnualCycleTimeSeries(api_responses));
       }
@@ -48,7 +48,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <VariableSelector 
             metadata={rasterMetadata}
-            value={variable ? variable.representative : null}
+            value={variable ? variable : null}
             canReplace={false}
             onChange={selectVariable}
             onNoChange={dontSelectVariable}
@@ -58,7 +58,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         {annualCycleTimeSeries ? 
           <AnnualCycleGraph 
             annualData={annualCycleTimeSeries}
-            variableInfo={variable}
+            variableInfo={variable.value}
           /> : 
           noGraphMessage({
               watershed: region,
