@@ -16,12 +16,10 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
   const [annualCycleTimeSeries, setAnnualCycleTimeSeries] = useState(null);
   const [variable, setVariable] = useState(null);
 
-  function selectVariable(event) {
-      setVariable(event);
-  }
+  const selectVariable = setVariable;
   
   function dontSelectVariable(event){
-    //nothing happens here, as we are not using cascading selection
+    //no-op, as we are not using cascading selection
   }
   
     useEffect(() => {
@@ -48,7 +46,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <VariableSelector 
             metadata={rasterMetadata}
-            value={variable ? variable : null}
+            value={variable}
             canReplace={false}
             onChange={selectVariable}
             onNoChange={dontSelectVariable}

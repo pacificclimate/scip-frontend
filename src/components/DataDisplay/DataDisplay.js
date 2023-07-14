@@ -32,20 +32,16 @@ function DataDisplay({region}) {
     }
   );
   
-  function selectModel(event) {
-      setModel(event);
-  }
+  const selectModel = setModel;
   
   function dontSelectModel(event){
-    //TODO: put something here. Ask Rod what.
+    //no-op, as we are not using cascading selection 
   }
   
-  function selectEmission(event) {
-      setEmission(event);
-  }
+  const selectEmission = setEmission;
   
   function dontSelectEmission(event){
-    //TODO: put something here. Ask Rod what.
+    //no-op, as we are not using cascading selection
   }
   
 
@@ -89,7 +85,7 @@ function DataDisplay({region}) {
             <span>Climate Model</span>
             <ModelSelector 
               metadata={rasterMetadata}
-              value={model ? model : null}
+              value={model}
               canReplace={false}
               onChange={selectModel}
               onNoChange={dontSelectModel}
@@ -101,7 +97,7 @@ function DataDisplay({region}) {
             <span> Emmissions Scenario</span> 
             <EmissionSelector 
               metadata={rasterMetadata}
-              value={emission ? emission : null}
+              value={emission}
               canReplace={false}
               onChange={selectEmission}
               onNoChange={dontSelectEmission}

@@ -36,7 +36,7 @@ function AreaDisplay({onChangeRegion, region}) {
         <AreaSelector
             regionNames={map(regions, 'name')}
             onChange={setRegion}
-            currentRegion={selectedRegion ? selectedRegion : null}
+            currentRegion={selectedRegion}
         />
     </div>
   );

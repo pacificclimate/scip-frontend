@@ -19,20 +19,16 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
   const [variable, setVariable] = useState(null);
   const [climatology, setClimatology] = useState(null);
 
-  function selectVariable(event) {
-      setVariable(event);
-  }
+  const selectVariable = setVariable;
   
-  function selectClimatology(event) {
-      setClimatology(event);
-  }
+  const selectClimatology = setClimatology;
   
   function dontSelectVariable(event){
-    //nothing happens here, as cascading selection is not in use
+    //no-op, as cascading selection is not in use
   }
   
   function dontSelectClimatology(event) {
-    // nothing happens here, as cascaing selection is not in use
+    // no-op, as cascading selection is not in use
   }
   
     useEffect(() => {
@@ -60,7 +56,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <VariableSelector 
             metadata={rasterMetadata}
-            value={variable ? variable : null}
+            value={variable}
             canReplace={false}
             onChange={selectVariable}
             onNoChange={dontSelectVariable}
@@ -70,7 +66,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <ClimatologySelector 
             metadata={rasterMetadata}
-            value={climatology ? climatology : null}
+            value={climatology}
             canReplace={false}
             onChange={selectClimatology}
             onNoChange={dontSelectClimatology}
