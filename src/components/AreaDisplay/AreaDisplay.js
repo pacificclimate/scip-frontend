@@ -10,6 +10,7 @@ import {parseRegions, filterRegions} from '../../helpers/GeographyHelpers.js';
 
 function AreaDisplay({onChangeRegion, region}) {
   const [regions, setRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState([]);
 
   //fetch region list from the API.
   // this only needs to be done once, when the component is loaded
@@ -25,17 +26,17 @@ function AreaDisplay({onChangeRegion, region}) {
   
   function setRegion(event) {
       const region = find(regions, function(r) {return r.name === event.value});
+      setSelectedRegion(event);
       
       onChangeRegion(region);
   };
     
   return (
     <div className="AreaDisplay">
-        <p>Currently Selected Region: {region ? region.name : "none"}</p>
         <AreaSelector
             regionNames={map(regions, 'name')}
             onChange={setRegion}
-            currentRegion={region ? region.name : null}
+            currentRegion={selectedRegion}
         />
     </div>
   );

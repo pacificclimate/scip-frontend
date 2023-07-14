@@ -19,35 +19,31 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
   const [variable, setVariable] = useState(null);
   const [climatology, setClimatology] = useState(null);
 
-  function selectVariable(event) {
-      setVariable(event.value);
-  }
+  const selectVariable = setVariable;
   
-  function selectClimatology(event) {
-      setClimatology(event.value);
-  }
+  const selectClimatology = setClimatology;
   
   function dontSelectVariable(event){
-    //nothing happens here, as cascading selection is not in use
+    //no-op, as cascading selection is not in use
   }
   
   function dontSelectClimatology(event) {
-    // nothing happens here, as cascaing selection is not in use
+    // no-op, as cascading selection is not in use
   }
   
     useEffect(() => {
       if(region && variable && climatology && rasterMetadata) {
         const datafiles = _.filter(rasterMetadata, {
-            'variable_id': variable.representative.variable_id,
+            'variable_id': variable.value.representative.variable_id,
             'experiment': emission,
             'model_id': model,
-            'start_date': climatology.representative.start_date,
-            'end_date': climatology.representative.end_date
+            'start_date': climatology.value.representative.start_date,
+            'end_date': climatology.value.representative.end_date
             });
         
         const api_calls = _.map(datafiles, datafile => {
             return annualCycleDataRequest(region.boundary, datafile.file_id, 
-                                   variable.representative.variable_id)
+                                   variable.value.representative.variable_id)
         });
         Promise.all(api_calls).then((api_responses)=> setDailyTimeSeries(api_responses));
       }
@@ -60,7 +56,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <VariableSelector 
             metadata={rasterMetadata}
-            value={variable ? variable.representative : null}
+            value={variable}
             canReplace={false}
             onChange={selectVariable}
             onNoChange={dontSelectVariable}
@@ -70,7 +66,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <ClimatologySelector 
             metadata={rasterMetadata}
-            value={climatology ? climatology.representative : null}
+            value={climatology}
             canReplace={false}
             onChange={selectClimatology}
             onNoChange={dontSelectClimatology}
@@ -80,7 +76,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
         {dailyTimeSeries ? 
           <DailyGraph 
             annualData={dailyTimeSeries}
-            variableInfo={variable}
+            variableInfo={variable.value}
           /> : 
           noGraphMessage({
                 climatology: climatology,

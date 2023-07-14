@@ -16,18 +16,16 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
   const [annualCycleTimeSeries, setAnnualCycleTimeSeries] = useState(null);
   const [variable, setVariable] = useState(null);
 
-  function selectVariable(event) {
-      setVariable(event.value);
-  }
+  const selectVariable = setVariable;
   
   function dontSelectVariable(event){
-    //nothing happens here, as we are not using cascading selection
+    //no-op, as we are not using cascading selection
   }
   
     useEffect(() => {
       if(region && variable && rasterMetadata) {
         const datafiles = _.filter(rasterMetadata, {
-            'variable_id': variable.representative.variable_id,
+            'variable_id': variable.value.representative.variable_id,
             'experiment': emission,
             'model_id': model
             });
@@ -35,7 +33,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         
         const api_calls = _.map(datafiles, datafile => {
             return annualCycleDataRequest(region.boundary, datafile.file_id, 
-                                   variable.representative.variable_id)
+                                   variable.value.representative.variable_id)
         });        
         Promise.all(api_calls).then((api_responses)=> setAnnualCycleTimeSeries(api_responses));
       }
@@ -48,7 +46,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <VariableSelector 
             metadata={rasterMetadata}
-            value={variable ? variable.representative : null}
+            value={variable}
             canReplace={false}
             onChange={selectVariable}
             onNoChange={dontSelectVariable}
@@ -58,7 +56,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
         {annualCycleTimeSeries ? 
           <AnnualCycleGraph 
             annualData={annualCycleTimeSeries}
-            variableInfo={variable}
+            variableInfo={variable.value}
           /> : 
           noGraphMessage({
               watershed: region,

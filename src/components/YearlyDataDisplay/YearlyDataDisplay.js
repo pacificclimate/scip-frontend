@@ -14,9 +14,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
   const [variable, setVariable] = useState(null);
 
-  function selectVariable(event) {
-      setVariable(event.value);
-  }
+  const selectVariable = setVariable;
   
   function dontSelectVariable(event){
     //nothing happens here, as we are not using cascading selection
@@ -25,7 +23,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
     useEffect(() => {
       if(region && variable) {
         longTermAverageDataRequest(region.boundary, 
-                                   variable.representative.variable_id,
+                                   variable.value.representative.variable_id,
                                    model,
                                    emission,
                                    "yearly",
@@ -41,7 +39,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
         {rasterMetadata ? 
           <VariableSelector 
             metadata={rasterMetadata}
-            value={variable ? variable.representative : null}
+            value={variable}
             canReplace={false}
             onChange={selectVariable}
             onNoChange={dontSelectVariable}
@@ -51,7 +49,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
         {longTermTimeSeries ? 
           <LongTermAverageGraph 
             longTermData={longTermTimeSeries}
-            variableInfo={variable}
+            variableInfo={variable.value}
             region={region}
           /> : 
           noGraphMessage({
