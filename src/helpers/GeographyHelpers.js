@@ -4,21 +4,6 @@ import _ from 'lodash';
 //attribute names to show on screen
 export const displayRegionAttributeNames = {};
 
-// for temporary use while only some data is available.
-const upper_fraser_watersheds = [
-    'Lower Chilako River', 'Lower Salmon River', 'Quesnel River',
-    'Salmon River', 'Cottonwood River', 'Euchiniko River', 
-    'Herrick Creek', 'Muskeg River', 'Nazko River', 'Morkill River', 
-    'Cariboo River', 'Bowron', 'Blackwater River', 'Willow River', 
-    'Tabor River', 'Narcosli Creek', 'Upper Fraser River', 
-    'Chilako River', 'McGregor River', 'Stuart River'
-    ];
-
-export function filterRegions(regions) {
-    return _.filter(regions, region => {
-    return(_.includes(upper_fraser_watersheds, region.name)); 
-    })
-}
 
 // Is point a valid WKT point?
 export function validPoint(point) {
@@ -38,7 +23,7 @@ export function parseRegions(regions) {
         region.boundary = b;
         return region;
     }
-    return(_.map(regions, parseBoundary));
+    return(_.sortBy(_.map(regions, parseBoundary), 'name'));
 }
 
 // the frontend uses geoJSON format, but the backends expect WKT format;

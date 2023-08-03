@@ -2,15 +2,13 @@
 // (watersheds, conservation units, drainage basins, etc); lets the user select the
 // area they care about; displays categorical data about the selected area 
 
-import {getWatersheds, getBasins} from '../../data-services/scip-backend.js';
+import {getWatersheds, getBasins, getConservationUnits} from '../../data-services/scip-backend.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
 import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
-import {parseRegions, filterRegions} from '../../helpers/GeographyHelpers.js';
+import {parseRegions} from '../../helpers/GeographyHelpers.js';
 
 function AreaDisplay({onChangeRegion, region}) {
-  const [regions, setRegions] = useState([]);
-  
   const [basins, setBasins] = useState([]);
   const [selectedBasin, setSelectedBasin] = useState(null);
   
@@ -20,21 +18,17 @@ function AreaDisplay({onChangeRegion, region}) {
 
   const [conservationUnits, setConservationUnits] = useState([]);
   const [selectedConservationUnit, setSelectedConservationUnit] = useState([]);
-
-
-  
-  const [selectedRegion, setSelectedRegion] = useState([]);
  
   // Hooks for this component are a little complex
   // This component allows a user to select a "region" and the rest of the app
   // (maps, graphs) will provide information based on what was selected. The 
-  // rest of the app is passed region informal by the onChangeRegion callback
+  // rest of the app is passed region information by the onChangeRegion callback
   // function.
   // This particular component understands three kinds of "region" - "basins", 
   // "conservation units", and "watersheds". Basins represent large river systems
   // like the Nass or Columbia; watersheds represent a stream network as defined by the 
   // BC Freshwater Atlas, and Conservation Units represent the location where a
-  // particular salmon species lives.
+  // particular salmon species lives. A user may examine data for any of these region kinds.
   // While other components don't know or care what kind of "region" a user has selected,
   // this component has some extra hooks relating to the hierarchical nature of
   // region selection. A "basin" contains many "watersheds" and "conservation units"
@@ -75,52 +69,51 @@ function AreaDisplay({onChangeRegion, region}) {
     onChangeRegion(basin);       
   }
   
-  //update selectable watersheds when a basin is selected
+  //update selectable watersheds and conservation units when a basin is selected
   useEffect(() => {
-    if(selectedBasin) { //select watersheds in this basin only
+    if(selectedBasin) { //select subsidiary regions in this basin only
         const b = findRegion("basin", selectedBasin.value);
         getWatersheds(b.boundary).then(
             data => {
                 setWatersheds(parseRegions(data));
             }
         );
+        getConservationUnits(b.boundary).then(
+            data => {
+                setConservationUnits(parseRegions(data));
+            }
+        );
     }
-    else { //all watersheds are selectable
+    else { //all regions are selectable
         getWatersheds().then(
             data => {
                 setWatersheds(parseRegions(data));
             }
         )
+        getConservationUnits().then(
+            data => {
+                setConservationUnits(parseRegions(data));
+            }
+        )
     }
     setSelectedWatershed(null);
+    setSelectedConservationUnit(null);
   }, [selectedBasin]);
 
   function setWatershed(event) {
     const watershed = findRegion("watershed", event.value);
     setSelectedWatershed(event);
+    setSelectedConservationUnit(null);
     onChangeRegion(watershed);
   }
-
-  //fetch region list from the API.
-  // this only needs to be done once, when the component is loaded
-  useEffect(() => {
-    if(regions.length === 0) {
-        getWatersheds().then(
-            data => {
-                setRegions(filterRegions(parseRegions(data)));
-            }
-        );
-    }
-  });
   
-
-  function setRegion(event) {
-      const region = find(regions, function(r) {return r.name === event.value});
-      setSelectedRegion(event);
-      
-      onChangeRegion(region);
-  };
-    
+  function setConservationUnit(event) {
+    const cu = findRegion("conservationUnit", event.value);
+    setSelectedConservationUnit(event);
+    setSelectedWatershed(null);
+    onChangeRegion(cu);
+  }
+  
   return (
     <div className="AreaDisplay">
         Select a watershed or conservation unit to view indicator and population data, or narrow down the list by selecting a basin or salmon species.
@@ -135,6 +128,12 @@ function AreaDisplay({onChangeRegion, region}) {
             onChange={setWatershed}
             currentRegion={selectedWatershed}
             kind={'watershed'}
+        />
+        <AreaSelector
+            regionNames={map(conservationUnits, 'name')}
+            onChange={setConservationUnit}
+            currentRegion={selectedConservationUnit}
+            kind={'conservation unit'}
         />
     </div>
   );

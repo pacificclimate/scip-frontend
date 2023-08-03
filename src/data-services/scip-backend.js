@@ -37,3 +37,18 @@ export function getBasins() {
     )
     .then(response => response.data);
 }
+
+export function getConservationUnits(overlap = null) {
+    let params = {kind: "conservation_unit"};
+    if(overlap) {
+        params.overlap = overlap;
+    }
+
+    return axios.get(
+        process.env.REACT_APP_SCIP_API_URL + "/region",
+        {
+            params: params
+        }
+    )
+    .then(response => response.data);
+}
