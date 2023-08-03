@@ -104,7 +104,7 @@ export function getWatershedStreams(point) {
         {
             params: {
                 station: geoJSONtoWKT(point),
-                ensemble_name: "upper_fraser_watershed"
+                ensemble_name: "frapce_watershed"
             }
         }
     )
@@ -119,7 +119,7 @@ export function getDownstream(point) {
         {
             params: {
                 station: geoJSONtoWKT(point),
-                ensemble_name: "upper_fraser_watershed"
+                ensemble_name: "frapce_watershed"
             }
         }
     )

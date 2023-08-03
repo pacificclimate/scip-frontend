@@ -4,6 +4,7 @@
 
 import {getWatersheds, getBasins, getConservationUnits} from '../../data-services/scip-backend.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
+import {Container, Row, Col} from 'react-bootstrap';
 import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
 import {parseRegions} from '../../helpers/GeographyHelpers.js';
@@ -116,25 +117,33 @@ function AreaDisplay({onChangeRegion, region}) {
   
   return (
     <div className="AreaDisplay">
-        Select a watershed or conservation unit to view indicator and population data, or narrow down the list by selecting a basin or salmon species.
+        Select a watershed or conservation unit to view indicator and population data, or narrow down the list by selecting a basin.
         <AreaSelector
             regionNames = {map(basins, 'name')}
             onChange={setBasin}
             currentRegion={selectedBasin}
             kind={'basin'}
         />
-        <AreaSelector
-            regionNames={map(watersheds, 'name')}
-            onChange={setWatershed}
-            currentRegion={selectedWatershed}
-            kind={'watershed'}
-        />
-        <AreaSelector
-            regionNames={map(conservationUnits, 'name')}
-            onChange={setConservationUnit}
-            currentRegion={selectedConservationUnit}
-            kind={'conservation unit'}
-        />
+        <Container fluid>
+          <Row>
+            <Col lg={6} md={6}>
+              <AreaSelector
+                  regionNames={map(watersheds, 'name')}
+                  onChange={setWatershed}
+                  currentRegion={selectedWatershed}
+                  kind={'watershed'}
+              />
+            </Col>
+            <Col lg={6} md={6}>
+              <AreaSelector
+                  regionNames={map(conservationUnits, 'name')}
+                  onChange={setConservationUnit}
+                  currentRegion={selectedConservationUnit}
+                  kind={'conservation unit'}
+              />
+            </Col>
+          </Row>
+        </Container>
     </div>
   );
 }

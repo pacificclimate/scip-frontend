@@ -19,6 +19,9 @@ function MapDisplay({region}) {
             }
         );
       }
+      else { // region with no valid outlet - display no stream data
+          setWatershedStreams(null);
+      }
   }, [region]);
   
     useEffect(() => {
@@ -26,6 +29,9 @@ function MapDisplay({region}) {
         getDownstream(JSON.parse(region.outlet)).then(data => {
             setDownstream(data);
         });
+      }
+      else { //region with no valid outlet - display no stream data
+          setDownstream(null);
       }
   }, [region]);
   
