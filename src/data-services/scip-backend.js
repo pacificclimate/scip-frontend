@@ -13,11 +13,26 @@ export function getSalmonPopulation(region) {
     .then(response => response.data);
 }
 
-export function getWatersheds() {
+export function getWatersheds(overlap = null) {
+    let params = {kind: "watershed"};
+    if(overlap) {
+        params.overlap = overlap;
+    }
+
     return axios.get(
         process.env.REACT_APP_SCIP_API_URL + "/region",
         {
-            params: {kind: "watershed"}
+            params: params
+        }
+    )
+    .then(response => response.data);
+}
+
+export function getBasins() {
+    return axios.get(
+        process.env.REACT_APP_SCIP_API_URL + "/region",
+        {
+            params: {kind: "basin"}
         }
     )
     .then(response => response.data);

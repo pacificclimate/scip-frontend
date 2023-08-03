@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash';
 // helper functions for parsing or formatting geographic data
 
 //attribute names to show on screen
@@ -18,6 +18,18 @@ export function filterRegions(regions) {
     return _.filter(regions, region => {
     return(_.includes(upper_fraser_watersheds, region.name)); 
     })
+}
+
+// Is point a valid WKT point?
+export function validPoint(point) {
+    const p = JSON.parse(point)
+    return p 
+        && _.has(p, 'type')
+        && p.type === "Point"
+        && _.has(p, 'coordinates') 
+        && p.coordinates.length === 2 
+        && _.isNumber(p.coordinates[0])
+        && _.isNumber(p.coordinates[1]);
 }
 
 export function parseRegions(regions) {    

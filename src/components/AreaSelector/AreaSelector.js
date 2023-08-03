@@ -3,7 +3,7 @@
 import Select from 'react-select'
 import React from 'react'
 
-function AreaSelector({regionNames, onChange, currentRegion}) {
+function AreaSelector({regionNames, onChange, currentRegion, kind}) {
   var valueOptions = [];
   regionNames.forEach(name => valueOptions.push({"value": name, "label": name}));
 
@@ -16,7 +16,7 @@ function AreaSelector({regionNames, onChange, currentRegion}) {
 
   return (
     <div className="AreaSelector">
-        Select a watershed.
+        Select a {kind}.
         <Select
             styles={customStyles}
             isSearchable
