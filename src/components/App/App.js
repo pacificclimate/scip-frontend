@@ -24,27 +24,25 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Salmon Climate Impacts Portal</h1>
-        <Container fluid>
-          <Row>
-            <Col lg={6} md={6}>
-              <MapDisplay
-                region={region}
-              />
-              <AreaDisplay
-                onChangeRegion={setRegion}
-                region={region}
-              />
-            </Col>
-            <Col lg={6} md={6}>
-              <DataDisplay
-                region={region}
-              />
-            </Col> 
-          </Row>
-        </Container>        
-      </header>
+      <h1>Salmon Climate Impacts Portal</h1>
+      <Container fluid>
+        <Row>
+          <Col lg={6} md={6}>
+            <MapDisplay
+              region={region}
+            />
+            <AreaDisplay
+              onChangeRegion={setRegion}
+              region={region}
+            />
+          </Col>
+          <Col lg={6} md={6}>
+            <DataDisplay
+              region={region}
+            />
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
