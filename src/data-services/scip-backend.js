@@ -52,3 +52,10 @@ export function getConservationUnits(overlap = null) {
     )
     .then(response => response.data);
 }
+
+export function getTaxons() {
+    return axios.get(
+        process.env.REACT_APP_SCIP_API_URL + "/taxon"
+    )
+    .then(response => response.data);
+}

@@ -2,12 +2,14 @@
 // (watersheds, conservation units, drainage basins, etc); lets the user select the
 // area they care about; displays categorical data about the selected area 
 
-import {getWatersheds, getBasins, getConservationUnits} from '../../data-services/scip-backend.js';
+import {getWatersheds, getBasins, getConservationUnits, getTaxons} from '../../data-services/scip-backend.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
+import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
 import {Container, Row, Col} from 'react-bootstrap';
 import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
 import {parseRegions} from '../../helpers/GeographyHelpers.js';
+import _ from 'lodash';
 
 function AreaDisplay({onChangeRegion, region}) {
   const [basins, setBasins] = useState([]);
@@ -19,6 +21,9 @@ function AreaDisplay({onChangeRegion, region}) {
 
   const [conservationUnits, setConservationUnits] = useState([]);
   const [selectedConservationUnit, setSelectedConservationUnit] = useState([]);
+  
+  const [taxons, setTaxons] = useState([]);
+  const [selectedTaxons, setSelectedTaxons] = useState([]);
  
   // Hooks for this component are a little complex
   // This component allows a user to select a "region" and the rest of the app
@@ -51,6 +56,19 @@ function AreaDisplay({onChangeRegion, region}) {
       }
   });
   
+  // fetch species list from the API.
+  // this only needs to be done once, when the component is loaded
+  useEffect(() => {
+      if(taxons.length === 0) {
+          getTaxons().then(
+            data => {
+                setTaxons(data);
+                setSelectedTaxons(data); //start with all species selected
+            }  
+          );
+      }
+  });
+    
   // returns a region given its kind and name
   function findRegion(kind, name) {
       const regionList = {
@@ -60,6 +78,21 @@ function AreaDisplay({onChangeRegion, region}) {
         }[kind];
         
         return find(regionList, function(r) {return r.name === name});
+  }
+  
+  function handleTaxonChange(taxon, checked) {
+      if(checked) {
+          setSelectedTaxons(_.concat(selectedTaxons, taxon));
+      }
+      else {
+        let newSelectedTaxons = [];
+        for(let i = 0; i < selectedTaxons.length; i++) {
+            if(selectedTaxons[i].common_name !== taxon.common_name || selectedTaxons[i].subgroup !== taxon.subgroup) {
+                newSelectedTaxons.push(selectedTaxons[i]);
+            }
+        }
+        setSelectedTaxons(newSelectedTaxons);
+      }
   }
 
 
@@ -117,32 +150,41 @@ function AreaDisplay({onChangeRegion, region}) {
   
   return (
     <div className="AreaDisplay">
-        Select a watershed or conservation unit to view indicator and population data, or narrow down the list by selecting a basin.
-        <AreaSelector
-            regionNames = {map(basins, 'name')}
-            onChange={setBasin}
-            currentRegion={selectedBasin}
-            kind={'basin'}
-        />
+        Select a watershed or conservation unit to view indicator and population data, or narrow down the list by selecting a basin or species.
         <Container fluid>
-          <Row>
-            <Col lg={6} md={6}>
-              <AreaSelector
-                  regionNames={map(watersheds, 'name')}
-                  onChange={setWatershed}
-                  currentRegion={selectedWatershed}
-                  kind={'watershed'}
-              />
-            </Col>
-            <Col lg={6} md={6}>
-              <AreaSelector
-                  regionNames={map(conservationUnits, 'name')}
-                  onChange={setConservationUnit}
-                  currentRegion={selectedConservationUnit}
-                  kind={'conservation unit'}
-              />
-            </Col>
-          </Row>
+            <Row>
+                <TaxonSelector
+                    taxons = {taxons}
+                    selectedTaxons = {selectedTaxons}
+                    onChange = {handleTaxonChange}
+                />
+            </Row>
+            <Row>
+                <AreaSelector
+                    regionNames = {map(basins, 'name')}
+                    onChange={setBasin}
+                    currentRegion={selectedBasin}
+                    kind={'basin'}
+                />
+            </Row>
+            <Row>
+                <Col lg={6} md={6}>
+                    <AreaSelector
+                        regionNames={map(watersheds, 'name')}
+                        onChange={setWatershed}
+                        currentRegion={selectedWatershed}
+                        kind={'watershed'}
+                    />
+                </Col>
+                <Col lg={6} md={6}>
+                    <AreaSelector
+                        regionNames={map(conservationUnits, 'name')}
+                        onChange={setConservationUnit}
+                        currentRegion={selectedConservationUnit}
+                        kind={'conservation unit'}
+                    />
+                </Col>
+            </Row>
         </Container>
     </div>
   );

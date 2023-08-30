@@ -30,3 +30,21 @@ export function unravelObject(object, attribute_name){
     
     return _.map(object, makeObject);
 }
+
+// describes a taxon object as a string. Common name, and if
+// there is a subgroup, it is appended with a dash.
+export function taxonString(taxonObject) {
+    if(taxonObject.subgroup){
+        return(`${taxonObject.common_name} - ${taxonObject.subgroup}`);
+    }
+    else{
+        return(`${taxonObject.common_name}`);
+    }
+}
+
+// returns the taxon object associated with a string
+// the inverse of taxonString
+export function taxonObject(taxonStr, taxonObjects){
+    let f = _.find(taxonObjects, t => {return taxonString(t) === taxonStr;});
+    return f;
+}
