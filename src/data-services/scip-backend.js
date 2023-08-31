@@ -13,10 +13,16 @@ export function getSalmonPopulation(region) {
     .then(response => response.data);
 }
 
-export function getWatersheds(overlap = null) {
+export function getWatersheds(overlap = null, common_name = null, subgroup = null) {
     let params = {kind: "watershed"};
     if(overlap) {
         params.overlap = overlap;
+    }
+    if(common_name) {
+        params.common_name = common_name;
+        if(subgroup) {
+            params.subgroup = subgroup;
+        }
     }
 
     return axios.get(
@@ -38,10 +44,16 @@ export function getBasins() {
     .then(response => response.data);
 }
 
-export function getConservationUnits(overlap = null) {
+export function getConservationUnits(overlap = null, common_name = null, subgroup = null) {
     let params = {kind: "conservation_unit"};
     if(overlap) {
         params.overlap = overlap;
+    }
+    if(common_name) {
+        params.common_name = common_name;
+        if(subgroup) {
+            params.subgroup = subgroup;
+        }
     }
 
     return axios.get(

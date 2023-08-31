@@ -8,7 +8,7 @@ import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
 import {Container, Row, Col} from 'react-bootstrap';
 import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
-import {parseRegions} from '../../helpers/GeographyHelpers.js';
+import {parseRegions, regionListUnion} from '../../helpers/GeographyHelpers.js';
 import _ from 'lodash';
 
 function AreaDisplay({onChangeRegion, region}) {
@@ -17,7 +17,6 @@ function AreaDisplay({onChangeRegion, region}) {
   
   const [watersheds, setWatersheds] = useState([]);
   const [selectedWatershed, setSelectedWatershed] = useState([]);
-
 
   const [conservationUnits, setConservationUnits] = useState([]);
   const [selectedConservationUnit, setSelectedConservationUnit] = useState([]);
@@ -43,6 +42,11 @@ function AreaDisplay({onChangeRegion, region}) {
   // selector are updated to include only regions in that basin. This is to help a user 
   // find the conservation unit or watershed they care about - they may not know its
   // official name, but they probably know what river system it's part of.
+  //
+  // Users may also indicate which salmon species or taxons they ae interested in.
+  // This doesn't change the selected basin, conservation unit, or watershed, but it
+  // does change which ones are selectable in the dropdown menus - only regions that 
+  // contain the currently selected species are available.
 
   // fetch basin list from the API.
   // this only needs to be done once, when the component is loaded
@@ -81,20 +85,69 @@ function AreaDisplay({onChangeRegion, region}) {
   }
   
   function handleTaxonChange(taxon, checked) {
+      let newSelectedTaxons = [];
       if(checked) {
-          setSelectedTaxons(_.concat(selectedTaxons, taxon));
+          newSelectedTaxons = _.concat(selectedTaxons, taxon);
       }
       else {
-        let newSelectedTaxons = [];
+        newSelectedTaxons = [];
         for(let i = 0; i < selectedTaxons.length; i++) {
             if(selectedTaxons[i].common_name !== taxon.common_name || selectedTaxons[i].subgroup !== taxon.subgroup) {
                 newSelectedTaxons.push(selectedTaxons[i]);
             }
         }
-        setSelectedTaxons(newSelectedTaxons);
       }
+      setSelectedTaxons(newSelectedTaxons);
   }
 
+  // update selectable watersheds and conservation units in dropdowns.
+  // called when either the selected taxon or the selected basin is changed - 
+  // available watersheds and conservation units are filtered by both taxon and 
+  // basin.
+  // doesn't update the selected region or change what's on the map. 
+  useEffect(() => {
+      const basin = selectedBasin ? findRegion("basin", selectedBasin.value) : null;
+      const boundary = basin ? basin.boundary : null;
+      
+      if(selectedTaxons.length === 0) {
+          // all taxons have been deselected - no selectable watersheds or
+          // conservation units.
+          setConservationUnits([]);
+          setWatersheds([]);
+      }
+      else if(selectedTaxons.length === taxons.length) {
+          // all taxons are selected, no filtering on species.
+          // filtering occurs on basin only, if that.
+        getWatersheds(boundary).then(
+            data => {
+                setWatersheds(parseRegions(data));
+            }
+        );
+        getConservationUnits(boundary).then(
+            data => {
+                setConservationUnits(parseRegions(data));
+            }
+        );
+      }
+      else {
+          // some, but not all, taxons are selected. 
+          // need to do multiple queries and merge the results.
+          const watershed_calls = _.map(selectedTaxons, taxon => {
+              return getWatersheds(boundary, taxon.common_name, taxon.subgroup)
+          });
+          Promise.all(watershed_calls).then((api_responses)=> 
+            setWatersheds(regionListUnion(_.map(api_responses, parseRegions)))
+          );
+          
+          const cu_calls = _.map(selectedTaxons, taxon => {
+              return getConservationUnits(boundary, taxon.common_name, taxon.subgroup)
+          });
+          Promise.all(cu_calls).then((api_responses)=> 
+            setConservationUnits(regionListUnion(_.map(api_responses, parseRegions)))
+          );
+      }
+  }, [selectedBasin, selectedTaxons]);
+  
 
   function setBasin(event){
     const basin = findRegion("basin", event.value);
@@ -103,33 +156,8 @@ function AreaDisplay({onChangeRegion, region}) {
     onChangeRegion(basin);       
   }
   
-  //update selectable watersheds and conservation units when a basin is selected
+  //unselect current watershed or conservation unit whenever a new basin is selected.
   useEffect(() => {
-    if(selectedBasin) { //select subsidiary regions in this basin only
-        const b = findRegion("basin", selectedBasin.value);
-        getWatersheds(b.boundary).then(
-            data => {
-                setWatersheds(parseRegions(data));
-            }
-        );
-        getConservationUnits(b.boundary).then(
-            data => {
-                setConservationUnits(parseRegions(data));
-            }
-        );
-    }
-    else { //all regions are selectable
-        getWatersheds().then(
-            data => {
-                setWatersheds(parseRegions(data));
-            }
-        )
-        getConservationUnits().then(
-            data => {
-                setConservationUnits(parseRegions(data));
-            }
-        )
-    }
     setSelectedWatershed(null);
     setSelectedConservationUnit(null);
   }, [selectedBasin]);
@@ -150,7 +178,8 @@ function AreaDisplay({onChangeRegion, region}) {
   
   return (
     <div className="AreaDisplay">
-        Select a watershed or conservation unit to view indicator and population data, or narrow down the list by selecting a basin or species.
+        Select a watershed or conservation unit to view indicator and population data,
+        or narrow down the list by selecting a basin or species first.
         <Container fluid>
             <Row>
                 <TaxonSelector

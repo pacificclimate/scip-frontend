@@ -26,6 +26,13 @@ export function parseRegions(regions) {
     return(_.sortBy(_.map(regions, parseBoundary), 'name'));
 }
 
+// returns the set of regions in the lists - intended to merge
+// the results of multiple region queries with different parameters
+// into a single list of all the unique regions
+export function regionListUnion(lists) {
+    return(_.unionBy(...lists, "name"));
+}
+
 // the frontend uses geoJSON format, but the backends expect WKT format;
 // convert from geoJSON to WKT
 export function geoJSONtoWKT(area) {
