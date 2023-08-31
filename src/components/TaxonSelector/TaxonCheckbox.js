@@ -21,6 +21,7 @@ function TaxonCheckbox({taxon, selectedTaxons, onChange}) {
     };
     
     return (
+//        <div>
         <label>
             <input
                 type="checkbox"
@@ -30,6 +31,7 @@ function TaxonCheckbox({taxon, selectedTaxons, onChange}) {
             />
             {taxonString(taxon)}
         </label>
+//        </div>
         );
 }
 

@@ -6,6 +6,9 @@ import React, {useState, useEffect} from 'react';
 import TaxonCheckbox from'./TaxonCheckbox.js'; 
 import _ from 'lodash';
 
+import './TaxonSelector.css';
+
+
 
 function TaxonSelector({taxons, selectedTaxons, onChange}) {
 

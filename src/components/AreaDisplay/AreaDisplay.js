@@ -182,22 +182,24 @@ function AreaDisplay({onChangeRegion, region}) {
         or narrow down the list by selecting a basin or species first.
         <Container fluid>
             <Row>
-                <TaxonSelector
-                    taxons = {taxons}
-                    selectedTaxons = {selectedTaxons}
-                    onChange = {handleTaxonChange}
-                />
+                <Col>
+                    <AreaSelector
+                        regionNames = {map(basins, 'name')}
+                        onChange={setBasin}
+                        currentRegion={selectedBasin}
+                        kind={'basin'}
+                    />
+                </Col>
+                <Col>
+                    <TaxonSelector
+                        taxons = {taxons}
+                        selectedTaxons = {selectedTaxons}
+                        onChange = {handleTaxonChange}
+                    />
+                </Col>
             </Row>
             <Row>
-                <AreaSelector
-                    regionNames = {map(basins, 'name')}
-                    onChange={setBasin}
-                    currentRegion={selectedBasin}
-                    kind={'basin'}
-                />
-            </Row>
-            <Row>
-                <Col lg={6} md={6}>
+                <Col>
                     <AreaSelector
                         regionNames={map(watersheds, 'name')}
                         onChange={setWatershed}
@@ -205,7 +207,7 @@ function AreaDisplay({onChangeRegion, region}) {
                         kind={'watershed'}
                     />
                 </Col>
-                <Col lg={6} md={6}>
+                <Col>
                     <AreaSelector
                         regionNames={map(conservationUnits, 'name')}
                         onChange={setConservationUnit}

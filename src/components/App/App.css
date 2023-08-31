@@ -25,3 +25,14 @@
     transform: rotate(360deg);
   }
 }
+
+.Header {
+    display:flex; 
+    flex-direction:row;
+    justify-content: start;
+}
+
+.Title {
+    margin-left: 30px;
+    margin-right: 30px;
+}

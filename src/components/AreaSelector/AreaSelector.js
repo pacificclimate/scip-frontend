@@ -3,22 +3,15 @@
 import Select from 'react-select'
 import React from 'react'
 
+
 function AreaSelector({regionNames, onChange, currentRegion, kind}) {
   var valueOptions = [];
   regionNames.forEach(name => valueOptions.push({"value": name, "label": name}));
-
-  const customStyles = {
-    option: (provided) => ({
-      ...provided,
-      color: 'grey'
-    })
-  } 
 
   return (
     <div className="AreaSelector">
         Select a {kind}.
         <Select
-            styles={customStyles}
             isSearchable
             isLoading={regionNames === null}
             options={valueOptions || []}
