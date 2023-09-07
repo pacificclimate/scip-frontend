@@ -2,8 +2,9 @@
 // on. Receives the list of possible species from its parent, creates a checkbox
 // for each, and passes any user changes of what is check to its parent via 
 // onChange.
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import TaxonCheckbox from'./TaxonCheckbox.js'; 
+import ButtonToolbar from 'react-bootstrap/ButtonGroup';
 import _ from 'lodash';
 
 import './TaxonSelector.css';
@@ -11,18 +12,13 @@ import './TaxonSelector.css';
 
 
 function TaxonSelector({taxons, selectedTaxons, onChange}) {
-
-const [checkBoxes, setCheckBoxes] = useState([]);
     
     function handleChange(taxon, checked) {
         onChange(taxon, checked);
     }
 
 
-    useEffect(() => {
-        setCheckBoxes(_.map(taxons, makeTaxonCheckbox));
-      }, [taxons, selectedTaxons]
-    );
+    const checkboxes = _.map(taxons, makeTaxonCheckbox);
 
     function makeTaxonCheckbox(taxon) {
         return(
@@ -36,7 +32,7 @@ const [checkBoxes, setCheckBoxes] = useState([]);
     
     return(
         <div className="DataDisplay">
-        {checkBoxes}
+            {checkboxes}
         </div>
     );
 }

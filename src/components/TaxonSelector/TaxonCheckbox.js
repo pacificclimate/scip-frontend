@@ -3,35 +3,31 @@
 // checked/unchecked state, but rather sends events to and receives
 // checked/unchecked props from its parent.
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
+import Form from 'react-bootstrap/Form';
 import {taxonString} from '../../helpers/APIDataHelpers.js';
 import _ from 'lodash';
 
 function TaxonCheckbox({taxon, selectedTaxons, onChange}) {
-    const [checked, setChecked] = useState(true);
-        
-    useEffect(() => {
-        setChecked(_.find(selectedTaxons, taxon, _.isEqual) ? true : false); 
-      }, [taxon, selectedTaxons]
-    );    
+    
+    const checked = _.find(selectedTaxons, taxon, _.isEqual) ? true : false;
     
     const handleChange = () => {
         onChange(taxon, !checked);
-        setChecked(!checked);
     };
     
     return (
-//        <div>
-        <label>
-            <input
+//        <label>
+            <Form.Check
                 type="checkbox"
+                className="me-2"
                 checked={checked}
                 onChange={handleChange}
                 inline
+                label={taxonString(taxon)}
             />
-            {taxonString(taxon)}
-        </label>
-//        </div>
+//            {taxonString(taxon)}
+//        </label>
         );
 }
 

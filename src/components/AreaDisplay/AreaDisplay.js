@@ -109,15 +109,14 @@ function AreaDisplay({onChangeRegion, region}) {
       const basin = selectedBasin ? findRegion("basin", selectedBasin.value) : null;
       const boundary = basin ? basin.boundary : null;
       
-      if(selectedTaxons.length === 0) {
-          // all taxons have been deselected - no selectable watersheds or
-          // conservation units.
-          setConservationUnits([]);
-          setWatersheds([]);
-      }
-      else if(selectedTaxons.length === taxons.length) {
+      if(selectedTaxons.length === taxons.length) {
           // all taxons are selected, no filtering on species.
           // filtering occurs on basin only, if that.
+          // we *could* handle this by making seperate calls for
+          // each species, as done below for the "else", but it's
+          // much faster to make single unfiltered all-watersheds
+          // and all-basins calls than to make seven calls filtered
+          // by species and merge the results.
         getWatersheds(boundary).then(
             data => {
                 setWatersheds(parseRegions(data));
@@ -153,14 +152,11 @@ function AreaDisplay({onChangeRegion, region}) {
     const basin = findRegion("basin", event.value);
     
     setSelectedBasin(event);
-    onChangeRegion(basin);       
-  }
-  
-  //unselect current watershed or conservation unit whenever a new basin is selected.
-  useEffect(() => {
+    onChangeRegion(basin);
     setSelectedWatershed(null);
-    setSelectedConservationUnit(null);
-  }, [selectedBasin]);
+    setSelectedConservationUnit(null); 
+  }
+
 
   function setWatershed(event) {
     const watershed = findRegion("watershed", event.value);
