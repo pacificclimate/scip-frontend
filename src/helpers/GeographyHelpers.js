@@ -1,23 +1,17 @@
-import _ from 'lodash'
+import _ from 'lodash';
 // helper functions for parsing or formatting geographic data
 
 //attribute names to show on screen
 export const displayRegionAttributeNames = {};
 
-// for temporary use while only some data is available.
-const upper_fraser_watersheds = [
-    'Lower Chilako River', 'Lower Salmon River', 'Quesnel River',
-    'Salmon River', 'Cottonwood River', 'Euchiniko River', 
-    'Herrick Creek', 'Muskeg River', 'Nazko River', 'Morkill River', 
-    'Cariboo River', 'Bowron', 'Blackwater River', 'Willow River', 
-    'Tabor River', 'Narcosli Creek', 'Upper Fraser River', 
-    'Chilako River', 'McGregor River', 'Stuart River'
-    ];
 
-export function filterRegions(regions) {
-    return _.filter(regions, region => {
-    return(_.includes(upper_fraser_watersheds, region.name)); 
-    })
+// Is point a valid WKT point?
+export function validPoint(point) {
+    const p = JSON.parse(point)
+    return p 
+        && p?.type=== "Point"
+        && _.isNumber(p?.coordinates?.[0]) 
+        && _.isNumber(p?.coordinates?.[1]);
 }
 
 export function parseRegions(regions) {    
@@ -26,7 +20,14 @@ export function parseRegions(regions) {
         region.boundary = b;
         return region;
     }
-    return(_.map(regions, parseBoundary));
+    return(_.sortBy(_.map(regions, parseBoundary), 'name'));
+}
+
+// returns the set of regions in the lists - intended to merge
+// the results of multiple region queries with different parameters
+// into a single list of all the unique regions
+export function regionListUnion(lists) {
+    return(_.unionBy(...lists, "name"));
 }
 
 // the frontend uses geoJSON format, but the backends expect WKT format;

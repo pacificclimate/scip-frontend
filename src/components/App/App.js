@@ -11,6 +11,7 @@
 // them when it changes.
 
 import './App.css';
+import pcic_logo from '../../assets/pcic_logo.png';
 
 import {Container, Row, Col} from 'react-bootstrap';
 import DataDisplay from '../DataDisplay/DataDisplay.js'
@@ -24,7 +25,19 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Salmon Climate Impacts Portal</h1>
+      <div className="Header">
+        <a href='https://pacificclimate.org/'>
+          <img 
+            src={pcic_logo}
+            width='328'
+            height='38'
+            alt='Pacific Climate Impacts Consotrium'
+          />
+        </a>
+        <div className="Title">
+          <h1>Salmon Climate Impacts Portal</h1>
+        </div>
+      </div>
       <Container fluid>
         <Row>
           <Col lg={6} md={6}>
