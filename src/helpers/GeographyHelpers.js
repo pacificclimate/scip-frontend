@@ -9,12 +9,9 @@ export const displayRegionAttributeNames = {};
 export function validPoint(point) {
     const p = JSON.parse(point)
     return p 
-        && _.has(p, 'type')
-        && p.type === "Point"
-        && _.has(p, 'coordinates') 
-        && p.coordinates.length === 2 
-        && _.isNumber(p.coordinates[0])
-        && _.isNumber(p.coordinates[1]);
+        && p?.type=== "Point"
+        && _.isNumber(p?.coordinates?.[0]) 
+        && _.isNumber(p?.coordinates?.[1]);
 }
 
 export function parseRegions(regions) {    
