@@ -5,7 +5,6 @@
 import {getWatersheds, getBasins, getConservationUnits, getTaxons} from '../../data-services/scip-backend.js';
 import {getWhitelist} from '../../data-services/public.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
-import CustomAreaDisplay from '../CustomAreaDisplay/CustomAreaDisplay.js';
 import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
 import {Container, Row, Col} from 'react-bootstrap';
 import React, {useState, useEffect} from 'react';

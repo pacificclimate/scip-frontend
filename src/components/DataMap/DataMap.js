@@ -8,17 +8,12 @@ import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 import { WMSTileLayer, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 
-function DataMap({regionBoundary, watershedStreams, downstream, onSelectOutlet, selectedOutlet}) {
+function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
   const viewport = BCBaseMap.initialViewport;
   //convert the geoJSON to a Feature so it can be displayed on the map.
   const boundaryFeature = regionBoundary ? {
       type: "Feature",
       geometry: regionBoundary
-  } : {};
-
-  const watershedFeature = watershedStreams ? {
-      type: "Feature",
-      geometry: watershedStreams.streams.geometry
   } : {};
 
   const downstreamFeature = downstream ? {
@@ -56,7 +51,6 @@ function DataMap({regionBoundary, watershedStreams, downstream, onSelectOutlet, 
         >
           <SetView view={viewport}/>
           <SimpleGeoJSON data={boundaryFeature} fill={false} color="#ffffff"/>
-          <SimpleGeoJSON data={watershedFeature} fill={false} color="#6699FF"/>
           <SimpleGeoJSON data={downstreamFeature} fill={false} color="#6699FF"/>
           <FeatureGroup>
             <EditControl 
