@@ -125,3 +125,22 @@ export function getDownstream(point) {
     )
     .then(response => response.data);
 }
+
+
+export function getUpstream(point) {
+    //returns the area upstream of the selected point 
+    // (plus some extra data this app doesn't use)
+    // named "getUpstream" for this app even though the API is named
+    // watershed, because "watershed" has a more specific meaning in this
+    // context.
+    return axios.get(
+    process.env.REACT_APP_PCEX_API_URL + "/streamflow/watershed",
+        {
+            params: {
+                station: point,
+                ensemble_name: "frapce_watershed"
+            }
+        }
+    )
+    .then(response => response.data);
+}

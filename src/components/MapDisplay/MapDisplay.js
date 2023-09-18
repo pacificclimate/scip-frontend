@@ -6,7 +6,7 @@ import {getWatershedStreams, getDownstream} from '../../data-services/pcex-backe
 import React, {useState, useEffect} from 'react';
 import {validPoint} from '../../helpers/GeographyHelpers.js';
 
-function MapDisplay({region}) {
+function MapDisplay({region, onSelectOutlet, selectedOutlet}) {
   
   const [watershedStreams, setWatershedStreams] = useState(null);
   const [downstream, setDownstream] = useState(null);
@@ -35,6 +35,10 @@ function MapDisplay({region}) {
       }
   }, [region]);
   
+  function handleSelectOutlet(point) {
+      //just pass it up to the parent.
+      onSelectOutlet(point);
+  }
 
   return (
     <div className="MapDisplay">
@@ -42,6 +46,8 @@ function MapDisplay({region}) {
           regionBoundary={region ? region.boundary : null}
           watershedStreams={watershedStreams}
           downstream={downstream}
+          onSelectOutlet={handleSelectOutlet}
+          selectedOutlet={selectedOutlet}
         />
     </div>
   );

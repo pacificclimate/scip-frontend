@@ -34,11 +34,16 @@ export function getWatersheds(overlap = null, common_name = null, subgroup = nul
     .then(response => response.data);
 }
 
-export function getBasins() {
+export function getBasins(overlap = null) {
+    let params = {kind: "basin"};
+    
+    if(overlap) {
+        params.overlap = overlap;
+    }
     return axios.get(
         process.env.REACT_APP_SCIP_API_URL + "/region",
         {
-            params: {kind: "basin"}
+            params: params
         }
     )
     .then(response => response.data);

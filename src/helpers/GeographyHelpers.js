@@ -87,3 +87,17 @@ export function geoJSONtoWKT(area) {
     }
     return wkt;
 }
+
+export function parseUpstream(upstream) {
+    // format upstream data into an object with the same attributes 
+    // as a region object.
+    const outlet = upstream.boundary.properties.mouth.geometry;
+    const name = `Upstream of ${outlet.coordinates[1]} ${outlet.coordinates[0]}`;
+    return({
+        name: name,
+        code: "UPST",
+        kind: "upstream",
+        boundary: upstream.boundary.geometry,
+        outlet: JSON.stringify(outlet)
+    });
+}

@@ -21,7 +21,14 @@ import React, {useState} from 'react'
 
 function App() {
   const [region, setRegion] = useState(null);
+  const [selectedOutlet, setSelectedOutlet] = useState(null);
 
+  function handleRegionChange(region, fromOutlet) {
+      setRegion(region);
+      if(!fromOutlet) {
+          setSelectedOutlet(null);
+      }
+  }
 
   return (
     <div className="App">
@@ -43,10 +50,13 @@ function App() {
           <Col lg={6} md={6}>
             <MapDisplay
               region={region}
+              onSelectOutlet={setSelectedOutlet}
+              selectedOutlet={selectedOutlet}
             />
             <AreaDisplay
-              onChangeRegion={setRegion}
+              onChangeRegion={handleRegionChange}
               region={region}
+              selectedOutlet={selectedOutlet}
             />
           </Col>
           <Col lg={6} md={6}>
