@@ -30,6 +30,7 @@ export function regionListUnion(lists) {
     return(_.unionBy(...lists, "name"));
 }
 
+
 // the frontend uses geoJSON format, but the backends expect WKT format;
 // convert from geoJSON to WKT
 export function geoJSONtoWKT(area) {
@@ -52,12 +53,21 @@ export function geoJSONtoWKT(area) {
         });
         wkt = wkt.concat("))");
     }
+    else if (area.type === "Polygon") {
+        wkt = "MULTIPOLYGON (((";
+        area.coordinates[0].forEach(function(point, index) {
+            wkt = wkt.concat(`${point[0]} ${point[1]},`);
+        });
+        wkt = wkt.slice(0, -1); //remove final comma
+        wkt = wkt.concat(")))");
+    }
     else if (area.type === "Point"){
         wkt = `POINT (${area.coordinates[0]} ${area.coordinates[1]})`
     }
     else{
-        console.log("other conversions not implemented yet.");
+        console.log(`Conversion for geoJSON ${area.type} is not implemented yet`);
         wkt = ""
     }
     return wkt;
 }
+
