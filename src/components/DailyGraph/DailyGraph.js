@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {makeGraphTimeseries} from '../../helpers/GraphHelpers.js';
+import GraphDownloadButton from '../GraphDownloadButton/GraphDownloadButton.js';
 import _ from 'lodash';
 
 //this piecewise loading of plotly avoids an issue where loading 
@@ -17,6 +18,11 @@ function DailyGraph({annualData, variableInfo}) {
     
     var yAxisTitle = `Mean ${variableInfo.representative.variable_id} (${ annualData[0].units })`;
     
+//    console.log("here is annual data");
+//    console.log(annualData);
+//    console.log("here is variableInfo");
+//    console.log(variableInfo);
+    
     function makeDataSeries() {
         if(annualData == null) {
             return []
@@ -25,26 +31,32 @@ function DailyGraph({annualData, variableInfo}) {
             return _.map(annualData, makeGraphTimeseries);
         }
     }
+    
+    const layout = { 
+        width: 500, 
+        height: 500, 
+        title: variableInfo.representative.variable_description, 
+        xaxis: {
+            title: 'Month',
+            tickvals: [15, 45, 75, 105, 135, 167, 197, 228, 259, 288, 319, 350],
+            ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            },
+        yaxis: {
+            title: yAxisTitle,
+        },
+    }; 
 
     return (
-        <Plot
-            data={makeDataSeries()}
-            layout={
-                { 
-                    width: 500, 
-                    height: 500, 
-                    title: variableInfo.representative.variable_description, 
-                    xaxis: {
-                        title: 'Month',
-                        tickvals: [15, 45, 75, 105, 135, 167, 197, 228, 259, 288, 319, 350],
-                        ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    },
-                    yaxis: {
-                        title: yAxisTitle,
-                    },
-                } 
-            }
-        />
+        <div>
+          <Plot
+              data={makeDataSeries()}
+              layout={layout}
+          />
+          <GraphDownloadButton
+               data={makeDataSeries()}
+               layout={layout}
+          />
+          </div>
       );
 }
 

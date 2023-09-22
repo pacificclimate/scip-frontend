@@ -4,6 +4,7 @@
 import React from 'react';
 import {makeGraphData} from '../../helpers/GraphHelpers.js';
 import {unravelObject} from '../../helpers/APIDataHelpers.js';
+import GraphDownloadButton from '../GraphDownloadButton/GraphDownloadButton.js';
 import _ from 'lodash';
 
 //this piecewise loading of plotly avoids an issue where loading 
@@ -32,26 +33,33 @@ function LongTermAverageGraph({longTermData, variableInfo}) {
         }
     }
 
+
+    const layout = { 
+        width: 700, 
+        height: 500, 
+        title: graphTitle, 
+        xaxis: {
+            title: 'Year',
+            type: 'date',
+            tickvals: ['1970-01-01', '1990-01-01', '2010-01-01', '2030-01-01', '2050-01-01', '2070-01-01', '2090-01-01'],
+            ticktext: ['1970', '1990', '2010', '2030', '2050', '2070', '2090'],
+        },
+        yaxis: {
+            title: yAxisTitle,
+        },
+    } 
+    
     return (
-        <Plot
-            data={makeLongTermTimeSeries()}
-            layout={
-                { 
-                    width: 700, 
-                    height: 500, 
-                    title: graphTitle, 
-                    xaxis: {
-                        title: 'Year',
-                        type: 'date',
-                        tickvals: ['1970-01-01', '1990-01-01', '2010-01-01', '2030-01-01', '2050-01-01', '2070-01-01', '2090-01-01'],
-                        ticktext: ['1970', '1990', '2010', '2030', '2050', '2070', '2090'],
-                    },
-                    yaxis: {
-                        title: yAxisTitle,
-                    },
-                } 
-            }
-        />
+        <div>
+            <Plot
+                data={makeLongTermTimeSeries()}
+                layout={layout}
+            />
+            <GraphDownloadButton
+               data={makeLongTermTimeSeries()}
+               layout={layout}
+          />
+        </div>
       );
 }
 

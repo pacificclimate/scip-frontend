@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {makeGraphTimeseries} from '../../helpers/GraphHelpers.js';
+import GraphDownloadButton from '../GraphDownloadButton/GraphDownloadButton.js';
 import _ from 'lodash';
 
 //this piecewise loading of plotly avoids an issue where loading 
@@ -25,26 +26,34 @@ function AnnualCycleGraph({annualData, variableInfo}) {
             return _.map(annualData, makeGraphTimeseries);
         }
     }
+    
+    const layout = { 
+        width: 500, 
+        height: 500, 
+        title: variableInfo.representative.variable_description, 
+        xaxis: {
+            title: 'Month',
+            tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        },
+        yaxis: {
+            title: yAxisTitle,
+        },
+    } 
+
 
     return (
-        <Plot
-            data={makeDataSeries()}
-            layout={
-                { 
-                    width: 500, 
-                    height: 500, 
-                    title: variableInfo.representative.variable_desrciption, 
-                    xaxis: {
-                        title: 'Month',
-                        tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                        ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    },
-                    yaxis: {
-                        title: yAxisTitle,
-                    },
-                } 
-            }
-        />
+        <div>
+            <Plot
+                data={makeDataSeries()}
+                layout={layout}
+            />
+            <GraphDownloadButton
+               data={makeDataSeries()}
+               layout={layout}
+            />
+        </div>
+
       );
 }
 
