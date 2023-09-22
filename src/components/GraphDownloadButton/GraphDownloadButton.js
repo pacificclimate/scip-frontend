@@ -8,7 +8,7 @@ function GraphDownloadButton({data, layout}) {
 
     function makeCSV() {
         const header = csvRow(data[0].x, `${layout.title} (${data[0].text[0]})`);
-        const series = _.map(data, s => {return csvRow(s.y, s.name);})
+        const series = _.map(data, s => {return csvRow(s.y, s.name, 3);})
         return [header, series];
     }
 
@@ -20,10 +20,9 @@ function GraphDownloadButton({data, layout}) {
         return filename.concat(".csv");
     }
     
-    //todo: precision
-    function csvRow (list, label) {
+    function csvRow (list, label, precision = null) {
         return (_.reduce(list, 
-            function(row, col) {return `${row}, ${col}`} , 
+            function(row, col) {return `${row}, ${precision ? col.toPrecision(precision) : col}`} , 
             `${label}`
         ).concat("\n"));
     }
