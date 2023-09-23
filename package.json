@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "homepage": ".",
   "private": true,
-  "license": "GPL-3.0",  
+  "license": "GPL-3.0",
   "contributors": [
     "Lee Zeman <lzeman@uvic.ca>",
     "James Hiebert <hiebert@uvic.ca>",
-      "Johnathan Helfrich <jhelfric@uvic.ca>",
-      "Rod Glover <rglover@uvic.ca>"
-  ],  
+    "Johnathan Helfrich <jhelfric@uvic.ca>",
+    "Rod Glover <rglover@uvic.ca>"
+  ],
   "dependencies": {
     "@react-leaflet/core": "^1.0.2",
     "@testing-library/jest-dom": "^5.15.0",
@@ -24,6 +24,7 @@
     "moment": "^2.29.1",
     "pcic-react-components": "git+https://git@github.com/pacificclimate/pcic-react-components.git",
     "plotly.js": "^2.10.1",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.2.1",
     "react-dom": "^17.0.2",
