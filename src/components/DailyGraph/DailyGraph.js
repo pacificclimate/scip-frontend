@@ -15,13 +15,8 @@ import { makeGraphTimeseries } from '../../helpers/GraphHelpers.js';
 
 const Plot = createPlotlyComponent(Plotly);
 
-function DailyGraph({ annualData, variableInfo }) {
+function DailyGraph({ annualData, variableInfo, graphMetadata }) {
   const yAxisTitle = `Mean ${variableInfo.representative.variable_id} (${annualData[0].units})`;
-
-  //    console.log("here is annual data");
-  //    console.log(annualData);
-  //    console.log("here is variableInfo");
-  //    console.log(variableInfo);
 
   function makeDataSeries() {
     if (annualData == null) {
@@ -53,6 +48,7 @@ function DailyGraph({ annualData, variableInfo }) {
       <GraphDownloadButton
         data={makeDataSeries()}
         layout={layout}
+        metadata={graphMetadata}
       />
     </div>
   );

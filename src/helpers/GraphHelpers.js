@@ -118,3 +118,14 @@ export function noGraphMessage(needed_data) {
         return(text.concat(`and ${noun_with_article(missing_metadata[missing_metadata.length - 1])} to view data.`));
     }
 }
+
+// makes a string that describes an emissions scenario without
+// commas. used in graph data CSV files. turns "historical, rcp85" into
+// "historical followed by RCP 8.5"
+export function noCommasExperiment(str) {
+    const humanFriendly = {
+        "historical, rcp45": "historical followed by RCP 4.5",
+        "historical, rcp85": "historical followed by RCP 8.5"
+        }
+    return(str in humanFriendly? humanFriendly[str] : str);
+}

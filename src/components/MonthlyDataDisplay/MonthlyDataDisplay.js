@@ -5,7 +5,7 @@
 // and a graph (AnnualCycleGraph).
 
 import {annualCycleDataRequest} from '../../data-services/pcex-backend.js'
-import {noGraphMessage} from '../../helpers/GraphHelpers.js'
+import {noGraphMessage, noCommasExperiment} from '../../helpers/GraphHelpers.js'
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js'
 import VariableSelector from '../selectors/VariableSelector.js';
 import React, {useState, useEffect} from 'react';
@@ -39,6 +39,11 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
       }
   }, [region, variable, model, emission, rasterMetadata]);
   
+  const graphMetadata = {
+      area: region? region.name : "no region selected",
+      "climate model": model,
+      emission: noCommasExperiment(emission),
+  }
 
   return (
     <div className="MonthlyDataDisplay">
@@ -57,6 +62,7 @@ function MonthlyDataDisplay({region, rasterMetadata, model, emission}){
           <AnnualCycleGraph 
             annualData={annualCycleTimeSeries}
             variableInfo={variable.value}
+            graphMetadata={graphMetadata}
           /> : 
           noGraphMessage({
               watershed: region,

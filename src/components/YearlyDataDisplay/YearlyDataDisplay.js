@@ -4,7 +4,7 @@
 // dropdown (VariableSelector) and a graph (LongTermAverageGraph).
 
 import {longTermAverageDataRequest} from '../../data-services/pcex-backend.js'
-import {noGraphMessage} from '../../helpers/GraphHelpers.js'
+import {noGraphMessage, noCommasExperiment} from '../../helpers/GraphHelpers.js'
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js'
 import VariableSelector from '../selectors/VariableSelector.js';
 import React, {useState, useEffect} from 'react';
@@ -33,6 +33,12 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
       }
   }, [region, variable, model, emission]);
   
+  const graphMetadata = {
+      area: region? region.name : "no region selected",
+      "climate model": model,
+      emission: noCommasExperiment(emission),
+  }
+  
   return (
     <div className="YearlyDataDisplay">
         <br/>
@@ -51,6 +57,7 @@ function YearlyDataDisplay({region, rasterMetadata, model, emission}){
             longTermData={longTermTimeSeries}
             variableInfo={variable.value}
             region={region}
+            graphMetadata={graphMetadata}
           /> : 
           noGraphMessage({
               watershed: region,

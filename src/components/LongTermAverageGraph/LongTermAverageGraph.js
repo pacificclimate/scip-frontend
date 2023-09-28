@@ -16,7 +16,7 @@ import GraphDownloadButton from '../GraphDownloadButton/GraphDownloadButton.js';
 
 const Plot = createPlotlyComponent(Plotly);
 
-function LongTermAverageGraph({ longTermData, variableInfo }) {
+function LongTermAverageGraph({ longTermData, variableInfo, graphMetadata }) {
   const dataArray = _.entries(longTermData);
   const graphTitle = `Mean Long Term ${variableInfo.representative.variable_description}: ${
     dataArray.length >= 1 ? (dataArray[0].length === 2 ? dataArray[0][0].toUpperCase() : '') : ''
@@ -56,6 +56,7 @@ function LongTermAverageGraph({ longTermData, variableInfo }) {
       <GraphDownloadButton
         data={makeLongTermTimeSeries()}
         layout={layout}
+        metadata={graphMetadata}
       />
     </div>
   );

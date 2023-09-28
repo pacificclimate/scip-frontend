@@ -7,7 +7,7 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-function GraphDownloadButton({ data, layout }) {
+function GraphDownloadButton({ data, layout, metadata }) {
   function csvRow(list, label, precision = null) {
     return (_.reduce(
       list,
@@ -15,11 +15,25 @@ function GraphDownloadButton({ data, layout }) {
       `${label}`,
     ).concat('\n'));
   }
+  
+  // when a list of strings is converted to a single output string, by default
+  // commas are added. This function converts a list of strings into an
+  // output string with concatenation only so we don't get extra commas in the CSV. 
+  function noCommas(txtList) {
+      return(_.reduce(txtList, function(strOut, str) {return strOut.concat(str)}, ""));
+  }
 
   function makeCSV() {
+    //make first table, which contains metadata
+    const meta = _.map(_.toPairs(metadata), (m) => {return `${m[0]}, ${m[1]}\n`;}); 
+    
+    //make blank line
+    const blank = "\n";
+    
+    //make second table, which contains data
     const header = csvRow(data[0].x, `${layout.title} (${data[0].text[0]})`);
     const series = _.map(data, (s) => csvRow(s.y, s.name, 3));
-    return [header, series];
+    return [noCommas(meta), blank, header, noCommas(series)];
   }
 
   function fileName() {

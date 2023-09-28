@@ -6,7 +6,7 @@
 // and a graph (AnnualCycleGraph).
 
 import {annualCycleDataRequest} from '../../data-services/pcex-backend.js'
-import {noGraphMessage} from '../../helpers/GraphHelpers.js'
+import {noGraphMessage, noCommasExperiment} from '../../helpers/GraphHelpers.js'
 import DailyGraph from '../DailyGraph/DailyGraph.js'
 import VariableSelector from '../selectors/VariableSelector.js';
 import ClimatologySelector from '../selectors/ClimatologySelector.js';
@@ -49,6 +49,12 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
       }
   }, [region, variable, model, emission, rasterMetadata, climatology]);
 
+  const graphMetadata = {
+      area: region? region.name : "no region selected",
+      "climate model": model,
+      emission: noCommasExperiment(emission),
+      climatology: climatology? climatology.label : "no climatology selected"
+  }
 
   return (
     <div className="DailyDataDisplay">
@@ -77,6 +83,7 @@ function DailyDataDisplay({region, rasterMetadata, model, emission}){
           <DailyGraph 
             annualData={dailyTimeSeries}
             variableInfo={variable.value}
+            graphMetadata={graphMetadata}
           /> : 
           noGraphMessage({
                 climatology: climatology,

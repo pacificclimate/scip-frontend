@@ -15,7 +15,7 @@ import { makeGraphTimeseries } from '../../helpers/GraphHelpers.js';
 
 const Plot = createPlotlyComponent(Plotly);
 
-function AnnualCycleGraph({ annualData, variableInfo }) {
+function AnnualCycleGraph({ annualData, variableInfo, graphMetadata }) {
   const yAxisTitle = `Mean ${variableInfo.representative.variable_id} (${annualData[0].units})`;
 
   function makeDataSeries() {
@@ -48,6 +48,7 @@ function AnnualCycleGraph({ annualData, variableInfo }) {
       <GraphDownloadButton
         data={makeDataSeries()}
         layout={layout}
+        metadata={graphMetadata}
       />
     </div>
 

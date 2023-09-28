@@ -4,7 +4,6 @@
 // onChange.
 import React from 'react';
 import TaxonCheckbox from'./TaxonCheckbox.js'; 
-import ButtonToolbar from 'react-bootstrap/ButtonGroup';
 import _ from 'lodash';
 
 import './TaxonSelector.css';
