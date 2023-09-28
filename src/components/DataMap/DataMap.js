@@ -7,14 +7,21 @@ import { BCBaseMap, SetView } from 'pcic-react-leaflet-components';
 import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 import { WMSTileLayer, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+import {useState} from 'react';
+import _ from 'lodash';
 
 function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
   const viewport = BCBaseMap.initialViewport;
+  const [outletMarker, setOutletMarker] = useState(null);
+  
+  console.log("selectedOutlet in DataMap is");
+  console.log(selectedOutlet);
+  
   //convert the geoJSON to a Feature so it can be displayed on the map.
   const boundaryFeature = regionBoundary ? {
       type: "Feature",
       geometry: regionBoundary
-  } : {};
+  } : null;
 
   const downstreamFeature = downstream ? {
       type: "Feature",
@@ -23,39 +30,67 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
           type: "LineString",
           coordinates: downstream.boundary.geometry.coordinates
       }
-  } : {};
-
-  function handlePoint(e) {
-      console.log("handlePoint called");
-      console.log(e);
-  }
+  } : null;
   
   function handleAreaCreated(e) {
-      console.log("handleAreaCreated called");
-      console.log(e);
+      //clearMapMarker();
+  
       const lat = e.layer._latlng.lat;
       const lon = e.layer._latlng.lng;
       const WKT = `POINT (${lon} ${lat})`;
       onSelectOutlet(WKT);
+      
+      setOutletMarker(e._layer);
+
+      // delete the old circlemarker - we can iterate through the layers
+      // of the map until we find one that has a radius and a latlng, 
+      // which has to be a circlemarker. We can compare the latlong to the
+      // current one to find the "old" circlemarker layer.
+      const map = e.layer._map;
+      const layers = map._layers;
+      
+      const oldMarker = _.findKey(layers, l => {
+          return(l._radius && l._latlng?.lat !== lat && l._latlng?.lon !== lon);
+      });
+      
+      if(oldMarker) {
+          map.removeLayer(layers[oldMarker]);
+          }
   }
   
-  //TODO: area deleted - turn seletedPoint back into null!
-
-
+  function handleAreaDeleted(e) {
+      onSelectOutlet(null);
+  }
+  
+  if(outletMarker && !selectedOutlet) {
+      // there is a marker on the map, but the user is looking 
+      // elsewhere - they have selected an area using the dropdowns
+      // instead of marking an outlet. delete the map marker.
+      console.log("need to delete map marker!");
+      clearMapMarker();
+  }
+  
+  function clearMapMarker() {
+      // deletes the circle marker on the map
+      // this function only deletes the most recent marker,
+      // but we only allow one at a time, so that's all we need.
+      console.log("clearing map marker");
+  }
+  
   return (
     <div className="DataMap">
         <BCBaseMap
           id={"map"}
           zoom={viewport.zoom}
-          center={viewport.center}
+          center={viewport.center}          
         >
           <SetView view={viewport}/>
           <SimpleGeoJSON data={boundaryFeature} fill={false} color="#ffffff"/>
           <SimpleGeoJSON data={downstreamFeature} fill={false} color="#6699FF"/>
           <FeatureGroup>
             <EditControl 
-              onEditMove={handlePoint}
               onCreated={handleAreaCreated}
+              onDeleted={handleAreaDeleted}
               draw={{
                   polyline: false,
                   polygon: false,
