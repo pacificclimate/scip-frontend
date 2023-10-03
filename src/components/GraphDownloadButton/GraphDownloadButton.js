@@ -16,13 +16,6 @@ function GraphDownloadButton({ data, layout, metadata }) {
     ).concat('\n'));
   }
 
-  // when a list of strings is converted to a single output string, by default
-  // commas are added. This function converts a list of strings into an
-  // output string with concatenation only so we don't get extra commas in the CSV.
-  function noCommas(txtList) {
-    return (_.reduce(txtList, (strOut, str) => strOut.concat(str), ''));
-  }
-
   function makeCSV() {
     // make first table, which contains metadata
     const meta = _.map(_.toPairs(metadata), (m) => `${m[0]}, ${m[1]}\n`);
@@ -33,7 +26,7 @@ function GraphDownloadButton({ data, layout, metadata }) {
     // make second table, which contains data
     const header = csvRow(data[0].x, `${layout.title} (${data[0].text[0]})`);
     const series = _.map(data, (s) => csvRow(s.y, s.name, 3));
-    return [noCommas(meta), blank, header, noCommas(series)];
+    return [meta.join(''), blank, header, series.join('')];
   }
 
   function fileName() {

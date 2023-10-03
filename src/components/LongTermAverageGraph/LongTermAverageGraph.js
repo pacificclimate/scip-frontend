@@ -1,5 +1,5 @@
-// AnnualCycleGraph - provides a plotly visualization of how the value an indicator changes
-// until 2100. Visualizes the output of the "data" PCEX API.
+// LongTernAverageGraph - provides a plotly visualization of how the value 
+// an indicator changes until 2100. Visualizes the output of the "data" PCEX API.
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -18,9 +18,7 @@ const Plot = createPlotlyComponent(Plotly);
 
 function LongTermAverageGraph({ longTermData, variableInfo, graphMetadata }) {
   const dataArray = _.entries(longTermData);
-  const graphTitle = `Mean Long Term ${variableInfo.representative.variable_description}: ${
-    dataArray.length >= 1 ? (dataArray[0].length === 2 ? dataArray[0][0].toUpperCase() : '') : ''
-  }`;
+  const graphTitle = `Mean Long Term ${variableInfo.representative.variable_description}`;
   const yAxisTitle = `Mean ${variableInfo.representative.variable_id} (${
     dataArray.length >= 1 ? (dataArray[0].length === 2 ? dataArray[0][1].units : '') : ''
   })`;
