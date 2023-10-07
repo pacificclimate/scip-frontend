@@ -12,10 +12,7 @@ import _ from 'lodash';
 
 function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
   const viewport = BCBaseMap.initialViewport;
-  const [outletMarker, setOutletMarker] = useState(null);
-  
-  console.log("selectedOutlet in DataMap is");
-  console.log(selectedOutlet);
+  const [cmMap, setCMMap] = useState(null);
   
   //convert the geoJSON to a Feature so it can be displayed on the map.
   const boundaryFeature = regionBoundary ? {
@@ -39,14 +36,16 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
       const lon = e.layer._latlng.lng;
       const WKT = `POINT (${lon} ${lat})`;
       onSelectOutlet(WKT);
-      
-      setOutletMarker(e._layer);
 
       // delete the old circlemarker - we can iterate through the layers
       // of the map until we find one that has a radius and a latlng, 
       // which has to be a circlemarker. We can compare the latlong to the
       // current one to find the "old" circlemarker layer.
       const map = e.layer._map;
+      
+      // set map reference so we can delete this layer later
+      // if we switch to selcting a region from tha dropdowns
+      setCMMap(map);
       const layers = map._layers;
       
       const oldMarker = _.findKey(layers, l => {
@@ -61,20 +60,41 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
   function handleAreaDeleted(e) {
       onSelectOutlet(null);
   }
-  
-  if(outletMarker && !selectedOutlet) {
-      // there is a marker on the map, but the user is looking 
-      // elsewhere - they have selected an area using the dropdowns
-      // instead of marking an outlet. delete the map marker.
-      console.log("need to delete map marker!");
-      clearMapMarker();
-  }
-  
-  function clearMapMarker() {
-      // deletes the circle marker on the map
-      // this function only deletes the most recent marker,
-      // but we only allow one at a time, so that's all we need.
-      console.log("clearing map marker");
+    
+  // this cleans up a residual layer containing a circlemarker
+  // if the user has placed a circlemarker on the map to select
+  // the area upstream of a point, but then the user switches to 
+  // selecting regions from the dropdown menus.
+  // the triggering of this cleanup is a little bit messy, but I was
+  // unable to get more reasonable ways to work.
+  // when a circlemarker is placed on the map, the drawing handler
+  // function stores the map in the cmMap state variable and sends a 
+  // callback to the parent component with the latlong of the 
+  // circlemaker, which is eventually received by this component
+  // in the selectedOutlet state variable.
+  // When the user selects a region from a dropdown, SelectedOutlet
+  // is set to null, because dropdown regions are not selected with 
+  // an outlet.
+  // this cleanup is triggered by the combination of cmMap being set
+  // (ie, the user has ever drawn a circlemarker) and selectedOutlet
+  // being unset (ie, the user is not looking at a circlemarker 
+  // right now). 
+  // it accesses the map via cmMap, finds the layer corresponding to 
+  // a circle outlet, and deletes it. Then it unsets cmMap, so that
+  // this cleanup is only run once (until the user draws another marker,
+  // which will set cmMap again).
+  if (cmMap !== null && selectedOutlet == null) {
+    const layers = cmMap._layers;
+      
+    const oldMarker = _.findKey(layers, l => {
+      return(l._radius && l._latlng);
+    });
+
+    if(oldMarker) {
+      cmMap.removeLayer(layers[oldMarker]);
+    }
+    
+    setCMMap(null);
   }
   
   return (
@@ -82,7 +102,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
         <BCBaseMap
           id={"map"}
           zoom={viewport.zoom}
-          center={viewport.center}          
+          center={viewport.center}
         >
           <SetView view={viewport}/>
           <SimpleGeoJSON data={boundaryFeature} fill={false} color="#ffffff"/>
