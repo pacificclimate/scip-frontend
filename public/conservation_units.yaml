@@ -1,0 +1,127 @@
+# This file is a white list for salmon conservation units, as defined
+# by DFO, that will be selectable in the app. It includes only
+# conservation units we have indicator netCDF
+# coverage of.
+
+ - (p)Adams and Momich Lakes-Early Summer Timing
+ - Akuklotz
+ - Aldrich
+ - Anderson/Seton-Early Summer Timing
+ - Asitika
+ - Atna
+ - Azuklotz
+ - Babine
+ - Bear
+ - Border
+ - Boundary Bay_FA_0.3
+ - Bowron-Early Summer Timing
+ - Bowser
+ - Bulkley
+ - Chiliwack-Early Summer Timing 
+ - Chilko-Early Summer Timing
+ - Chilko-Summer Timing
+ - Christina
+ - Chutine
+ - Cultus - Late Timing
+ - Damdochax/Winimasik
+ - Damshilgwit
+ - Dean River
+ - Dennis
+ - East Vancouver Island-Nanaimo_SP_1.x
+ - Footsore/Hodder
+ - Francois/Fraser-Summer Timing
+ - Fraser Canyon
+ - Fraser River
+ - Fraser River<<bin>>
+ - Fraser-Harrison Fall Transplant_FA_0.3<<Bin>>
+ - Fred Wright
+ - Great Central
+ - Harrion-Upstream Migrating-Late Timing
+ - Harrison River
+ - Harrison-Downstream Migrating-Late Timing
+ - Interior Fraser
+ - Johanson
+ - Kamloops-Early Summer Timing
+ - King Salmon
+ - Kitwancool
+ - Kluatantan
+ - Kluayaz
+ - Kuthai
+ - Kwinageese
+ - Lillooet
+ - Lillooet/Harrison-Late Timing
+ - Little Trapper
+ - Lower Fraser
+ - Lower Fraser River_FA_0.3
+ - Lower Fraser River_SP_1.3
+ - Lower Fraser River_SU_1.3
+ - Lower Fraser River-Upper Pitt_SU_1.3
+ - Lower Nass
+ - Lower Skeena
+ - Lower Stikine
+ - Lower Thompson
+ - Maria Slough_SU_0.3
+ - Maxan
+ - McDonnell
+ - Meziadin
+ - Middle & Upper Skeena
+ - Middle Fraser River-Portage_FA_1.3
+ - Middle Skeena
+ - Middle Skeena-Mainstem Tributaries
+ - Middle-Upper Skeena
+ - Morice
+ - Motase
+ - Muchalat
+ - Nahatlatch-Early Summer Timing
+ - North Barriere-Early Summer Timing
+ - North Thompson
+ - North Thompson_SP_1.3
+ - North Thompson_SU_1.3
+ - Northern Transboundary Fjords
+ - Oweegee
+ - Owikeno
+ - Pitt-Early Summer Timing
+ - Quesnel-Summer Timing
+ - Schoen
+ - Seton-Later Timing
+ - Shuswap Complex-Early Summer Timing
+ - Shuswap Complex-Late Timing
+ - Shuswap River_SU_0.3
+ - Sicintine
+ - Skeena River
+ - Skeena River-High Interior
+ - Slamgeesh
+ - South Atnarko Lakes
+ - South Thompson
+ - South Thompson_SU_0.3
+ - South Thompson-Bessette Creek_SU_1.2
+ - Spawning
+ - Sproat
+ - Stephens
+ - Stikine-Early Timing
+ - Stikine-Late Timing
+ - Sustut
+ - Tahitan
+ - Tahlo/Morrison
+ - Takla/Trembleur-Early Stuart Timing
+ - Takla/Trembleur/Stuart-Summer Timing
+ - Taku
+ - Taku-Early Timing
+ - Taku-Late Timing
+ - Taku-Mid Timing
+ - Taseko-Early Summer Timing
+ - Tatsamenie
+ - Unuk
+ - Unuk River
+ - Upper Adams River_SU_x.x
+ - Upper Bulkley River
+ - Upper Fraser River_SP_1.3
+ - Upper Knight
+ - Upper Nass
+ - Upper Nass River
+ - Upper Skeena
+ - Vernon
+ - Wannock
+ - Wannock[Owikeno]
+ - Widgeon
+ - Zymoetz

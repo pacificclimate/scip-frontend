@@ -1,0 +1,128 @@
+# This file is a white list for watersheds (as named in the
+# BC Freshwater Atlas) that will be selectable in the app.
+# It includes only watersheds we have indicator netCDF
+# coverage of.
+
+ - Adams River
+ - Alberni Inlet
+ - Atnarko River
+ - Babine Lake
+ - Babine River
+ - Barrington River
+ - Bella Coola River
+ - Big Bar Creek
+ - Big Creek
+ - Blackwater River
+ - Bonaparte River
+ - Bowron
+ - Bridge Creek
+ - Bulkley River
+ - Campbell River
+ - Cariboo River
+ - Chesletta River
+ - Chilako River
+ - Chiliwack River
+ - Chilko River
+ - Chukachida River
+ - Clearwater River
+ - Comox
+ - Cottonwood River
+ - Cowichan
+ - Deadman River
+ - Dog Creek
+ - Driftwood River
+ - Euchiniko Lake
+ - Euchiniko River
+ - Francois Lake
+ - Fraser Canyon
+ - Gold River
+ - Green Lake
+ - Guichon Creek
+ - Harrison River
+ - Herrick Creek
+ - Homathko River
+ - Horsefly River
+ - Inklin River
+ - Iskut River
+ - Kakiddi Creek
+ - Kalum River
+ - Kinskuch River
+ - Kispiox River
+ - Kitimat River
+ - Klappan River
+ - Klinaklini River
+ - Lillooet
+ - Lower Bell -Irving River
+ - Lower Chilako River
+ - Lower Chilcotin River
+ - Lower Eutsuk Lake
+ - Lower Fraser
+ - Lower Iskut River
+ - Lower Nass River
+ - Lower Nechako Reservoir
+ - Lower Nicola River
+ - Lower North Thompson River
+ - Lower Salmon River
+ - Lower Skeena River
+ - Lower Stikine River
+ - Lower Trembleur Lake
+ - Mahood Lake
+ - McGregor River
+ - Mess Creek
+ - Middle Fraser
+ - Middle River
+ - Middle Skeena River
+ - Middle Stikine River
+ - Morice River
+ - Morkill River
+ - Murtle Lake
+ - Musleg River
+ - Nahlin River
+ - Nakina River
+ - Narcosli Creek
+ - Nass River
+ - Nazko River
+ - Nechako River
+ - Nikola River
+ - Nimpkish River
+ - Owikeno Lake
+ - Parksville
+ - Piman River
+ - Quesnel River
+ - Salmon River
+ - San Jose River
+ - Seton Lake
+ - Sheslay River
+ - Shuswap Lake
+ - South Thompson River
+ - Spatsizi River
+ - Squamish
+ - Stikine River
+ - Stuart Lake
+ - Stuart River
+ - Sustut River
+ - Tabor River
+ - Tahltan River
+ - Takla Lake
+ - Taseko River
+ - Taylor River
+ - Thompson River
+ - Tsitika River
+ - Tuya River
+ - Twan Creek
+ - Unuk River
+ - Upper Bell -Irving River
+ - Upper Chilcotin River
+ - Upper Dean River
+ - Upper Eutsuk Lake
+ - Upper Fraser River
+ - Upper Iskut River
+ - Upper Nass River
+ - Upper Nechako Reservoir
+ - Upper North Thompson River
+ - Upper Shuswap
+ - Upper Skeena River
+ - Upper Stikine River
+ - Upper Trembleur Lake
+ - Willow River
+ - Zymoetz River

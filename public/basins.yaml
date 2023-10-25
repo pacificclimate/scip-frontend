@@ -1,0 +1,11 @@
+# This file is a white list for drainage basins that will be
+# selectable in the app. It includes only basins we have indicator netCDF
+# coverage of.
+
+- Fraser River
+- Nass River
+- Skeena River
+- Southwest Coast
+- Stewart
+- Stikine River
+- Taku River

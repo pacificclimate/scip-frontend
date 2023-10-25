@@ -14,13 +14,30 @@ export function validPoint(point) {
         && _.isNumber(p?.coordinates?.[1]);
 }
 
-export function parseRegions(regions) {    
+// prepares a list of regions for use in a dropdown selector
+// alphabetical order, formats boundary
+// if a "whitelist" containing names of desired regions is
+// supplied, filter regions by whether or not they appear
+// on the list.
+export function parseRegions(regions, whitelist = null) {
+
     function parseBoundary(region) {
         const b = JSON.parse(region.boundary);
         region.boundary = b;
         return region;
     }
-    return(_.sortBy(_.map(regions, parseBoundary), 'name'));
+    
+    function whitelistFilter (e) {
+        return(whitelist.includes(e.name));
+    }
+    
+    function identityFilter(e) {
+        return true;
+    }
+    
+    const filter = whitelist ? whitelistFilter : identityFilter;
+    
+    return(_.filter(_.sortBy(_.map(regions, parseBoundary), 'name'), filter));
 }
 
 // returns the set of regions in the lists - intended to merge
@@ -71,3 +88,21 @@ export function geoJSONtoWKT(area) {
     return wkt;
 }
 
+// these functions are needed because the whitelists and the region
+// lists are fetched simultaneously via Promise.all. Once you have all 
+// the data back, you need to sort out which API responses are which.
+export function isWhitelist(data) {
+    return(_.isArray(data) && _.isString(data[0]));
+}
+
+export function isRegionList(data) {
+    return(_.isArray(data) && _.isObject(data[0]) && _.has(data[0], 'name'));
+}
+
+export function findWhitelist(data) {
+    return _.find(data, isWhitelist);
+}
+
+export function findRegionLists(data) {
+    return _.filter(data, isRegionList);
+}
