@@ -9,7 +9,7 @@ import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
 import {Container, Row, Col} from 'react-bootstrap';
 import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
-import {parseRegions, regionListUnion, findRegionLists, findWhitelist} from '../../helpers/GeographyHelpers.js';
+import {parseRegions, regionListUnion} from '../../helpers/GeographyHelpers.js';
 import _ from 'lodash';
 
 function AreaDisplay({onChangeRegion, region}) {
@@ -54,8 +54,8 @@ function AreaDisplay({onChangeRegion, region}) {
   useEffect(() => {
       if(basins.length === 0) {
           Promise.all([getBasins(), getWhitelist("basins")]).then(
-            api_responses => {
-                setBasins(collateRegions(api_responses));
+            ([basins, whitelist]) => {
+                setBasins(collateRegions([basins], whitelist));
             }  
           );
       }
@@ -120,13 +120,13 @@ function AreaDisplay({onChangeRegion, region}) {
           // by species and merge the results.
           
         Promise.all([getWatersheds(boundary), getWhitelist("watersheds")]).then(
-            api_responses => {
-                setWatersheds(collateRegions(api_responses));
+            ([watersheds, whitelist]) => {
+                setWatersheds(collateRegions([watersheds], whitelist));
             }  
           );
         Promise.all([getConservationUnits(boundary), getWhitelist("conservation_units")]).then(
-            api_responses => {
-                setConservationUnits(collateRegions(api_responses));
+            ([conservation_units, whitelist]) => {
+                setConservationUnits(collateRegions([conservation_units], whitelist));
             }  
           );
       }
@@ -141,7 +141,9 @@ function AreaDisplay({onChangeRegion, region}) {
           
           Promise.all(watershed_calls.concat([watershedWhitelist_call]))
             .then((api_responses) => {
-                setWatersheds(collateRegions(api_responses));
+                const watersheds = api_responses.slice(0, -1);
+                const whitelist = api_responses.slice(-1);
+                setWatersheds(collateRegions(watersheds, whitelist[0]));
             });
 
 
@@ -150,24 +152,24 @@ function AreaDisplay({onChangeRegion, region}) {
           });
           const cuWhitelist_call = getWhitelist("conservation_units");
           Promise.all(cu_calls.concat([cuWhitelist_call])).then((api_responses)=> {
-              setConservationUnits(collateRegions(api_responses));
+              const conservation_units = api_responses.slice(0, -1);
+              const whitelist = api_responses.slice(-1);
+              setConservationUnits(collateRegions(conservation_units, whitelist[0]));
             }
           );
       }
   }, [selectedBasin, selectedTaxons]);
   
-  // receives a collection of API responses, including a whitelist
-  // and one or more calls to the /region API. Returns a list with
-  // the set of unique region objects present in the whitelist and
-  // at least one region list
-  function collateRegions(api_responses) {
-    const whitelist = findWhitelist(api_responses);
-    const regionLists = findRegionLists(api_responses);
+  // receives a collection of responses from the /region API
+  // and a whitelist. Returns a list with the set of unique
+  // region objects present in the whitelist and at least one
+  // region list
+function collateRegions(regions, whitelist) {
     function pr(rl) {
         return parseRegions(rl, whitelist);
     }
-    return regionListUnion(_.map(regionLists, pr));
-  }
+    return regionListUnion(_.map(regions, pr));
+}
 
   function setBasin(event){
     const basin = findRegion("basin", event.value);

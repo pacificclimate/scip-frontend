@@ -87,22 +87,3 @@ export function geoJSONtoWKT(area) {
     }
     return wkt;
 }
-
-// these functions are needed because the whitelists and the region
-// lists are fetched simultaneously via Promise.all. Once you have all 
-// the data back, you need to sort out which API responses are which.
-export function isWhitelist(data) {
-    return(_.isArray(data) && _.isString(data[0]));
-}
-
-export function isRegionList(data) {
-    return(_.isArray(data) && _.isObject(data[0]) && _.has(data[0], 'name'));
-}
-
-export function findWhitelist(data) {
-    return _.find(data, isWhitelist);
-}
-
-export function findRegionLists(data) {
-    return _.filter(data, isRegionList);
-}
