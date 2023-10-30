@@ -3,6 +3,7 @@
 // area they care about; displays categorical data about the selected area 
 
 import {getWatersheds, getBasins, getConservationUnits, getTaxons} from '../../data-services/scip-backend.js';
+import {getWhitelist} from '../../data-services/public.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
 import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
 import {Container, Row, Col} from 'react-bootstrap';
@@ -52,9 +53,9 @@ function AreaDisplay({onChangeRegion, region}) {
   // this only needs to be done once, when the component is loaded
   useEffect(() => {
       if(basins.length === 0) {
-          getBasins().then(
-            data => {
-                setBasins(parseRegions(data));
+          Promise.all([getBasins(), getWhitelist("basins")]).then(
+            ([basins, whitelist]) => {
+                setBasins(collateRegions([basins], whitelist));
             }  
           );
       }
@@ -117,36 +118,58 @@ function AreaDisplay({onChangeRegion, region}) {
           // much faster to make single unfiltered all-watersheds
           // and all-basins calls than to make seven calls filtered
           // by species and merge the results.
-        getWatersheds(boundary).then(
-            data => {
-                setWatersheds(parseRegions(data));
-            }
-        );
-        getConservationUnits(boundary).then(
-            data => {
-                setConservationUnits(parseRegions(data));
-            }
-        );
+          
+        Promise.all([getWatersheds(boundary), getWhitelist("watersheds")]).then(
+            ([watersheds, whitelist]) => {
+                setWatersheds(collateRegions([watersheds], whitelist));
+            }  
+          );
+        Promise.all([getConservationUnits(boundary), getWhitelist("conservation_units")]).then(
+            ([conservation_units, whitelist]) => {
+                setConservationUnits(collateRegions([conservation_units], whitelist));
+            }  
+          );
       }
       else {
           // some, but not all, taxons are selected. 
           // need to do multiple queries and merge the results.
+
           const watershed_calls = _.map(selectedTaxons, taxon => {
               return getWatersheds(boundary, taxon.common_name, taxon.subgroup)
           });
-          Promise.all(watershed_calls).then((api_responses)=> 
-            setWatersheds(regionListUnion(_.map(api_responses, parseRegions)))
-          );
+          const watershedWhitelist_call = getWhitelist("watersheds");
           
+          Promise.all(watershed_calls.concat([watershedWhitelist_call]))
+            .then((api_responses) => {
+                const watersheds = api_responses.slice(0, -1);
+                const whitelist = api_responses.slice(-1);
+                setWatersheds(collateRegions(watersheds, whitelist[0]));
+            });
+
+
           const cu_calls = _.map(selectedTaxons, taxon => {
               return getConservationUnits(boundary, taxon.common_name, taxon.subgroup)
           });
-          Promise.all(cu_calls).then((api_responses)=> 
-            setConservationUnits(regionListUnion(_.map(api_responses, parseRegions)))
+          const cuWhitelist_call = getWhitelist("conservation_units");
+          Promise.all(cu_calls.concat([cuWhitelist_call])).then((api_responses)=> {
+              const conservation_units = api_responses.slice(0, -1);
+              const whitelist = api_responses.slice(-1);
+              setConservationUnits(collateRegions(conservation_units, whitelist[0]));
+            }
           );
       }
   }, [selectedBasin, selectedTaxons]);
   
+  // receives a collection of responses from the /region API
+  // and a whitelist. Returns a list with the set of unique
+  // region objects present in the whitelist and at least one
+  // region list
+function collateRegions(regions, whitelist) {
+    function pr(rl) {
+        return parseRegions(rl, whitelist);
+    }
+    return regionListUnion(_.map(regions, pr));
+}
 
   function setBasin(event){
     const basin = findRegion("basin", event.value);

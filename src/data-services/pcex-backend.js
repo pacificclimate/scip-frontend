@@ -8,7 +8,7 @@ import {geoJSONtoWKT} from '../helpers/GeographyHelpers.js'
 // Functions for accessing the multimeta API, which returns a list of
 // available datafiles, and some metadata about each one
 
-export function getMultimeta(ensemble="scip_files") {
+export function getMultimeta(ensemble="scip_fraser_bccoast") {
     // returns the results of the multimeta API call - a list of available
     // netCDF raster data files and what data each contains
     // other API calls can be made to access this data.
@@ -72,7 +72,7 @@ export function annualCycleDataRequest(area, datafile, variable) {
 
 export function longTermAverageDataRequest(area, variable, model,
                                            emission, timescale, 
-                                           time, ensemble_name="scip_files") {
+                                           time, ensemble_name="scip_fraser_bccoast") {
     return axios.get(
     process.env.REACT_APP_PCEX_API_URL + "/data",
         {
@@ -104,7 +104,7 @@ export function getWatershedStreams(point) {
         {
             params: {
                 station: geoJSONtoWKT(point),
-                ensemble_name: "frapce_watershed"
+                ensemble_name: "fraser_bccoast_watershed"
             }
         }
     )
@@ -119,7 +119,7 @@ export function getDownstream(point) {
         {
             params: {
                 station: geoJSONtoWKT(point),
-                ensemble_name: "frapce_watershed"
+                ensemble_name: "fraser_bccoast_watershed"
             }
         }
     )

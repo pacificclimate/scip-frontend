@@ -71,7 +71,7 @@ function DataDisplay({region}) {
               region={region}
               model={model ? model.value.representative.model_id : "PCIC-HYDRO"}
               emission={emission ? emission.value.representative.experiment : "historical, rcp85"}
-              rasterMetadata={_.filter(rasterMetadata, {"timescale": "other"})}
+              rasterMetadata={_.filter(rasterMetadata, {"timescale": "daily"})}
             />}
           </Tab>
           <Tab eventKey="population" title="Salmon Populations">
