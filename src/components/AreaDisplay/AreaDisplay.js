@@ -3,6 +3,7 @@
 // area they care about; displays categorical data about the selected area 
 
 import {getWatersheds, getBasins, getConservationUnits, getTaxons} from '../../data-services/scip-backend.js';
+import {getUpstream} from '../../data-services/pcex-backend.js';
 import {getWhitelist} from '../../data-services/public.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
 import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
