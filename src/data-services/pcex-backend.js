@@ -132,13 +132,13 @@ export function getUpstream(point) {
     // (plus some extra data this app doesn't use)
     // named "getUpstream" for this app even though the API is named
     // watershed, because "watershed" has a more specific meaning in this
-    // context.
+    // app.
     return axios.get(
     process.env.REACT_APP_PCEX_API_URL + "/streamflow/watershed",
         {
             params: {
                 station: point,
-                ensemble_name: "frapce_watershed"
+                ensemble_name: "fraser_bccoast_watershed"
             }
         }
     )
