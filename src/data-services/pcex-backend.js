@@ -3,7 +3,7 @@
 // responses from the API.
 import axios from 'axios';
 import {map, keys, pick} from 'lodash';
-import {geoJSONtoWKT} from '../helpers/GeographyHelpers.js'
+import {geoJSONtoWKT} from '../helpers/GeographyHelpers.js';
 
 // Functions for accessing the multimeta API, which returns a list of
 // available datafiles, and some metadata about each one
@@ -53,42 +53,73 @@ export function flattenMultimeta(response) {
 }
 
 // Functions for accessing the raster data retrieval APIs, "timeseries" and "data".
+// These APIs are accessed with a GET request if possible (to take advantage of
+// caching), but will use POST if the area string is too long for GET.
+const MAXAREALENGTH = 2000;
 
-
-
-export function annualCycleDataRequest(area, datafile, variable) {    
-    return axios.get(
-    process.env.REACT_APP_PCEX_API_URL + "/timeseries",
-    {
-      params: {
-        id_: datafile,
-        variable: variable,
-        area: geoJSONtoWKT(area),
-      }
+export function annualCycleDataRequest(area, datafile, variable) {
+    const wkt = geoJSONtoWKT(area);
+    if (area && wkt.length > MAXAREALENGTH) {
+        // send a POST reqiest to accomodate long area string
+        const formData = new FormData();
+        formData.append('id_', datafile);
+        formData.append('area', wkt);
+        formData.append('variable', variable);
+        return axios.post(
+            `${process.env.REACT_APP_PCEX_API_URL}/timeseries`,
+            formData
+        ).then(response => response.data);
     }
-  )
-  .then(response => response.data);
+    else {
+        //send a GET request
+        return axios.get(
+            `${process.env.REACT_APP_PCEX_API_URL}/timeseries`, {
+                params: {
+                    id_: datafile,
+                    area: wkt,
+                    variable: variable,
+                }
+            }
+        ).then(response=> response.data);
+    }
+
 }
 
 export function longTermAverageDataRequest(area, variable, model,
                                            emission, timescale, 
                                            time, ensemble_name="scip_fraser_bccoast") {
-    return axios.get(
-    process.env.REACT_APP_PCEX_API_URL + "/data",
-        {
-            params: {
-                ensemble_name,
-                model,
-                variable,
-                emission,
-                timescale,
-                time,
-                area: geoJSONtoWKT(area),
+    const wkt = geoJSONtoWKT(area);
+    if (area && wkt.length > MAXAREALENGTH) {
+        // send a POST reqiest to accomodate long area string
+        const formData = new FormData();
+        formData.append('ensemble_name', ensemble_name);
+        formData.append('model', model);
+        formData.append('variable', variable);
+        formData.append('emission', emission);
+        formData.append('timescale', timescale);
+        formData.append('time', time);
+        formData.append('area', wkt);
+        return axios.post(
+            `${process.env.REACT_APP_PCEX_API_URL}/data`,
+            formData
+        ).then(response => response.data);
+    }
+    else {
+        //send a GET request
+        return axios.get(
+            `${process.env.REACT_APP_PCEX_API_URL}/data`, {
+                params: {
+                    ensemble_name,
+                    model,
+                    variable,
+                    emission,
+                    timescale,
+                    time,
+                    area: wkt,
+                }
             }
-        }
-    )
-    .then(response => response.data);
-                                               
+        ).then(response=> response.data);
+    }
 }
 
 
