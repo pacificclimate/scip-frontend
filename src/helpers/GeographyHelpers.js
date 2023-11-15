@@ -4,6 +4,12 @@ import _ from 'lodash';
 //attribute names to show on screen
 export const displayRegionAttributeNames = {};
 
+// WKT strings long than this will be sent to backends as POST
+// requests, not GET requests. The unofficial maximum total URL
+// length, including all parameters and domain information,
+// is 4096.
+export const MAXAREALENGTH = 2000;
+
 
 // Is point a valid WKT point?
 export function validPoint(point) {

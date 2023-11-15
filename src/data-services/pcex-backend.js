@@ -3,7 +3,7 @@
 // responses from the API.
 import axios from 'axios';
 import {map, keys, pick} from 'lodash';
-import {geoJSONtoWKT} from '../helpers/GeographyHelpers.js';
+import {geoJSONtoWKT, MAXAREALENGTH} from '../helpers/GeographyHelpers.js';
 
 // Functions for accessing the multimeta API, which returns a list of
 // available datafiles, and some metadata about each one
@@ -55,7 +55,6 @@ export function flattenMultimeta(response) {
 // Functions for accessing the raster data retrieval APIs, "timeseries" and "data".
 // These APIs are accessed with a GET request if possible (to take advantage of
 // caching), but will use POST if the area string is too long for GET.
-const MAXAREALENGTH = 2000;
 
 export function annualCycleDataRequest(area, datafile, variable) {
     const wkt = geoJSONtoWKT(area);
