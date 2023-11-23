@@ -260,6 +260,7 @@ function collateRegions(regions, whitelist) {
                 </Col>
             </Row>
         </Container>
+      The downstream path, if known, is marked in blue. The selected watershed is outlined in white.
     </div>
   );
 }
