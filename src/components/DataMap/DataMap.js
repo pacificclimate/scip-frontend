@@ -30,7 +30,6 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
   } : null;
   
   function handleAreaCreated(e) {
-      //clearMapMarker();
   
       const lat = e.layer._latlng.lat;
       const lon = e.layer._latlng.lng;
@@ -119,6 +118,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
                   circlemarker: true,
                   marker: false
               }}
+              edit={{edit: false}}
             />
           </FeatureGroup>
           <WMSTileLayer
