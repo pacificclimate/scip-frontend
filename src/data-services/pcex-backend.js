@@ -52,6 +52,20 @@ export function flattenMultimeta(response) {
     })
 }
 
+// get more information on a dataset, so that it can be displayed on the map.
+export function getMetadata(dataset) {
+    return axios.get(
+    process.env.REACT_APP_PCEX_API_URL + "/metadata",
+    {
+      params: {
+        model_id: dataset,
+        extras: "filepath",
+      }
+    }
+  )
+  .then(response => response.data);
+}
+
 // Functions for accessing the raster data retrieval APIs, "timeseries" and "data".
 // These APIs are accessed with a GET request if possible (to take advantage of
 // caching), but will use POST if the area string is too long for GET.

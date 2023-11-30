@@ -7,6 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
+import useStore from '../../store/useStore.js';
 import { annualCycleDataRequest } from '../../data-services/pcex-backend.js';
 import { noGraphMessage, noCommasExperiment } from '../../helpers/GraphHelpers.js';
 import DailyGraph from '../DailyGraph/DailyGraph.js';
@@ -17,10 +18,10 @@ function DailyDataDisplay({
   region, rasterMetadata, model, emission,
 }) {
   const [dailyTimeSeries, setDailyTimeSeries] = useState(null);
-  const [variable, setVariable] = useState(null);
   const [climatology, setClimatology] = useState(null);
-
-  const selectVariable = setVariable;
+  
+  const storeVariable = useStore((state) => state.setDailyIndicator);
+  const variable = useStore((state) => state.dailyIndicator);
 
   const selectClimatology = setClimatology;
 
@@ -67,7 +68,7 @@ function DailyDataDisplay({
             metadata={rasterMetadata}
             value={variable}
             canReplace={false}
-            onChange={selectVariable}
+            onChange={storeVariable}
             onNoChange={dontSelectVariable}
           />
         )

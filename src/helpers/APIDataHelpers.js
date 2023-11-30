@@ -48,3 +48,18 @@ export function taxonObject(taxonStr, taxonObjects){
     let f = _.find(taxonObjects, t => {return taxonString(t) === taxonStr;});
     return f;
 }
+
+// returns the first and only item in a one-item list. 
+// returns null if the list is empty, throws an error if there
+// is more than one item.
+export function only(list) {
+    if (list.length === 0) {
+        return null;
+    }
+    else if (list.length === 1) {
+        return list[0];
+    }
+    else {
+        throw new Error(`List contains more than one item: ${list}`);
+    }
+}
