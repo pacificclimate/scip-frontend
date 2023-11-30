@@ -11,6 +11,7 @@ import {unravelObject, only} from '../../helpers/APIDataHelpers.js'
 import _ from 'lodash';
 
 function MapControls({onChange, mapDataset}) {
+    //access user selections on the Data Display component
     const graphTab = useStore((state) => state.graphTab);
     const dailyIndicator = useStore((state) => state.dailyIndicator);
     const yearlyIndicator = useStore((state) => state.yearlyIndicator);
@@ -18,10 +19,14 @@ function MapControls({onChange, mapDataset}) {
     const model = useStore((state) => state.model);
     const emission = useStore((state) => state.emission);
     
+    //keep track of user selections on this component
     const [timeMetadata, setTimeMetadata] = useState(null);
     const [datasetSeries, setDatasetSeries] = useState([]);
 
-    // switch to a new datafile when the user changes which graph they are looking at
+    // this useEffect responds to user changes and selections made on the Data Display
+    // component or its children, which it receives via the Zustand store.
+    // it determines which datasets are described by the selection parameters and loads
+    // one of them.
     useEffect(() => {
         console.log("model is");
         console.log(model);
@@ -37,35 +42,74 @@ function MapControls({onChange, mapDataset}) {
                 
         // select a datafile
         if(datafiles) { 
-            setDatasetSeries(datafiles.value.contexts);
             console.log(`received ${datafiles.value.contexts.length} datasets`);
-            //todo: non-random filtering here.
-            const dataset = datafiles.value.contexts[0];
             
-//            console.log("dataset chosen randomly is");
-//            console.log(dataset)
+            //datafiles contains all datasets with a particular indicator.
+            //filter by model and emissions scenario to get the list of all the ones
+            //viewable for current user selections on Data Display.
+            const availableDatasets = _.filter(datafiles.value.contexts, {
+                model_id: model.value.representative.model_id,
+                experiment: emission.value.representative.experiment});
+            setDatasetSeries(availableDatasets);
+            
+            // figure out how many runs are in this data, and select the earliest
+            // one alphabetically (ie r1i1p1 before r2i1p1, etc)
+            const availableRuns = getDatasetAttributes(availableDatasets, ['ensemble_member']);
+            const defaultRun = _.map(availableRuns, 'ensemble_member').sort()[0];
+            console.log(`defaultRun is ${defaultRun}`);
+            
+            const selectedRunDatasets = _.filter(availableDatasets, {ensemble_member: defaultRun});
+            
+            // select a single dataset to view on the map. 
+            // the climatology should match the one the user was previously viewing, if possible,
+            // otherwise load the earliest climatology.
+            let matchingClimo = null;
+            if(mapDataset) {
+                //this uses string sorting for dates; they're all year-first format
+                function dateInClimatology(dataset, datestr) {
+                    return(datestr > dataset.start_date && datestr < dataset.end_date);
+                }
+                matchingClimo = _.find(selectedRunDatasets, dateInClimatology(mapDataset.time));
+            }
+            const first_start = _.map(getDatasetAttributes(selectedRunDatasets, "start_date"), 'start_date').sort()[0];
+            const earliest = _.find(selectedRunDatasets, {start_date: first_start});
+            
+            const dataset = mapDataset && matchingClimo ? matchingClimo : earliest;
+            
+            console.log("dataset chosen is");
+            console.log(dataset)
+
             
             // fetch timestamp information for the selected datafile
             getMetadata(dataset.file_id).then(data => {
                 const metadata = only(unravelObject(data, "file_id"));
                 console.log("time metadata is ");
                 console.log(metadata);
-                setTimeMetadata(data);
+                setTimeMetadata(metadata);
 //                console.log("here is the fetched data");
 //                console.log(metadata);
                 
                 const indicator = only(Object.keys(metadata.variables));
                 console.log(indicator);
                 
-                const timestamp = _.values(metadata.times)[0];
+                // if the new dataset contains the timestamp the user was previously,
+                // looking at, keep using that timestamp, otherwise pick the first one
+                // on the list.
+                let timestamp = null;
+                if(mapDataset && _.includes(metadata.times, mapDataset.time)) {
+                    timestamp = mapDataset.time;
+                }
+                else {
+                    timestamp = _.values(metadata.times)[0];
+                }
                 
                 const mapDataLayer = {
                     file: metadata.filepath,
                     variable: indicator,
                     time: timestamp,
-                    styles: "default-scalar/x-Occam"
+                    styles: "default-scalar/x-Occam",
+                    file_id: metadata.file_id //not used by map but makes things easier.
                 }
-                
                 onChange(mapDataLayer);
             });
         }
@@ -73,6 +117,18 @@ function MapControls({onChange, mapDataset}) {
             console.log("no raster metadata");
         }
     }, [graphTab, dailyIndicator, yearlyIndicator, monthlyIndicator, model, emission]);
+    
+    // returns a list of all values for one or more attributes in a collection
+    // of datasets, for example all experiments, start dates, etc.
+    function getDatasetAttributes(datasets, attributes) {
+        return(_.uniqWith(_.map(datasets, d=> {return _.pick(d, attributes)}),_.isEqual));
+    }
+
+    //given the id of a dataset, return the values of one of its attributes 
+    function getDatasetAttribute(id, datasets, attribute) {
+        const ds = _.find(datasets, {file_id: id});
+        return ds[attribute];
+    }
 
     function describeTimestamp() {
         const date = new Date(mapDataset.time);
