@@ -98,9 +98,16 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
     setCMMap(null);
   }
   
-
-  console.log("dataset in Datamap is");
-  console.log(dataset);
+  // WMSTileLayer does not update itself in response to updates made to the
+  // "layer" parameter, but does update in responds to changes made to
+  // parameters in the "params" objecf. Therefore, we need anything that
+  // might change over the course of a user session to be in this 
+  // object.
+  const wmsParams = dataset ? {
+    layers: `x${dataset.file}/${dataset.variable}`,
+    time: dataset.time,
+    styles: dataset.styles
+    }: {};
 
   return (
     <div className="DataMap">
@@ -127,7 +134,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
               edit={{edit: false}}
             />
           </FeatureGroup>
-          {dataset ?
+          {dataset &&
           <WMSTileLayer
             url={"https://services.pacificclimate.org/dev/ncwms"}
             format={'image/png'}
@@ -135,10 +142,8 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
             opacity={0.3}
             transparent={true}
             version={'1.1.1'}
-            layers={`x${dataset.file}/${dataset.variable}`}
-            time={dataset.time}
-            styles={dataset.styles}
-          /> : ""
+            params={wmsParams}
+          />
           }
         </BCBaseMap>
     </div>
