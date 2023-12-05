@@ -32,8 +32,6 @@ function MapDisplay({region, onSelectOutlet, selectedOutlet}) {
 
 
   function handleDatasetChange(dataset) {
-      console.log("dataset change!");
-      console.log(dataset);
       setMapDataset(dataset);
   }
 

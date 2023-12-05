@@ -11,6 +11,12 @@ import _ from 'lodash';
 
 import NextTimestampButton from './NextTimestampButton.js';
 import PreviousTimestampButton from './PreviousTimestampButton.js';
+import NextClimatologyButton from './NextClimatologyButton.js';
+import PreviousClimatologyButton from './PreviousClimatologyButton.js';
+
+import './MapControls.css';
+
+
 
 function MapControls({onChange, mapDataset}) {
     //access user selections on the Data Display component
@@ -29,22 +35,14 @@ function MapControls({onChange, mapDataset}) {
     // component or its children, which it receives via the Zustand store.
     // it determines which datasets are described by the selection parameters and loads
     // one of them.
-    useEffect(() => {
-        console.log("model is");
-        console.log(model);
-        
+    useEffect(() => {        
         const datafiles = graphTab === 'day' ? dailyIndicator 
             : graphTab === 'month' ? monthlyIndicator 
             : graphTab === 'year' ? yearlyIndicator
             : undefined;
-
-        console.log("Indicator in useEffect is");
-        console.log(`graphTab: ${graphTab}, dailyINdictaor: ${dailyIndicator} monthly: ${monthlyIndicator} yearly ${yearlyIndicator}`);
-        console.log(datafiles);
                 
         // select a datafile
         if(datafiles) { 
-            console.log(`received ${datafiles.value.contexts.length} datasets`);
             
             //datafiles contains all datasets with a particular indicator.
             //filter by model and emissions scenario to get the list of all the ones
@@ -58,7 +56,6 @@ function MapControls({onChange, mapDataset}) {
             // one alphabetically (ie r1i1p1 before r2i1p1, etc)
             const availableRuns = getDatasetAttributes(availableDatasets, ['ensemble_member']);
             const defaultRun = _.map(availableRuns, 'ensemble_member').sort()[0];
-            console.log(`defaultRun is ${defaultRun}`);
             
             const selectedRunDatasets = _.filter(availableDatasets, {ensemble_member: defaultRun});
             
@@ -78,21 +75,11 @@ function MapControls({onChange, mapDataset}) {
             
             const dataset = mapDataset && matchingClimo ? matchingClimo : earliest;
             
-            console.log("dataset chosen is");
-            console.log(dataset)
-
-            
             // fetch timestamp information for the selected datafile
             getMetadata(dataset.file_id).then(data => {
                 const metadata = flattenMetadata(data, "file_id");
-                console.log("time metadata is ");
-                console.log(metadata);
                 setTimeMetadata(metadata);
-                console.log("here is the fetched data");
-                console.log(metadata);
-                
                 const indicator = metadata.variable_id;
-                console.log(indicator);
                 
                 // if the new dataset contains the timestamp the user was previously,
                 // looking at, keep using that timestamp, otherwise pick the first one
@@ -155,7 +142,6 @@ function MapControls({onChange, mapDataset}) {
     
     function describeClimatology() {
         if (timeMetadata) {
-            console.log(`start date is ${timeMetadata.start_date}`);
             const start = new Date(timeMetadata.start_date);
             const end = new Date(timeMetadata.end_date);
             return `${start.getFullYear()}-${end.getFullYear()}`
@@ -208,9 +194,101 @@ function MapControls({onChange, mapDataset}) {
         newMapLayer["time"] = timeMetadata.times[currentTimeIndex -1 ];
         onChange(newMapLayer);
     }
+    
+    function nextClimatologyExists() {
+        if(!mapDataset) {
+            return false;
+        }
+        const currentDataset = _.find(datasetSeries, {file_id: mapDataset.file_id});
+        //a "next" climo is defined as one with a later end date.
+        const next = _.find(datasetSeries, (ds) => {return(ds.end_date > currentDataset.end_date)});
+        return !_.isUndefined(next);
+    }
+    
+    function nextClimatology() {
+        const currentDataset = _.find(datasetSeries, {file_id: mapDataset.file_id});
+        // find the dataset with the smallest end_date larger than the current one.
+        let nextClimatology;
+        for(let i = 0; i < datasetSeries.length; i++) {
+            if (datasetSeries[i].end_date > currentDataset.end_date && 
+                    (_.isUndefined(nextClimatology) || datasetSeries[i].end_date < nextClimatology.end_date)) {
+                        nextClimatology = datasetSeries[i];
+                    }
+        }
+
+        // fetch time metadata for the next climatology's dataset
+        getMetadata(nextClimatology.file_id).then(data => {
+            const metadata = flattenMetadata(data, "file_id");
+
+            // keep the same time index - if the user was looking at March 13 and 
+            // switches to a climatology 30 years later, show March 13 then.
+            const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
+            const timestamp = metadata.times[currentTimeIndex];
+            
+            //update the new map parameters and time metadata
+            const mapDataLayer = {
+              file: metadata.filepath,
+              variable: mapDataset.variable,
+              time: timestamp,
+              styles: mapDataset.styles,
+              file_id: metadata.file_id  
+            };
+            
+            onChange(mapDataLayer);            
+            setTimeMetadata(metadata);
+        }); 
+    }
+    
+    function previousClimatologyExists() {
+        if(!mapDataset) {
+            return false;
+        }
+        const currentDataset = _.find(datasetSeries, {file_id: mapDataset.file_id});
+        //a "previous" climo is defined as one with an earlier start date
+        const next = _.find(datasetSeries, (ds) => {return(ds.start_date < currentDataset.start_date)});
+        return !_.isUndefined(next);
+    }
+    
+    function previousClimatology() {
+        const currentDataset = _.find(datasetSeries, {file_id: mapDataset.file_id});
+        // find the dataset with the largest start_date smaller than the current one.
+        let previousClimatology;
+        for(let i = 0; i < datasetSeries.length; i++) {
+            if (datasetSeries[i].start_date < currentDataset.start_date && 
+                    (_.isUndefined(previousClimatology) || datasetSeries[i].start_date > previousClimatology.start_date)) {
+                        previousClimatology = datasetSeries[i];
+                    }
+        }
+
+        // fetch time metadata for the next climatology's dataset
+        getMetadata(previousClimatology.file_id).then(data => {
+            const metadata = flattenMetadata(data, "file_id");
+
+            // keep the same time index - if the user was looking at March 13 and 
+            // switches to a climatology 30 years later, show March 13 then.
+            const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
+            const timestamp = metadata.times[currentTimeIndex];
+            
+            //update the new map parameters and time metadata
+            const mapDataLayer = {
+              file: metadata.filepath,
+              variable: mapDataset.variable,
+              time: timestamp,
+              styles: mapDataset.styles,
+              file_id: metadata.file_id  
+            };
+            
+            onChange(mapDataLayer);            
+            setTimeMetadata(metadata);
+        }); 
+    }
 
     return (
-        <div>
+        <div classname="MapControls">
+          <PreviousClimatologyButton
+            disabled={!previousClimatologyExists()}
+            onClick={previousClimatology}
+          />
           <PreviousTimestampButton
             disabled={!previousTimestampExists()}
             onClick={previousTimestamp}
@@ -219,7 +297,11 @@ function MapControls({onChange, mapDataset}) {
           <NextTimestampButton
             disabled={!nextTimestampExists()}
             onClick={nextTimestamp}
-          /> 
+          />
+         <NextClimatologyButton
+            disabled={!nextClimatologyExists()}
+            onClick={nextClimatology}
+          />
         </div>
         );
 }
