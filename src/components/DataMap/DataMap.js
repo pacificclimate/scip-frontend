@@ -104,7 +104,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
           center={viewport.center}
         >
           <SetView view={viewport}/>
-          <SimpleGeoJSON data={boundaryFeature} fill={false} color="#ffffff"/>
+          <SimpleGeoJSON data={boundaryFeature} fill={false} color="#000000"/>
           <SimpleGeoJSON data={downstreamFeature} fill={false} color="#6699FF"/>
           <FeatureGroup>
             <EditControl 
