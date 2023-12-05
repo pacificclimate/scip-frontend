@@ -6,9 +6,11 @@
 
 import useStore from '../../store/useStore.js'
 import React, {useState, useEffect} from 'react';
-import {getMetadata} from '../../data-services/pcex-backend.js';
-import {unravelObject, only} from '../../helpers/APIDataHelpers.js'
+import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
 import _ from 'lodash';
+
+import NextTimestampButton from './NextTimestampButton.js';
+import PreviousTimestampButton from './PreviousTimestampButton.js';
 
 function MapControls({onChange, mapDataset}) {
     //access user selections on the Data Display component
@@ -82,14 +84,14 @@ function MapControls({onChange, mapDataset}) {
             
             // fetch timestamp information for the selected datafile
             getMetadata(dataset.file_id).then(data => {
-                const metadata = only(unravelObject(data, "file_id"));
+                const metadata = flattenMetadata(data, "file_id");
                 console.log("time metadata is ");
                 console.log(metadata);
                 setTimeMetadata(metadata);
-//                console.log("here is the fetched data");
-//                console.log(metadata);
+                console.log("here is the fetched data");
+                console.log(metadata);
                 
-                const indicator = only(Object.keys(metadata.variables));
+                const indicator = metadata.variable_id;
                 console.log(indicator);
                 
                 // if the new dataset contains the timestamp the user was previously,
@@ -140,7 +142,7 @@ function MapControls({onChange, mapDataset}) {
         if(graphTab === "year") {
             return "annual";
         }
-        else if(graphTab == "month") {
+        else if(graphTab === "month") {
             return monthNames[date.getMonth()];
         }
         else if(graphTab === "day") {
@@ -156,7 +158,7 @@ function MapControls({onChange, mapDataset}) {
             console.log(`start date is ${timeMetadata.start_date}`);
             const start = new Date(timeMetadata.start_date);
             const end = new Date(timeMetadata.end_date);
-            return `${start.getYear()}-${end.getYear()}`
+            return `${start.getFullYear()}-${end.getFullYear()}`
         }
         else {
             return "unset climatology";
@@ -173,7 +175,53 @@ function MapControls({onChange, mapDataset}) {
         }
     }
 
-    return describeMap();
+    function nextTimestampExists() {
+        if(!mapDataset || graphTab==="year") {
+            return false;
+        }
+        const lastTime = timeMetadata.times[timeMetadata.times.length - 1];
+        const currentTime = mapDataset.time;
+        return lastTime > currentTime;
+    }
+    
+    //advance to the next timestamp when the user clicks the corresponding button
+    function nextTimestamp() {
+        const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
+        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id"]);
+        newMapLayer["time"] = timeMetadata.times[currentTimeIndex + 1];
+        onChange(newMapLayer);
+    }
+    
+    function previousTimestampExists() {
+        if(!mapDataset || graphTab==="year") {
+            return false;
+        }
+        const firstTime = timeMetadata.times[0];
+        const currentTime = mapDataset.time;
+        return firstTime < currentTime;
+    }
+    
+    //step back to the previous timestamp when user clicks the corresponding button
+    function previousTimestamp() {
+        const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
+        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id"]);
+        newMapLayer["time"] = timeMetadata.times[currentTimeIndex -1 ];
+        onChange(newMapLayer);
+    }
+
+    return (
+        <div>
+          <PreviousTimestampButton
+            disabled={!previousTimestampExists()}
+            onClick={previousTimestamp}
+          />
+          {describeMap()}
+          <NextTimestampButton
+            disabled={!nextTimestampExists()}
+            onClick={nextTimestamp}
+          /> 
+        </div>
+        );
 }
 
 
