@@ -219,10 +219,6 @@ function collateRegions(regions, whitelist) {
 
   return (
     <div className="AreaDisplay">
-      Select a region eiher using the circle marker tool on the map to place a
-      marker and select everything upstream of it, or from the dropdown watershed and
-      conservation unit menus below. You can narrow down regions shown on the menus
-      by river basin or species.
         <Container fluid>
             <Row>
                 <Col>
