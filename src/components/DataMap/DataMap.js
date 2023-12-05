@@ -129,7 +129,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
             transparent={true}
             version={'1.1.1'}
             layers={"x/storage/data/projects/comp_support/bc-srif/climatologies/fraser+bccoast/annual/means/peakFlow_aClimMean_ensMean_VICGL-dynWat_rcp85_1971-2000_bccoast+fraser.nc/peakQmag_year"}
-            time={"1985-07-02T00:00:00Z"}
+            time={"1986-07-02T00:00:00Z"}
             styles={"default-scalar/x-Occam"}
           />
         </BCBaseMap>
