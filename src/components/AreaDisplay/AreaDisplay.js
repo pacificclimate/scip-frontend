@@ -3,16 +3,17 @@
 // area they care about; displays categorical data about the selected area 
 
 import {getWatersheds, getBasins, getConservationUnits, getTaxons} from '../../data-services/scip-backend.js';
+import {getUpstream} from '../../data-services/pcex-backend.js';
 import {getWhitelist} from '../../data-services/public.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
 import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
 import {Container, Row, Col} from 'react-bootstrap';
 import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
-import {parseRegions, regionListUnion} from '../../helpers/GeographyHelpers.js';
+import {parseRegions, regionListUnion, parseUpstream} from '../../helpers/GeographyHelpers.js';
 import _ from 'lodash';
 
-function AreaDisplay({onChangeRegion, region}) {
+function AreaDisplay({onChangeRegion, region, selectedOutlet}) {
   const [basins, setBasins] = useState([]);
   const [selectedBasin, setSelectedBasin] = useState(null);
   
@@ -100,6 +101,19 @@ function AreaDisplay({onChangeRegion, region}) {
       }
       setSelectedTaxons(newSelectedTaxons);
   }
+  
+
+
+  useEffect(() => {
+      //if the user has selected an outlet, fetch its upstream area
+      if(selectedOutlet){
+          getUpstream(selectedOutlet).then(
+            data => {
+              setUpstream(parseUpstream(data));
+            }
+          );
+      }
+  }, [selectedOutlet]);
 
   // update selectable watersheds and conservation units in dropdowns.
   // called when either the selected taxon or the selected basin is changed - 
@@ -175,7 +189,7 @@ function collateRegions(regions, whitelist) {
     const basin = findRegion("basin", event.value);
     
     setSelectedBasin(event);
-    onChangeRegion(basin);
+    onChangeRegion(basin, false);
     setSelectedWatershed(null);
     setSelectedConservationUnit(null); 
   }
@@ -185,20 +199,30 @@ function collateRegions(regions, whitelist) {
     const watershed = findRegion("watershed", event.value);
     setSelectedWatershed(event);
     setSelectedConservationUnit(null);
-    onChangeRegion(watershed);
+    onChangeRegion(watershed, false);
   }
   
   function setConservationUnit(event) {
     const cu = findRegion("conservationUnit", event.value);
     setSelectedConservationUnit(event);
     setSelectedWatershed(null);
-    onChangeRegion(cu);
+    onChangeRegion(cu, false);
   }
   
+  function setUpstream(upstream) {
+    //search for region.
+      setSelectedConservationUnit(null);
+      setSelectedWatershed(null);
+      setSelectedBasin(null);
+      onChangeRegion(upstream, true);
+  }
+
   return (
     <div className="AreaDisplay">
-        Select a watershed or conservation unit to view indicator and population data,
-        or narrow down the list by selecting a basin or species first.
+      Select a region eiher using the circle marker tool on the map to place a
+      marker and select everything upstream of it, or from the dropdown watershed and
+      conservation unit menus below. You can narrow down regions shown on the menus
+      by river basin or species.
         <Container fluid>
             <Row>
                 <Col>
@@ -235,7 +259,12 @@ function collateRegions(regions, whitelist) {
                     />
                 </Col>
             </Row>
-        </Container>
+          </Container>
+      Select a region either using the circle marker tool on the map to place a
+      marker and select everything upstream of it, or from the dropdown watershed and
+      conservation unit menus below. You can narrow down regions shown on the menus
+      by river basin or species.
+      The downstream path, if known, is marked in blue. The selected watershed is outlined in black.
     </div>
   );
 }
