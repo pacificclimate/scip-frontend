@@ -7,6 +7,7 @@
 import useStore from '../../store/useStore.js'
 import React, {useState, useEffect} from 'react';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
+import {getIndicatorMapOptions} from '../../data-services/public.js';
 import _ from 'lodash';
 
 import NextTimestampButton from './NextTimestampButton.js';
@@ -30,6 +31,14 @@ function MapControls({onChange, mapDataset}) {
     //keep track of user selections on this component
     const [timeMetadata, setTimeMetadata] = useState(null);
     const [datasetSeries, setDatasetSeries] = useState([]);
+    const [indicatorConfig, setIndicatorConfig] = useState(null);
+    
+    //load the indicator configuration options, if not already loaded
+    useEffect(() => {
+        if(!indicatorConfig) {
+            getIndicatorMapOptions().then(options => setIndicatorConfig(options));
+        }
+    });
 
     // this useEffect responds to user changes and selections made on the Data Display
     // component or its children, which it receives via the Zustand store.
@@ -92,11 +101,18 @@ function MapControls({onChange, mapDataset}) {
                     timestamp = _.values(metadata.times)[0];
                 }
                 
+                //use indicator-specific colouration if available
+                const palette = (indicatorConfig && indicator in indicatorConfig) ?
+                    indicatorConfig[indicator].palette : 'x-Occam';
+                const logscale = (indicatorConfig && indicator in indicatorConfig) ?
+                    indicatorConfig[indicator].logscale : false;
+                
                 const mapDataLayer = {
                     file: metadata.filepath,
                     variable: indicator,
                     time: timestamp,
-                    styles: "default-scalar/x-Occam",
+                    styles: `default-scalar/${palette}`,
+                    logscale: logscale,
                     file_id: metadata.file_id //not used by map but makes things easier.
                 }
                 onChange(mapDataLayer);
@@ -153,7 +169,7 @@ function MapControls({onChange, mapDataset}) {
 
     function describeMap() {
         if (mapDataset) {
-            return `${describeTimestamp()} mean ${mapDataset.variable} ${describeClimatology()}`;
+            return `${describeTimestamp()} mean ${mapDataset.variable} ${describeClimatology()} (${mapDataset.logscale ? "logarithmic" : "linear"} colour scaling)`;
         }
         else
         {
@@ -173,7 +189,7 @@ function MapControls({onChange, mapDataset}) {
     //advance to the next timestamp when the user clicks the corresponding button
     function nextTimestamp() {
         const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
-        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id"]);
+        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id", "logscale"]);
         newMapLayer["time"] = timeMetadata.times[currentTimeIndex + 1];
         onChange(newMapLayer);
     }
@@ -190,7 +206,7 @@ function MapControls({onChange, mapDataset}) {
     //step back to the previous timestamp when user clicks the corresponding button
     function previousTimestamp() {
         const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
-        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id"]);
+        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id", "logscale"]);
         newMapLayer["time"] = timeMetadata.times[currentTimeIndex -1 ];
         onChange(newMapLayer);
     }
@@ -200,6 +216,9 @@ function MapControls({onChange, mapDataset}) {
             return false;
         }
         const currentDataset = _.find(datasetSeries, {file_id: mapDataset.file_id});
+        if(!currentDataset) {
+            return false;
+        }
         //a "next" climo is defined as one with a later end date.
         const next = _.find(datasetSeries, (ds) => {return(ds.end_date > currentDataset.end_date)});
         return !_.isUndefined(next);
@@ -231,6 +250,7 @@ function MapControls({onChange, mapDataset}) {
               variable: mapDataset.variable,
               time: timestamp,
               styles: mapDataset.styles,
+              logscale: mapDataset.logscale,
               file_id: metadata.file_id  
             };
             
@@ -244,6 +264,9 @@ function MapControls({onChange, mapDataset}) {
             return false;
         }
         const currentDataset = _.find(datasetSeries, {file_id: mapDataset.file_id});
+        if(!currentDataset) {
+            return false;
+        }
         //a "previous" climo is defined as one with an earlier start date
         const next = _.find(datasetSeries, (ds) => {return(ds.start_date < currentDataset.start_date)});
         return !_.isUndefined(next);
@@ -275,6 +298,7 @@ function MapControls({onChange, mapDataset}) {
               variable: mapDataset.variable,
               time: timestamp,
               styles: mapDataset.styles,
+              logscale: mapDataset.logscale,
               file_id: metadata.file_id  
             };
             

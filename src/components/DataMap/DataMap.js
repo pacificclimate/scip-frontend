@@ -106,7 +106,8 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
   const wmsParams = dataset ? {
     layers: `x${dataset.file}/${dataset.variable}`,
     time: dataset.time,
-    styles: dataset.styles
+    styles: dataset.styles,
+    logscale: dataset.logscale
     }: {};
 
   return (
@@ -139,7 +140,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
             url={"https://services.pacificclimate.org/dev/ncwms"}
             format={'image/png'}
             noWrap={true}
-            opacity={0.3}
+            opacity={0.5}
             transparent={true}
             version={'1.1.1'}
             params={wmsParams}
