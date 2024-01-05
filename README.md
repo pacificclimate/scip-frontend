@@ -22,6 +22,9 @@ export REACT_APP_PCEX_API_URL=https://services.pacificclimate.org/dev/pcex/api
 # SCIP API - use an instance that is not in production
 export REACT_APP_SCIP_API_URL=http://docker-dev02.pcic.uvic.ca:30203/api/
 
+# ncWMS server
+export REACT_APP_NCWMS_URL=https://services.pacificclimate.org/dev/ncwms
+
 #tileserver URL
 export REACT_APP_BC_BASE_MAP_TILES_URL=https://services.pacificclimate.org/tiles/bc-albers-lite/{z}/{x}/{y}.png
 

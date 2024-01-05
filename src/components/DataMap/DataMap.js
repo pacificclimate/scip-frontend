@@ -137,7 +137,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
           </FeatureGroup>
           {dataset &&
           <WMSTileLayer
-            url={"https://services.pacificclimate.org/dev/ncwms"}
+            url={process.env.REACT_APP_NCWMS_URL}
             format={'image/png'}
             noWrap={true}
             opacity={0.5}

@@ -107,7 +107,7 @@ function DataDisplay({region}) {
           "Loading Available Datasets"}
         {rasterMetadata ?
           <div>
-            <span> Emmissions Scenario</span> 
+            <span> Emissions Scenario</span> 
             <EmissionSelector 
               metadata={rasterMetadata}
               value={emission}

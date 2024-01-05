@@ -6,7 +6,9 @@
 
 import useStore from '../../store/useStore.js'
 import React, {useState, useEffect} from 'react';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
+import {getNcwmsMinMax} from '../../data-services/ncwms.js'; 
 import {getIndicatorMapOptions} from '../../data-services/public.js';
 import _ from 'lodash';
 
@@ -14,6 +16,7 @@ import NextTimestampButton from './NextTimestampButton.js';
 import PreviousTimestampButton from './PreviousTimestampButton.js';
 import NextClimatologyButton from './NextClimatologyButton.js';
 import PreviousClimatologyButton from './PreviousClimatologyButton.js';
+import ColourLegend from './ColourLegend.js';
 
 import './MapControls.css';
 
@@ -30,15 +33,30 @@ function MapControls({onChange, mapDataset}) {
     
     //keep track of user selections on this component
     const [timeMetadata, setTimeMetadata] = useState(null);
+    const [datasetMinMax, setDatasetMinMax] = useState({});
     const [datasetSeries, setDatasetSeries] = useState([]);
     const [indicatorConfig, setIndicatorConfig] = useState(null);
     
     //load the indicator configuration options, if not already loaded
     useEffect(() => {
         if(!indicatorConfig) {
-            getIndicatorMapOptions().then(options => setIndicatorConfig(options));
+            getIndicatorMapOptions().then((options) => setIndicatorConfig(options));
         }
     });
+    
+    // this useEffect responds to changes in the selected dataset, via the mapDataset
+    // prop. It fetches the minimum and maximum values of the dataset and stores them.
+    // It is inefficient - the dataset minimum and maximum do not change if
+    // a user merely goes to the next timestamp, but they will be fetched anyway.
+    // this is such a small request it is not an issue.
+    useEffect(() => {
+        if(mapDataset) {
+            getNcwmsMinMax(mapDataset.file, mapDataset.variable).then(data => {
+                console.log(data);
+                setDatasetMinMax(data);
+            });
+        }
+    }, [mapDataset]);
 
     // this useEffect responds to user changes and selections made on the Data Display
     // component or its children, which it receives via the Zustand store.
@@ -173,7 +191,7 @@ function MapControls({onChange, mapDataset}) {
         }
         else
         {
-            return "Select an indicator on the Data Display to see it on the map";
+            return "No dataset";
         }
     }
 
@@ -304,28 +322,40 @@ function MapControls({onChange, mapDataset}) {
             
             onChange(mapDataLayer);            
             setTimeMetadata(metadata);
-        }); 
+        });
     }
 
     return (
         <div classname="MapControls">
-          <PreviousClimatologyButton
-            disabled={!previousClimatologyExists()}
-            onClick={previousClimatology}
-          />
-          <PreviousTimestampButton
-            disabled={!previousTimestampExists()}
-            onClick={previousTimestamp}
-          />
-          {describeMap()}
-          <NextTimestampButton
-            disabled={!nextTimestampExists()}
-            onClick={nextTimestamp}
-          />
-         <NextClimatologyButton
-            disabled={!nextClimatologyExists()}
-            onClick={nextClimatology}
-          />
+          <div claaname="TimeControls">
+            <ButtonGroup>
+              <PreviousClimatologyButton
+                disabled={!previousClimatologyExists()}
+                onClick={previousClimatology}
+              />
+              <PreviousTimestampButton
+                disabled={!previousTimestampExists()}
+                onClick={previousTimestamp}
+              />
+              {describeMap()}
+              <NextTimestampButton
+                disabled={!nextTimestampExists()}
+                onClick={nextTimestamp}
+              />
+             <NextClimatologyButton
+                disabled={!nextClimatologyExists()}
+                onClick={nextClimatology}
+              />
+            </ButtonGroup>
+          </div>
+          <div classname="ColourControls">
+            {mapDataset ? (
+              <ColourLegend 
+                mapDataset={mapDataset}
+                minmax = {datasetMinMax} 
+              />
+              ) : "Select an indicator on the data display to see it on the map"}
+          </div>
         </div>
         );
 }
