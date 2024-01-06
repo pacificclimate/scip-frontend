@@ -13,7 +13,7 @@ function NextTimestampButton({disabled, onClick}) {
             title="Next Timestamp"
             disabled={disabled}
             onClick={onClick}> 
-                <ArrowRight/> 
+                Time<ArrowRight/> 
     </Button>
     );
 }

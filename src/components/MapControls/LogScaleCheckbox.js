@@ -14,9 +14,9 @@ function LogScaleCheckbox({mapDataset, minmax, handleChange}) {
             checked={mapDataset.logscale}
             onChange={handleChange}
             inline
-            label={"Logarithmic Scale"}
-            title={minmax.min <= 0 ? "Logscale not possible for datasets containing 0" : "Logarithmic Scale"}
-            disabled={minmax.min <= 0}
+            label={"Log scale"}
+            title={minmax.min <= 0 ? "Logscale not possible for datasets containing values less than 1" : "Logarithmic Scale"}
+            disabled={minmax.min <= 1}
         />
     );
 

@@ -1,6 +1,7 @@
+//Displays a colour bar and minimum and maximum values. Display-only component, not interactive.
 import {getColourBarURL} from '../../data-services/ncwms.js';
 
-function ColourLegend({mapDataset, minmax}) {
+function ColourLegend({mapDataset, minmax, units}) {
     
     function palette() {
         return mapDataset.styles.split('/')[1];
@@ -9,7 +10,7 @@ function ColourLegend({mapDataset, minmax}) {
 
     return(
         <div>
-          {minmax.min}
+          <strong>{mapDataset.variable} ({units}):</strong> {minmax.min}
           <img src={getColourBarURL(palette(), mapDataset.logscale)} />
           {minmax.max}
         </div>

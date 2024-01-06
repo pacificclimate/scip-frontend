@@ -6,6 +6,7 @@
 
 import useStore from '../../store/useStore.js'
 import React, {useState, useEffect} from 'react';
+import {Container, Row, Col} from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
 import {getNcwmsMinMax} from '../../data-services/ncwms.js'; 
@@ -18,6 +19,7 @@ import NextClimatologyButton from './NextClimatologyButton.js';
 import PreviousClimatologyButton from './PreviousClimatologyButton.js';
 import ColourLegend from './ColourLegend.js';
 import LogScaleCheckbox from './LogScaleCheckbox';
+import PaletteSelector from './PaletteSelector';
 
 import './MapControls.css';
 
@@ -160,6 +162,11 @@ function MapControls({onChange, mapDataset}) {
         console.log("handle log scale", selected);
         updateMapDisplayParameter("logscale", !mapDataset.logscale);
     }
+    
+    function handlePalette(selected) {
+        console.log("handle palette", selected);
+        updateMapDisplayParameter("styles", "default-scalar/"+selected.target.value);
+    }
 
     function describeTimestamp() {
         const date = new Date(mapDataset.time);
@@ -169,7 +176,7 @@ function MapControls({onChange, mapDataset}) {
                 "October", "November", "December"];
         
         if(graphTab === "year") {
-            return "annual";
+            return "Annual";
         }
         else if(graphTab === "month") {
             return monthNames[date.getMonth()];
@@ -195,7 +202,7 @@ function MapControls({onChange, mapDataset}) {
 
     function describeMap() {
         if (mapDataset) {
-            return `${describeTimestamp()} mean ${mapDataset.variable} ${describeClimatology()} (${mapDataset.logscale ? "logarithmic" : "linear"} colour scaling)`;
+            return `${describeTimestamp()} Mean ${describeClimatology()}`;
         }
         else
         {
@@ -335,7 +342,7 @@ function MapControls({onChange, mapDataset}) {
 
     return (
         <div classname="MapControls">
-          <div claaname="TimeControls">
+          <div classname="TimeContols">
             <ButtonGroup>
               <PreviousClimatologyButton
                 disabled={!previousClimatologyExists()}
@@ -350,27 +357,38 @@ function MapControls({onChange, mapDataset}) {
                 disabled={!nextTimestampExists()}
                 onClick={nextTimestamp}
               />
-             <NextClimatologyButton
+              <NextClimatologyButton
                 disabled={!nextClimatologyExists()}
                 onClick={nextClimatology}
               />
             </ButtonGroup>
           </div>
-          <div classname="ColourControls">
-            {mapDataset ? (
-              <div>
-                <ColourLegend 
-                  mapDataset={mapDataset}
-                  minmax={datasetMinMax} 
-                />
-                <LogScaleCheckbox
-                  mapDataset={mapDataset}
-                  minmax={datasetMinMax}
-                  handleChange={handleLogScale}
-                />
-              </div>
+          {mapDataset ? (
+            <Container>
+              <Row>
+                  <ColourLegend 
+                    mapDataset={mapDataset}
+                    minmax={datasetMinMax}
+                    units={timeMetadata.units} 
+                  />
+              </Row>
+              <Row>
+                <Col>
+                  <PaletteSelector
+                      mapDataset={mapDataset}
+                      handleChange={handlePalette}
+                  />
+                </Col>
+                <Col>
+                  <LogScaleCheckbox
+                    mapDataset={mapDataset}
+                    minmax={datasetMinMax}
+                    handleChange={handleLogScale}
+                  />
+                </Col>
+              </Row>
+            </Container>
               ) : "Select an indicator on the data display to see it on the map"}
-          </div>
         </div>
         );
 }

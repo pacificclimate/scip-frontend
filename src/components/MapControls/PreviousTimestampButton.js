@@ -13,7 +13,7 @@ function PreviousTimestampButton({disabled, onClick}) {
             title="Previous Timestamp"
             disabled={disabled}
             onClick={onClick}> 
-                <ArrowLeft/> 
+                <ArrowLeft/>Time 
     </Button>
     );
 }

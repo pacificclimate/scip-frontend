@@ -13,7 +13,7 @@ function PreviousClimatologyButton({disabled, onClick}) {
             title="Previous Climatology"
             disabled={disabled}
             onClick={onClick}> 
-                <BoxArrowInLeft/> 
+                <BoxArrowInLeft/>Climatology 
     </Button>
     );
 }
