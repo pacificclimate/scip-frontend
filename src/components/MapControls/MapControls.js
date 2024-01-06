@@ -17,6 +17,7 @@ import PreviousTimestampButton from './PreviousTimestampButton.js';
 import NextClimatologyButton from './NextClimatologyButton.js';
 import PreviousClimatologyButton from './PreviousClimatologyButton.js';
 import ColourLegend from './ColourLegend.js';
+import LogScaleCheckbox from './LogScaleCheckbox';
 
 import './MapControls.css';
 
@@ -146,11 +147,18 @@ function MapControls({onChange, mapDataset}) {
     function getDatasetAttributes(datasets, attributes) {
         return(_.uniqWith(_.map(datasets, d=> {return _.pick(d, attributes)}),_.isEqual));
     }
+    
+    // updates a single attribute of the displayed dataset, 
+    // used in cases where no fancy logic or data fetching is needed.
+    function updateMapDisplayParameter(parameter, value) {
+        let newMapDataLayer = {...mapDataset};
+        newMapDataLayer[parameter] = value;
+        onChange(newMapDataLayer);
+    }
 
-    //given the id of a dataset, return the values of one of its attributes 
-    function getDatasetAttribute(id, datasets, attribute) {
-        const ds = _.find(datasets, {file_id: id});
-        return ds[attribute];
+    function handleLogScale(selected) {
+        console.log("handle log scale", selected);
+        updateMapDisplayParameter("logscale", !mapDataset.logscale);
     }
 
     function describeTimestamp() {
@@ -350,10 +358,17 @@ function MapControls({onChange, mapDataset}) {
           </div>
           <div classname="ColourControls">
             {mapDataset ? (
-              <ColourLegend 
-                mapDataset={mapDataset}
-                minmax = {datasetMinMax} 
-              />
+              <div>
+                <ColourLegend 
+                  mapDataset={mapDataset}
+                  minmax={datasetMinMax} 
+                />
+                <LogScaleCheckbox
+                  mapDataset={mapDataset}
+                  minmax={datasetMinMax}
+                  handleChange={handleLogScale}
+                />
+              </div>
               ) : "Select an indicator on the data display to see it on the map"}
           </div>
         </div>
