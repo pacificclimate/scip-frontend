@@ -19,9 +19,78 @@ function PaletteSelector({mapDataset, handleChange}) {
     });
     
     // tries to create a human-friendly name to each palette
-    // if it cannot create a human-friendly name, just returns the original name.
+    // by expanding the ncWMS abbreviations for palette types, colours
+    // and "inverted" and replacing dashes with spaces.
     function humanFriendly(palette) {
-        return palette;
+        const comp = palette.split("-");
+        let hf = "";
+        
+        //general palette types, denoted by the first part of the palette name
+        const types = {
+            "x": "Cross Platform",
+            "div": "Divergent",
+            "seq": "Sequential",
+            "psu": "Matplotlib PUS",
+        };
+        
+        // attempts to understand colour sequences like BuRd for "Blue-Red"
+        // returns False if there's no such sequence
+        function expandedColorSequence(colseq) {
+            if (colseq === "Oranges" || colseq === "Purples") {
+                return false; //these palettes are misparsed by this function. 
+            }
+            let expanded = colseq;
+            const colours = {
+                "Bu": "Blue",
+                "Rd": "Red",
+                "Br": "Brown",
+                "Pi": "Pink",
+                "Or": "Orange",
+                "Gy": "Grey",
+                "Gn": "Green",
+                "Pu": "Purple",
+                "Yl": "Yellow",
+                "BG": "Blue-Green",
+                "YG": "Yellow-Green",
+                "Bk": "Black",
+                "PR": "Purple-Red"
+            };
+            for(let abbreviation in colours) {
+                expanded = expanded.replace(abbreviation, `, ${colours[abbreviation]}`);
+            }
+            
+            return expanded === colseq ? false : _.trim(expanded, ",");
+        }
+
+        if(comp[0] in types) {
+            hf = `${types[comp[0]]}:`;
+        }
+        else {
+            hf = comp[0];
+        }
+        
+        if(comp.length === 1) {
+            return hf;
+        }
+        else if(comp[1] === "inv") {
+            return `${hf} (inverted)`;
+        }
+        else if (expandedColorSequence(comp[1])) {
+            hf = `${hf} ${expandedColorSequence(comp[1])}`;
+        }
+        else {
+            hf = `${hf} ${comp[1]}`;
+        }
+        
+        if (comp.length === 2) {
+            return hf;
+        } 
+        else if(comp[2] === "inv") {
+            return `${hf} (inverted)`;
+        }
+        else {
+            return `${hf} ${comp[2]}`;
+        }
     }
 
     function makeOption(palette) {

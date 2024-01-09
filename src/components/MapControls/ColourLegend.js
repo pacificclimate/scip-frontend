@@ -11,7 +11,10 @@ function ColourLegend({mapDataset, minmax, units}) {
     return(
         <div>
           <strong>{mapDataset.variable} ({units}):</strong> {minmax.min}
-          <img src={getColourBarURL(palette(), mapDataset.logscale)} />
+          <img 
+            src={getColourBarURL(palette(), mapDataset.logscale)}
+            alt={"colour legend for the map"} 
+          />
           {minmax.max}
         </div>
     );

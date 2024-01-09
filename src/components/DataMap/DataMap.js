@@ -107,7 +107,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
     layers: `x${dataset.file}/${dataset.variable}`,
     time: dataset.time,
     styles: dataset.styles,
-    logscale: dataset.logscale
+    logscale: dataset.logscale,
     }: {};
 
   return (
@@ -140,9 +140,9 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
             url={process.env.REACT_APP_NCWMS_URL}
             format={'image/png'}
             noWrap={true}
-            opacity={0.5}
             transparent={true}
             version={'1.1.1'}
+            opacity={dataset.opacity}
             params={wmsParams}
           />
           }

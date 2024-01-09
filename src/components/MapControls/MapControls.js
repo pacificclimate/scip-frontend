@@ -20,6 +20,7 @@ import PreviousClimatologyButton from './PreviousClimatologyButton.js';
 import ColourLegend from './ColourLegend.js';
 import LogScaleCheckbox from './LogScaleCheckbox';
 import PaletteSelector from './PaletteSelector';
+import OpacitySlider from './OpacitySlider';
 
 import './MapControls.css';
 
@@ -55,7 +56,6 @@ function MapControls({onChange, mapDataset}) {
     useEffect(() => {
         if(mapDataset) {
             getNcwmsMinMax(mapDataset.file, mapDataset.variable).then(data => {
-                console.log(data);
                 setDatasetMinMax(data);
             });
         }
@@ -134,6 +134,7 @@ function MapControls({onChange, mapDataset}) {
                     time: timestamp,
                     styles: `default-scalar/${palette}`,
                     logscale: logscale,
+                    opacity: 0.5,
                     file_id: metadata.file_id //not used by map but makes things easier.
                 }
                 onChange(mapDataLayer);
@@ -151,7 +152,8 @@ function MapControls({onChange, mapDataset}) {
     }
     
     // updates a single attribute of the displayed dataset, 
-    // used in cases where no fancy logic or data fetching is needed.
+    // used in cases where the dataset itself hasn't change, only
+    // the way it is displayed, so we don't need to fetch a new dataset.
     function updateMapDisplayParameter(parameter, value) {
         let newMapDataLayer = {...mapDataset};
         newMapDataLayer[parameter] = value;
@@ -159,13 +161,15 @@ function MapControls({onChange, mapDataset}) {
     }
 
     function handleLogScale(selected) {
-        console.log("handle log scale", selected);
         updateMapDisplayParameter("logscale", !mapDataset.logscale);
     }
     
     function handlePalette(selected) {
-        console.log("handle palette", selected);
         updateMapDisplayParameter("styles", "default-scalar/"+selected.target.value);
+    }
+    
+    function handleOpacity(selected) {
+        updateMapDisplayParameter("opacity", selected.target.valueAsNumber / 100);
     }
 
     function describeTimestamp() {
@@ -222,7 +226,7 @@ function MapControls({onChange, mapDataset}) {
     //advance to the next timestamp when the user clicks the corresponding button
     function nextTimestamp() {
         const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
-        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id", "logscale"]);
+        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id", "logscale", "opacity"]);
         newMapLayer["time"] = timeMetadata.times[currentTimeIndex + 1];
         onChange(newMapLayer);
     }
@@ -239,7 +243,7 @@ function MapControls({onChange, mapDataset}) {
     //step back to the previous timestamp when user clicks the corresponding button
     function previousTimestamp() {
         const currentTimeIndex = timeMetadata.times.findIndex((idx) => idx === mapDataset.time);
-        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id", "logscale"]);
+        let newMapLayer = _.pick(mapDataset, ["file", "variable", "styles", "file_id", "logscale", "opacity"]);
         newMapLayer["time"] = timeMetadata.times[currentTimeIndex -1 ];
         onChange(newMapLayer);
     }
@@ -284,6 +288,7 @@ function MapControls({onChange, mapDataset}) {
               time: timestamp,
               styles: mapDataset.styles,
               logscale: mapDataset.logscale,
+              opacity: mapDataset.opacity,
               file_id: metadata.file_id  
             };
             
@@ -332,6 +337,7 @@ function MapControls({onChange, mapDataset}) {
               time: timestamp,
               styles: mapDataset.styles,
               logscale: mapDataset.logscale,
+              opacity: mapDataset.opacity,
               file_id: metadata.file_id  
             };
             
@@ -384,6 +390,12 @@ function MapControls({onChange, mapDataset}) {
                     mapDataset={mapDataset}
                     minmax={datasetMinMax}
                     handleChange={handleLogScale}
+                  />
+                </Col>
+                <Col>
+                  <OpacitySlider
+                    mapDataset={mapDataset}
+                    handleChange={handleOpacity}
                   />
                 </Col>
               </Row>
