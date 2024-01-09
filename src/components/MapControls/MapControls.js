@@ -41,12 +41,10 @@ function MapControls({onChange, mapDataset}) {
     const [datasetSeries, setDatasetSeries] = useState([]);
     const [indicatorConfig, setIndicatorConfig] = useState(null);
     
-    //load the indicator configuration options, if not already loaded
+    //load the indicator configuration options; only needs to be done once
     useEffect(() => {
-        if(!indicatorConfig) {
-            getIndicatorMapOptions().then((options) => setIndicatorConfig(options));
-        }
-    });
+        getIndicatorMapOptions().then((options) => setIndicatorConfig(options));
+    }, []);
     
     // this useEffect responds to changes in the selected dataset, via the mapDataset
     // prop. It fetches the minimum and maximum values of the dataset and stores them.

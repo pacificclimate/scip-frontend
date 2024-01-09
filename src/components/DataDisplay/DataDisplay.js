@@ -31,16 +31,12 @@ function DataDisplay({region}) {
   const setGraphTab = useStore((state) => state.setGraphTab);
 
   
-  // fetch list of available datasets
+  // fetch list of all available datasets. Only needs to be done once.
   useEffect(() => {
-    //only needs to be done once
-    if(!rasterMetadata) {
-        getMultimeta().then(data => {
-            setRasterMetadata(flattenMultimeta(data));
-        })
-        }
-    }
-  );
+    getMultimeta().then(data => {
+        setRasterMetadata(flattenMultimeta(data));
+    })
+    }, []);
   
   function dontSelectModel(event){
     //no-op, as we are not using cascading selection 

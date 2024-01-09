@@ -11,12 +11,10 @@ function PaletteSelector({mapDataset, handleChange}) {
     const [palettes, setPalettes] = useState();
 
 
-    //get the list of available palettes
+    //get the list of available palettes. Only needs to be done once.
     useEffect(() => {
-        if(!palettes) {
             getNcwmsPalettes(mapDataset.file, mapDataset.variable).then((palettes) => setPalettes(palettes));
-        }
-    });
+    }, []);
     
     // tries to create a human-friendly name to each palette
     // by expanding the ncWMS abbreviations for palette types, colours

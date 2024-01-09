@@ -53,27 +53,23 @@ function AreaDisplay({onChangeRegion, region, selectedOutlet}) {
   // fetch basin list from the API.
   // this only needs to be done once, when the component is loaded
   useEffect(() => {
-      if(basins.length === 0) {
-          Promise.all([getBasins(), getWhitelist("basins")]).then(
+        Promise.all([getBasins(), getWhitelist("basins")]).then(
             ([basins, whitelist]) => {
-                setBasins(collateRegions([basins], whitelist));
-            }  
-          );
-      }
-  });
+            setBasins(collateRegions([basins], whitelist));
+        }  
+    );
+  }, []);
   
   // fetch species list from the API.
   // this only needs to be done once, when the component is loaded
   useEffect(() => {
-      if(taxons.length === 0) {
-          getTaxons().then(
-            data => {
-                setTaxons(data);
-                setSelectedTaxons(data); //start with all species selected
-            }  
-          );
-      }
-  });
+    getTaxons().then(
+        data => {
+            setTaxons(data);
+            setSelectedTaxons(data); //start with all species selected
+        }  
+    );
+  }, []);
     
   // returns a region given its kind and name
   function findRegion(kind, name) {
