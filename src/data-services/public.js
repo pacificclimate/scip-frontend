@@ -12,3 +12,11 @@ export function getWhitelist(whitelist) {
         .then(response => response.data)
         .then(yaml.safeLoad);
 }
+
+// accesses configuration file of indicator map display options
+export function getIndicatorMapOptions() {
+    const url = `${process.env.PUBLIC_URL}/map_indicators.yaml`;
+    return axios.get(url)
+        .then(response => response.data)
+        .then(yaml.safeLoad);
+}

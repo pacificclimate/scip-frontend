@@ -17,7 +17,6 @@ function TaxonCheckbox({taxon, selectedTaxons, onChange}) {
     };
     
     return (
-//        <label>
             <Form.Check
                 type="checkbox"
                 className="me-2"
@@ -26,8 +25,6 @@ function TaxonCheckbox({taxon, selectedTaxons, onChange}) {
                 inline
                 label={taxonString(taxon)}
             />
-//            {taxonString(taxon)}
-//        </label>
         );
 }
 

@@ -10,7 +10,8 @@ import { EditControl } from 'react-leaflet-draw';
 import {useState} from 'react';
 import _ from 'lodash';
 
-function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
+
+function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, dataset}) {
   const viewport = BCBaseMap.initialViewport;
   const [cmMap, setCMMap] = useState(null);
   
@@ -89,6 +90,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
       return(l._radius && l._latlng);
     });
 
+
     if(oldMarker) {
       cmMap.removeLayer(layers[oldMarker]);
     }
@@ -96,6 +98,18 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
     setCMMap(null);
   }
   
+  // WMSTileLayer does not update itself in response to updates made to the
+  // "layer" parameter, but does update in responds to changes made to
+  // parameters in the "params" objecf. Therefore, we need anything that
+  // might change over the course of a user session to be in this 
+  // object.
+  const wmsParams = dataset ? {
+    layers: `x${dataset.file}/${dataset.variable}`,
+    time: dataset.time,
+    styles: dataset.styles,
+    logscale: dataset.logscale,
+    }: {};
+
   return (
     <div className="DataMap">
         <BCBaseMap
@@ -121,17 +135,17 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet}) {
               edit={{edit: false}}
             />
           </FeatureGroup>
+          {dataset &&
           <WMSTileLayer
-            url={"https://services.pacificclimate.org/dev/ncwms"}
+            url={process.env.REACT_APP_NCWMS_URL}
             format={'image/png'}
             noWrap={true}
-            opacity={0.3}
             transparent={true}
             version={'1.1.1'}
-            layers={"x/storage/data/projects/comp_support/bc-srif/climatologies/fraser+bccoast/annual/means/peakFlow_aClimMean_ensMean_VICGL-dynWat_rcp85_1971-2000_bccoast+fraser.nc/peakQmag_year"}
-            time={"1986-07-02T00:00:00Z"}
-            styles={"default-scalar/x-Occam"}
+            opacity={dataset.opacity}
+            params={wmsParams}
           />
+          }
         </BCBaseMap>
     </div>
   );

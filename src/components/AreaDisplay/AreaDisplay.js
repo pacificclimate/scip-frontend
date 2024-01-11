@@ -53,27 +53,23 @@ function AreaDisplay({onChangeRegion, region, selectedOutlet}) {
   // fetch basin list from the API.
   // this only needs to be done once, when the component is loaded
   useEffect(() => {
-      if(basins.length === 0) {
-          Promise.all([getBasins(), getWhitelist("basins")]).then(
+        Promise.all([getBasins(), getWhitelist("basins")]).then(
             ([basins, whitelist]) => {
-                setBasins(collateRegions([basins], whitelist));
-            }  
-          );
-      }
-  });
+            setBasins(collateRegions([basins], whitelist));
+        }  
+    );
+  }, []);
   
   // fetch species list from the API.
   // this only needs to be done once, when the component is loaded
   useEffect(() => {
-      if(taxons.length === 0) {
-          getTaxons().then(
-            data => {
-                setTaxons(data);
-                setSelectedTaxons(data); //start with all species selected
-            }  
-          );
-      }
-  });
+    getTaxons().then(
+        data => {
+            setTaxons(data);
+            setSelectedTaxons(data); //start with all species selected
+        }  
+    );
+  }, []);
     
   // returns a region given its kind and name
   function findRegion(kind, name) {
@@ -219,10 +215,6 @@ function collateRegions(regions, whitelist) {
 
   return (
     <div className="AreaDisplay">
-      Select a region eiher using the circle marker tool on the map to place a
-      marker and select everything upstream of it, or from the dropdown watershed and
-      conservation unit menus below. You can narrow down regions shown on the menus
-      by river basin or species.
         <Container fluid>
             <Row>
                 <Col>

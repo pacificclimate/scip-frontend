@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { annualCycleDataRequest } from '../../data-services/pcex-backend.js';
 import { noGraphMessage, noCommasExperiment } from '../../helpers/GraphHelpers.js';
+import useStore from '../../store/useStore.js';
 import AnnualCycleGraph from '../AnnualCycleGraph/AnnualCycleGraph.js';
 import VariableSelector from '../selectors/VariableSelector.js';
 
@@ -15,10 +16,10 @@ function MonthlyDataDisplay({
   region, rasterMetadata, model, emission,
 }) {
   const [annualCycleTimeSeries, setAnnualCycleTimeSeries] = useState(null);
-  const [variable, setVariable] = useState(null);
-
-  const selectVariable = setVariable;
-
+    
+  const storeVariable = useStore((state) => state.setMonthlyIndicator);
+  const variable = useStore((state) => state.monthlyIndicator);
+  
   function dontSelectVariable(event) {
     // no-op, as we are not using cascading selection
   }
@@ -55,7 +56,7 @@ function MonthlyDataDisplay({
             metadata={rasterMetadata}
             value={variable}
             canReplace={false}
-            onChange={selectVariable}
+            onChange={storeVariable}
             onNoChange={dontSelectVariable}
           />
         )

@@ -4,6 +4,8 @@
 import axios from 'axios';
 import {map, keys, pick} from 'lodash';
 import {geoJSONtoWKT, MAXAREALENGTH} from '../helpers/GeographyHelpers.js';
+import _ from 'lodash';
+
 
 // Functions for accessing the multimeta API, which returns a list of
 // available datafiles, and some metadata about each one
@@ -51,6 +53,43 @@ export function flattenMultimeta(response) {
         }
     })
 }
+
+// get more information on a dataset, so that it can be displayed on the map.
+export function getMetadata(dataset) {
+    return axios.get(
+    process.env.REACT_APP_PCEX_API_URL + "/metadata",
+    {
+      params: {
+        model_id: dataset,
+        extras: "filepath",
+      }
+    }
+  )
+  .then(response => response.data);
+}
+
+// the metadata API returns an object with a single attribute whose key is the file_id
+// and whose value is all the other attributes. We'd prefer a one-layer object.
+// the API also makes allowances for multiple variables in one file, but since no
+// files in this project are formatted that way, flatten lists of variables into single
+// attributes.
+export function flattenMetadata(response) {
+    const unmodified_attributes = ["institution", "model_id", "model_name",
+                                    "experiment", "ensemble_member", "modtime",
+                                    "filepath", "timescale", "multi_year_mean",
+                                    "start_date", "end_date"];
+    const file_id = keys(response)[0];
+    let metadata = _.pick(response[file_id], unmodified_attributes);
+    metadata["file_id"] = file_id;
+    const variable_id = keys(response[file_id].variables)[0];
+    metadata["variable_id"] = variable_id;
+    metadata["variable_description"] = response[file_id].variables[variable_id];
+    metadata["units"] = response[file_id].units[variable_id];
+    const times = _.values(response[file_id].times);
+    metadata["times"] = times.sort();
+    return metadata;
+}
+
 
 // Functions for accessing the raster data retrieval APIs, "timeseries" and "data".
 // These APIs are accessed with a GET request if possible (to take advantage of

@@ -32,7 +32,11 @@ export function PopulationTable({populations}) {
     
     return (
         <div class="ag-theme-alpine" style={{height: "400px", "text-align": "left"}}>
-        {noSalmonHere ? "No salmon populations recorded at this location" : 
+        {noSalmonHere ? 
+            "No salmon populations recorded at this location" : 
+            "Salmon populations in selected area"
+        }
+        {noSalmonHere ? "" :
             <AgGridReact
                 rowData={_.map(populations, tableizePop)}
                 columnDefs={ColumnDefs}>

@@ -5,6 +5,7 @@
 
 import {getMultimeta, flattenMultimeta} from '../../data-services/pcex-backend.js'
 import React, {useState, useEffect} from 'react';
+import useStore from '../../store/useStore.js'
 import YearlyDataDisplay from '../YearlyDataDisplay/YearlyDataDisplay.js'
 import MonthlyDataDisplay from '../MonthlyDataDisplay/MonthlyDataDisplay.js'
 import DailyDataDisplay from '../DailyDataDisplay/DailyDataDisplay.js'
@@ -18,36 +19,44 @@ import _ from 'lodash';
 function DataDisplay({region}) {
 
   const [rasterMetadata, setRasterMetadata] = useState(null);
-  const [model, setModel] = useState(null);
-  const [emission, setEmission] = useState(null);
+
+  const storeModel = useStore((state) => state.setModel);
+  const model = useStore((state) => state.model);
   
-  // fetch list of available datasets
+  const storeEmission = useStore((state) => state.setEmission);
+  const emission = useStore((state) => state.emission);
+  
+  // stores which tab or graph is active, for the benefit of the map, which changes
+  // displayed map data to match currently visible graph.
+  const setGraphTab = useStore((state) => state.setGraphTab);
+
+  
+  // fetch list of all available datasets. Only needs to be done once.
   useEffect(() => {
-    //only needs to be done once
-    if(!rasterMetadata) {
-        getMultimeta().then(data => {
-            setRasterMetadata(flattenMultimeta(data));
-        })
-        }
-    }
-  );
-  
-  const selectModel = setModel;
+    getMultimeta().then(data => {
+        setRasterMetadata(flattenMultimeta(data));
+    })
+    }, []);
   
   function dontSelectModel(event){
     //no-op, as we are not using cascading selection 
   }
-  
-  const selectEmission = setEmission;
+
   
   function dontSelectEmission(event){
     //no-op, as we are not using cascading selection
   }
   
+  function handleTabSwitch(tab) {
+    if(tab !== "population") {
+        setGraphTab(tab);
+        }
+    }
 
   return (
     <div className="DataDisplay">
         <Tabs
+          onSelect={handleTabSwitch}
           id="data-display-tabs"
           >
           <Tab eventKey="year" title="Yearly Indicators">
@@ -87,19 +96,19 @@ function DataDisplay({region}) {
               metadata={rasterMetadata}
               value={model}
               canReplace={false}
-              onChange={selectModel}
+              onChange={storeModel}
               onNoChange={dontSelectModel}
             /> 
           </div> : 
           "Loading Available Datasets"}
         {rasterMetadata ?
           <div>
-            <span> Emmissions Scenario</span> 
+            <span> Emissions Scenario</span> 
             <EmissionSelector 
               metadata={rasterMetadata}
               value={emission}
               canReplace={false}
-              onChange={selectEmission}
+              onChange={storeEmission}
               onNoChange={dontSelectEmission}
             />
           </div> : 

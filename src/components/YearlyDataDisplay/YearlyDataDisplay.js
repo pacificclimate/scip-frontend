@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { longTermAverageDataRequest } from '../../data-services/pcex-backend.js';
+import useStore from '../../store/useStore.js';
 import { noGraphMessage, noCommasExperiment } from '../../helpers/GraphHelpers.js';
 import LongTermAverageGraph from '../LongTermAverageGraph/LongTermAverageGraph.js';
 import VariableSelector from '../selectors/VariableSelector.js';
@@ -13,10 +14,10 @@ function YearlyDataDisplay({
   region, rasterMetadata, model, emission,
 }) {
   const [longTermTimeSeries, setLongTermTimeSeries] = useState(null);
-  const [variable, setVariable] = useState(null);
 
-  const selectVariable = setVariable;
-
+  const storeVariable = useStore((state) => state.setYearlyIndicator);
+  const variable = useStore((state) => state.yearlyIndicator);
+  
   function dontSelectVariable(event) {
     // nothing happens here, as we are not using cascading selection
   }
@@ -51,7 +52,7 @@ function YearlyDataDisplay({
             metadata={rasterMetadata}
             value={variable}
             canReplace={false}
-            onChange={selectVariable}
+            onChange={storeVariable}
             onNoChange={dontSelectVariable}
           />
         )

@@ -1,0 +1,56 @@
+# This file configures how indicators will be shown on the map.
+# Each indicator can be configured with a colour palette and
+# a boolean for whether or not to plot on the map with a logscaled
+# colour scale (only works when indicator is always greater than 0. 
+# List of available ncWMS colour palettes is here:
+# https://reading-escience-centre.gitbooks.io/ncwms-user-guide/content/04-usage.html
+
+# General rules of thumb: 
+# - flow indicators are logscaled, temperatures are not
+# - flow indicators use the seq-YlGnBl palette
+# - temperatures use the spectral palette (blue to red)
+# - flows use the blue heat palette (blue to more blue)
+# - miscellaneous things use the psu-viridis palette
+# - other things (like frequencies) use the default x-Occam palette
+
+highQ95_year:
+    logscale: false
+    palette: psu-viridis
+
+lowQ05_year:
+    logscale: false
+    palette: psu-viridis
+
+peakQmag_year:
+    logscale: false
+    palette: seq-BlueHeat-inv
+
+peakQday_year: 
+    logscale: false
+    palette: psu-viridis
+
+POT19dur_year: 
+    logscale: false
+    palette: psu-viridis
+
+POT19freq_year:
+    logscale: false
+    palette: psu-viridis
+
+#monthly indicators
+flow_month:
+    logscale: false
+    palette: seq-BlueHeat-inv
+
+tw_month:
+    logscale: false
+    palette: div-Spectral-inv
+
+#daily indicators
+flow_day:
+    logscale: false
+    palette: seq-BlueHeat-inv
+
+tw_day:
+    logscale: false
+    palette: div-Spectral-inv

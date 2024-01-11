@@ -53,6 +53,7 @@ function App() {
               onSelectOutlet={setSelectedOutlet}
               selectedOutlet={selectedOutlet}
             />
+            <hr />
             <AreaDisplay
               onChangeRegion={handleRegionChange}
               region={region}
