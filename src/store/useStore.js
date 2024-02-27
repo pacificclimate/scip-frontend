@@ -46,6 +46,19 @@ const useStore = create((set) => {
             emission: startingEmission,
             setEmission: (em) => set((state) => ({emission: em})),
 
+
+            // user-selected region and related data
+            // users may select a region either from a dropdown in AreaDisplay
+            // or by clicking on the map to select everything upstream in DataMap
+            // there's a lot of tangled logic related to handling regions in AreaDisplay 
+            // that should eventually be moved into this store.
+            // region selection data is consumed by *DataDisplay to generate graphs
+            region: null,
+            setRegion: (reg) => set((state) => ({region: reg})),
+            selectedOutlet: null,
+            setSelectedOutlet: (out) => set((state) => ({selectedOutlet: out})),
+            viewOutletIndicators: false,
+            setViewOutletIndicators: (view) => set((state) => ({viewOutletIndicators: view})),
         }
     }
 );

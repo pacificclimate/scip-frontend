@@ -22,6 +22,7 @@ function DailyDataDisplay({
   
   const storeVariable = useStore((state) => state.setDailyIndicator);
   const variable = useStore((state) => state.dailyIndicator);
+  const viewOutletIndicators = useStore((state) => state.viewOutletIndicators);
 
   const selectClimatology = setClimatology;
 
@@ -35,6 +36,7 @@ function DailyDataDisplay({
 
   useEffect(() => {
     if (region && variable && climatology && rasterMetadata) {
+      const area = viewOutletIndicators ? JSON.parse(region.outlet) : region.boundary;
       const datafiles = _.filter(rasterMetadata, {
         variable_id: variable.value.representative.variable_id,
         experiment: emission,
@@ -44,13 +46,13 @@ function DailyDataDisplay({
       });
 
       const api_calls = _.map(datafiles, (datafile) => annualCycleDataRequest(
-        region.boundary,
+        area,
         datafile.file_id,
         variable.value.representative.variable_id,
       ));
       Promise.all(api_calls).then((api_responses) => setDailyTimeSeries(api_responses));
     }
-  }, [region, variable, model, emission, rasterMetadata, climatology]);
+  }, [region, variable, model, emission, rasterMetadata, climatology, viewOutletIndicators]);
 
   const graphMetadata = {
     area: region ? region.name : 'no region selected',

@@ -17,6 +17,8 @@ function YearlyDataDisplay({
 
   const storeVariable = useStore((state) => state.setYearlyIndicator);
   const variable = useStore((state) => state.yearlyIndicator);
+  const viewOutletIndicators = useStore((state) => state.viewOutletIndicators);
+
   
   function dontSelectVariable(event) {
     // nothing happens here, as we are not using cascading selection
@@ -24,8 +26,9 @@ function YearlyDataDisplay({
 
   useEffect(() => {
     if (region && variable) {
+      const area = viewOutletIndicators ? JSON.parse(region.outlet) : region.boundary;
       longTermAverageDataRequest(
-        region.boundary,
+        area,
         variable.value.representative.variable_id,
         model,
         emission,
@@ -35,7 +38,7 @@ function YearlyDataDisplay({
         setLongTermTimeSeries(data);
       });
     }
-  }, [region, variable, model, emission]);
+  }, [region, variable, model, emission, viewOutletIndicators]);
 
   const graphMetadata = {
     area: region ? region.name : 'no region selected',
