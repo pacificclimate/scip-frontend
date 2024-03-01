@@ -24,6 +24,14 @@ export function PopulationTable({populations}) {
         {field: 'name', flex: 1} //grant extra horizonal space to this column.
     ];
     
+    const title = (
+        <p>
+        <strong>Salmon population in selected area</strong>
+        <br />
+        Only populations with associated indicator data are selectable on the conservation unit menu.
+        </p>
+        );
+    
     //this is different than merely waiting for data to load.
     //if we are waiting for an initial data load, populations 
     //is undefined. If there are no salmon in an area, populations
@@ -33,8 +41,7 @@ export function PopulationTable({populations}) {
     return (
         <div class="ag-theme-alpine" style={{height: "400px", "text-align": "left"}}>
         {noSalmonHere ? 
-            "No salmon populations recorded at this location" : 
-            "Salmon populations in selected area"
+            "No salmon populations recorded at this location" : title
         }
         {noSalmonHere ? "" :
             <AgGridReact

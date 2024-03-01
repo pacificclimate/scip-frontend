@@ -7,6 +7,7 @@ import {getUpstream} from '../../data-services/pcex-backend.js';
 import {getWhitelist} from '../../data-services/public.js';
 import AreaSelector from '../AreaSelector/AreaSelector.js';
 import TaxonSelector from '../TaxonSelector/TaxonSelector.js';
+import OutletToggle from '../OutletToggle/OutletToggle.js';
 import {Container, Row, Col} from 'react-bootstrap';
 import React, {useState, useEffect} from 'react';
 import {map, find} from 'lodash';
@@ -250,6 +251,12 @@ function collateRegions(regions, whitelist) {
                         kind={'conservation unit'}
                     />
                 </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <OutletToggle region={region}/>
+                </Col>
+                <Col/>
             </Row>
           </Container>
       Select a region either using the circle marker tool on the map to place a

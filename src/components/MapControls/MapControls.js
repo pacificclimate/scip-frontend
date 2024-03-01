@@ -8,6 +8,7 @@ import useStore from '../../store/useStore.js'
 import React, {useState, useEffect} from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Button from 'react-bootstrap/Button';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
 import {getNcwmsMinMax} from '../../data-services/ncwms.js'; 
 import {getIndicatorMapOptions} from '../../data-services/public.js';
@@ -59,7 +60,7 @@ function MapControls({onChange, mapDataset}) {
         }
     }, [mapDataset]);
 
-    // this useEffect responds to user changes and selections made on the Data Display
+    // this useEffect responds to user changes in selected dataset made on the Data Display
     // component or its children, which it receives via the Zustand store.
     // it determines which datasets are described by the selection parameters and loads
     // one of them.
@@ -121,11 +122,20 @@ function MapControls({onChange, mapDataset}) {
                 }
                 
                 //use indicator-specific colouration if available
-                const palette = (indicatorConfig && indicator in indicatorConfig) ?
-                    indicatorConfig[indicator].palette : 'x-Occam';
-                const logscale = (indicatorConfig && indicator in indicatorConfig) ?
-                    indicatorConfig[indicator].logscale : false;
-                
+                const config = indicatorConfig?.[indicator]; 
+                const palette = config ? config.palette : 'x-Occam';
+
+                // currently data is buggy - datasets that are supposed to 
+                // always be greater than zero (stream flow magnitudes)
+                // contain zeros. ncWMS throws an error if asked to display
+                // a dataset with zero values and logarithmic scale colour.
+                // Accordingly, since there are no datasets that can actualle
+                // BE displayed with logairthmic colour scaling right noe, 
+                // logarithmic scaling is disabled.
+                // TODO: uncomment following line when data is fixed.                
+                // const logscale = config ? config.logscale : false;
+                const logscale = false;
+                                
                 const mapDataLayer = {
                     file: metadata.filepath,
                     variable: indicator,
@@ -150,7 +160,7 @@ function MapControls({onChange, mapDataset}) {
     }
     
     // updates a single attribute of the displayed dataset, 
-    // used in cases where the dataset itself hasn't change, only
+    // used in cases where the dataset itself hasn't changed, only
     // the way it is displayed, so we don't need to fetch a new dataset.
     function updateMapDisplayParameter(parameter, value) {
         let newMapDataLayer = {...mapDataset};
@@ -356,7 +366,13 @@ function MapControls({onChange, mapDataset}) {
                 disabled={!previousTimestampExists()}
                 onClick={previousTimestamp}
               />
-              {describeMap()}
+              <Button
+                variant="secondary" 
+                size="sm"
+                title={describeMap()}
+                disabled={true}>
+                  {describeMap()}
+              </Button>
               <NextTimestampButton
                 disabled={!nextTimestampExists()}
                 onClick={nextTimestamp}
@@ -378,6 +394,7 @@ function MapControls({onChange, mapDataset}) {
               </Row>
               <Row>
                 <Col>
+                  Map Palette
                   <PaletteSelector
                       mapDataset={mapDataset}
                       handleChange={handlePalette}
@@ -388,9 +405,11 @@ function MapControls({onChange, mapDataset}) {
                     mapDataset={mapDataset}
                     minmax={datasetMinMax}
                     handleChange={handleLogScale}
+                    indicatorConfig={indicatorConfig}
                   />
                 </Col>
                 <Col>
+                  Opacity
                   <OpacitySlider
                     mapDataset={mapDataset}
                     handleChange={handleOpacity}

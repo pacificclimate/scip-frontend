@@ -19,6 +19,8 @@ function MonthlyDataDisplay({
     
   const storeVariable = useStore((state) => state.setMonthlyIndicator);
   const variable = useStore((state) => state.monthlyIndicator);
+  const viewOutletIndicators = useStore((state) => state.viewOutletIndicators);
+
   
   function dontSelectVariable(event) {
     // no-op, as we are not using cascading selection
@@ -26,6 +28,7 @@ function MonthlyDataDisplay({
 
   useEffect(() => {
     if (region && variable && rasterMetadata) {
+      const area = viewOutletIndicators ? JSON.parse(region.outlet) : region.boundary;
       const datafiles = _.filter(rasterMetadata, {
         variable_id: variable.value.representative.variable_id,
         experiment: emission,
@@ -33,13 +36,13 @@ function MonthlyDataDisplay({
       });
 
       const api_calls = _.map(datafiles, (datafile) => annualCycleDataRequest(
-        region.boundary,
+        area,
         datafile.file_id,
         variable.value.representative.variable_id,
       ));
       Promise.all(api_calls).then((api_responses) => setAnnualCycleTimeSeries(api_responses));
     }
-  }, [region, variable, model, emission, rasterMetadata]);
+  }, [region, variable, model, emission, rasterMetadata, viewOutletIndicators]);
 
   const graphMetadata = {
     area: region ? region.name : 'no region selected',
@@ -71,7 +74,7 @@ function MonthlyDataDisplay({
           />
         )
         : noGraphMessage({
-          watershed: region,
+          region: region,
           indicator: variable,
         })}
     </div>
