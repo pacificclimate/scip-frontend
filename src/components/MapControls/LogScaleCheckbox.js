@@ -19,9 +19,7 @@ function LogScaleCheckbox({mapDataset, minmax, handleChange, indicatorConfig}) {
     
     //TODO: uncomment this function when data issue is fixed.
     //function allowLogscale() {
-    //    return indicatorConfig 
-    //        && mapDataset.variable in indicatorConfig 
-    //        && indicatorConfig[mapDataset.variable].logscale
+    //    return indicatorConfig?.[mapDataset.variable]?,logscale 
     //        && minmax.min >= .01; 
     //}
     function allowLogscale() {return false};

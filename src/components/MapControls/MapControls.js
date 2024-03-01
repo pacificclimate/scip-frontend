@@ -121,8 +121,7 @@ function MapControls({onChange, mapDataset}) {
                 }
                 
                 //use indicator-specific colouration if available
-                const config = indicatorConfig && indicator in indicatorConfig ?
-                    indicatorConfig[indicator] : false; 
+                const config = indicatorConfig?.[indicator]; 
                 const palette = config ? config.palette : 'x-Occam';
 
                 // currently data is buggy - datasets that are supposed to 
