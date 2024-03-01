@@ -21,7 +21,7 @@ function PopulationDisplay({region}) {
                 populations={salmonPopulations}
             />
             : noGraphMessage({
-              watershed: region,
+              region: region,
           })}
     </div>
     );

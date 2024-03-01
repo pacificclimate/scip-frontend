@@ -8,6 +8,7 @@ import useStore from '../../store/useStore.js'
 import React, {useState, useEffect} from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Button from 'react-bootstrap/Button';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
 import {getNcwmsMinMax} from '../../data-services/ncwms.js'; 
 import {getIndicatorMapOptions} from '../../data-services/public.js';
@@ -365,7 +366,13 @@ function MapControls({onChange, mapDataset}) {
                 disabled={!previousTimestampExists()}
                 onClick={previousTimestamp}
               />
-              {describeMap()}
+              <Button
+                variant="secondary" 
+                size="sm"
+                title={describeMap()}
+                disabled={true}>
+                  {describeMap()}
+              </Button>
               <NextTimestampButton
                 disabled={!nextTimestampExists()}
                 onClick={nextTimestamp}
@@ -387,6 +394,7 @@ function MapControls({onChange, mapDataset}) {
               </Row>
               <Row>
                 <Col>
+                  Map Palette
                   <PaletteSelector
                       mapDataset={mapDataset}
                       handleChange={handlePalette}
@@ -401,6 +409,7 @@ function MapControls({onChange, mapDataset}) {
                   />
                 </Col>
                 <Col>
+                  Opacity
                   <OpacitySlider
                     mapDataset={mapDataset}
                     handleChange={handleOpacity}

@@ -74,7 +74,7 @@ function MonthlyDataDisplay({
           />
         )
         : noGraphMessage({
-          watershed: region,
+          region: region,
           indicator: variable,
         })}
     </div>

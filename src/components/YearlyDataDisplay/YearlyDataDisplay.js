@@ -71,7 +71,7 @@ function YearlyDataDisplay({
           />
         )
         : noGraphMessage({
-          watershed: region,
+          region: region,
           indicator: variable,
         })}
     </div>

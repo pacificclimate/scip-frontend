@@ -99,7 +99,7 @@ function DailyDataDisplay({
         : noGraphMessage({
           climatology,
           indicator: variable,
-          watershed: region,
+          region: region,
         })}
     </div>
   );
