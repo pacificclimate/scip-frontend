@@ -1,4 +1,16 @@
-// Handles map state and data fetching.
+// Handles map state and layout.
+// This component mostly passes props around. It will be very
+// short when we switch this app to zustand.
+//
+// MapDisplay "owns" two state objects, mapDataset and
+// datasetMinMax, both of which are set by MapControls and
+// consumed by DataMap, its children.
+//
+// Its child DataMap also sets selectedOutlet, which MapDisplay
+// passes upwards to App for eventual consumption by AreaDisplay.
+//
+// It receives region (set by AreaDisplay) from its parent
+// App and passes it to its child DataMap.
 
 import './MapDisplay.css';
 import DataMap from '../DataMap/DataMap.js'
@@ -11,6 +23,7 @@ function MapDisplay({region, onSelectOutlet, selectedOutlet}) {
   
   const [downstream, setDownstream] = useState(null);
   const [mapDataset, setMapDataset] = useState(null);
+  const [datasetMinMax, setDatasetMinMax] = useState({});
 
   // fetch downstream data from the PCEX API
     useEffect(() => {
@@ -35,6 +48,10 @@ function MapDisplay({region, onSelectOutlet, selectedOutlet}) {
       setMapDataset(dataset);
   }
 
+  function handleMinMaxChange(minmax) {
+      setDatasetMinMax(minmax);
+  }
+
   return (
     <div className="MapDisplay">
         <DataMap
@@ -43,10 +60,13 @@ function MapDisplay({region, onSelectOutlet, selectedOutlet}) {
           onSelectOutlet={handleSelectOutlet}
           selectedOutlet={selectedOutlet}
           dataset={mapDataset}
+          datasetMinMax={datasetMinMax}
         />
         <MapControls
           onChange={handleDatasetChange}
           mapDataset={mapDataset}
+          onMinMaxChange={handleMinMaxChange}
+          datasetMinMax={datasetMinMax}
         />
     </div>
   );
