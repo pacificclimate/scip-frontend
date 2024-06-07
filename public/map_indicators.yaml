@@ -1,7 +1,9 @@
 # This file configures how indicators will be shown on the map.
 # Each indicator can be configured with a colour palette and
 # a boolean for whether or not to allow a logscaled
-# colour scale (only works when indicator is always greater than 0. 
+# colour scale (only works when indicator is always greater than 0),
+# and minimum and maximum expected values so colour scale is consistent
+# across data files.
 # List of available ncWMS colour palettes is here:
 # https://reading-escience-centre.gitbooks.io/ncwms-user-guide/content/04-usage.html
 
@@ -16,41 +18,61 @@
 highQ95_year:
     logscale: false
     palette: psu-viridis
+    minimum: 0
+    maximum: 250
 
 lowQ05_year:
     logscale: false
     palette: psu-viridis
+    minimum: 0
+    maximum: 250
 
 peakQmag_year:
     logscale: true
     palette: seq-BlueHeat-inv
+    minimum: 0.0001
+    maximum: 10000
 
 peakQday_year: 
     logscale: false
     palette: psu-viridis
+    minimum: 1
+    maximum: 365
 
 POT19dur_year: 
     logscale: false
     palette: psu-viridis
+    minimum: 0
+    maximum: 100
 
 POT19freq_year:
     logscale: false
     palette: psu-viridis
+    minimum: 0
+    maximum: 200
 
 #monthly indicators
 flow_month:
     logscale: true
     palette: seq-BlueHeat-inv
+    minimum: 0.0001
+    maximum: 8500
 
 tw_month:
     logscale: false
     palette: div-Spectral-inv
+    minimum: 0
+    maximum: 30
 
 #daily indicators
 flow_day:
     logscale: true
     palette: seq-BlueHeat-inv
+    minimum: 0.0001
+    maximum: 10000
 
 tw_day:
     logscale: false
     palette: div-Spectral-inv
+    minimum: 0
+    maximum: 35
