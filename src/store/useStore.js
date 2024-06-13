@@ -54,6 +54,10 @@ const useStore = create((set) => {
             // region selection data is consumed by *DataDisplay to generate graphs
             viewOutletIndicators: false,
             setViewOutletIndicators: (view) => set((state) => ({viewOutletIndicators: view})),
+
+            // help text, loaded once from a config file by App amd consumed by InfoPopup
+            helpText: {},
+            setHelpText: (help) => set((state) => ({helpText: help}))
         }
     }
 );

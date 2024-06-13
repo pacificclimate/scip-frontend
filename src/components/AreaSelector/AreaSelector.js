@@ -2,6 +2,7 @@
 
 import Select from 'react-select'
 import React from 'react'
+import InfoPopup from '../InfoPopup/InfoPopup.js'
 
 
 function AreaSelector({regionNames, onChange, currentRegion, kind}) {
@@ -10,6 +11,7 @@ function AreaSelector({regionNames, onChange, currentRegion, kind}) {
 
   return (
     <div className="AreaSelector">
+        <InfoPopup index={kind.replace(" ", "-")} />
         Select a {kind}.
         <Select
             isSearchable

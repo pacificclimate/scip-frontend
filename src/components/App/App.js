@@ -17,11 +17,25 @@ import {Container, Row, Col} from 'react-bootstrap';
 import DataDisplay from '../DataDisplay/DataDisplay.js'
 import MapDisplay from '../MapDisplay/MapDisplay.js'
 import AreaDisplay from '../AreaDisplay/AreaDisplay.js'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import useStore from '../../store/useStore.js'
+import {getHelpTexts} from '../../data-services/public.js'
+
 
 function App() {
   const [region, setRegion] = useState(null);
   const [selectedOutlet, setSelectedOutlet] = useState(null);
+
+  //config file used in help popups, loaded at startup by this component
+  const storeHelp = useStore((state) => state.setHelpText);
+
+  //load all the help texts from the config file; only needs to be done once
+    useEffect(() => {
+        getHelpTexts().then((texts) => storeHelp(texts));
+    }, []);
+
+
+
 
   function handleRegionChange(region, fromOutlet) {
       setRegion(region);
