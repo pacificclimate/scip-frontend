@@ -11,7 +11,7 @@ import {useState} from 'react';
 import _ from 'lodash';
 
 
-function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, dataset}) {
+function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, dataset, datasetMinMax}) {
   const viewport = BCBaseMap.initialViewport;
   const [cmMap, setCMMap] = useState(null);
   
@@ -103,12 +103,16 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
   // parameters in the "params" objecf. Therefore, we need anything that
   // might change over the course of a user session to be in this 
   // object.
-  const wmsParams = dataset ? {
+  let wmsParams = dataset ? {
     layers: `x${dataset.file}/${dataset.variable}`,
     time: dataset.time,
     styles: dataset.styles,
     logscale: dataset.logscale,
     }: {};
+
+    if(dataset && datasetMinMax) {
+        wmsParams["colorscalerange"] = `${datasetMinMax.min},${datasetMinMax.max}`;
+    }
 
   return (
     <div className="DataMap">
