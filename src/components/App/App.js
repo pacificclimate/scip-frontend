@@ -20,18 +20,22 @@ import AreaDisplay from '../AreaDisplay/AreaDisplay.js';
 import React, {useState, useEffect} from 'react';
 import useStore from '../../store/useStore.js';
 import {getIndicatorMapOptions} from '../../data-services/public.js';
+import {getHelpTexts} from '../../data-services/public.js';
 
 function App() {
   const [region, setRegion] = useState(null);
   const [selectedOutlet, setSelectedOutlet] = useState(null);
 
+
   //load-once-per-app config files
   const storeIndicatorOptions = useStore((state) => state.setIndicatorOptions);
+  const storeHelp = useStore((state) => state.setHelpText);
+
 
   //load config files into zustand for components
     useEffect(() => {
-
         getIndicatorMapOptions().then((options) => storeIndicatorOptions(options));
+        getHelpTexts().then((texts) => storeHelp(texts));
     }, []);
 
   function handleRegionChange(region, fromOutlet) {

@@ -1,0 +1,41 @@
+# content for the info popup boxes
+# each entry should consist of an identifying key,
+# a title, and the body text.
+#
+#  sample:
+#    title: sample popup
+#    body: this is the sample popup
+
+basin:
+    title: Select Basin
+    body: |
+        This dropdown selects a large drainage basin or area, such as the entire Fraser River. This selection will be used to narrow down the watershed and conseravtion unit dropdowns below; only regions within your drainge basin will be shown.
+        
+conservation-unit:
+    title: Select Conservation Unit
+    body: |
+        This dropdown selects a Salmon Conservation Unit. A Conservation Unit is the area in which a ecologically and genetically distinct population of salmon spawns. For more information about these populations, see the Salmon Population tab to the right.
+
+emissions:
+    title: Select Emissions Scenario
+    body: |
+        This dropdown switches between the RCP 8.5 scenario (increase of greenhouse gas emissions until the end of the centur, used for worst-case planning) and the RCP 4.5 scenario (intermediat increase of greenhouse gas emissions peaking mid-century).
+
+map-controls:
+    title: Map Controls
+    body: |
+        These controls change which indicator data is displayed on the map. 
+        The outermost set of buttons change the displayed climatology. There are four climatologies available: historical, early century, mid century, and end of century.
+        The innermost set of buttons change the displayed timestamp for daily or monthly indicators. They are disabled for annual indicators.
+        
+model:
+    title: Select Global Climate Model
+    body: |
+        This dropdown allows selection of which Global CLimate Model(GCM) provides the projected climate data, or switching between climate models to view data variance. The PCIC-HYDRO model is an average of the other six.
+        
+watershed:
+    title: Select Watershed
+    body: |
+        This dropdown selects a watershed as standardized in the BC Freshwater Atlas. To narrow down the list to watersheds within a particular area, select a basin above.
+        
+        

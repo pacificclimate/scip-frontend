@@ -60,6 +60,9 @@ const useStore = create((set) => {
             // variable map display options (map colour, log scale, minmax)
             indicatorOptions: {},
             setIndicatorOptions: (options) => set((state) => ({indicatorOptions: options}))
+            // help popup texts and titles
+            helpText: {},
+            setHelpText: (help) => set((state) => ({helpText: help}))
         }
     }
 );
