@@ -1,4 +1,4 @@
-# content for the info popup boxes
+﻿# content for the info popup boxes
 # each entry should consist of an identifying key,
 # a title, and the body text.
 #
@@ -14,12 +14,12 @@ basin:
 conservation-unit:
     title: Select Conservation Unit
     body: |
-        This dropdown selects a Salmon Conservation Unit. A Conservation Unit is the area in which a ecologically and genetically distinct population of salmon spawns. For more information about these populations, see the Salmon Population tab to the right.
+        This dropdown selects a Salmon Conservation Unit. A Conservation Unit consists of one or more genetically similar salmon populations with a defined geographic distribution and dependence on a particular set of habitats. For more information about these populations, see the Salmon Population tab to the right.
 
 emissions:
     title: Select Emissions Scenario
     body: |
-        This dropdown switches between the RCP 8.5 scenario (increase of greenhouse gas emissions until the end of the centur, used for worst-case planning) and the RCP 4.5 scenario (intermediat increase of greenhouse gas emissions peaking mid-century).
+        This dropdown selects which scenario of emissions (greenhouse gases, etc.) was used as an input to the model runs. The choices are the RCP 8.5 scenario (increase of greenhouse gas emissions until the end of the century) and the RCP 4.5 scenario (intermediate increase of greenhouse gas emissions peaking mid-century).
 
 map-controls:
     title: Map Controls
@@ -31,11 +31,10 @@ map-controls:
 model:
     title: Select Global Climate Model
     body: |
-        This dropdown allows selection of which Global CLimate Model(GCM) provides the projected climate data, or switching between climate models to view data variance. The PCIC-HYDRO model is an average of the other six.
+        This dropdown allows selection of the Global Climate Model (GCM) with which the indicator data was produced. The models are identified by short codes which are described in the Help.
         
 watershed:
     title: Select Watershed
     body: |
-        This dropdown selects a watershed as standardized in the BC Freshwater Atlas. To narrow down the list to watersheds within a particular area, select a basin above.
-        
-        
+        This dropdown selects a watershed as defined by the watershed group boundaries in the BC Freshwater Atlas. To narrow down the list to watersheds within a particular region, select a basin above.
+
