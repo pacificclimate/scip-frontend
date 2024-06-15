@@ -1,0 +1,26 @@
+name: Docker Publishing
+
+on:
+  push:
+    branches:
+      - "*"
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  publish:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Export REACT_APP__VERSION env var
+        run: |
+          git fetch --prune --unshallow
+          echo "REACT_APP_VERSION=$(git describe --tags --abbrev=0) ($(git rev-parse --abbrev-ref HEAD):$(git log -1 --format=%h))" >> $GITHUB_ENV
+      - name: Publish to Registry
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.pcicdevops_at_dockerhub_username }}
+          password: ${{ secrets.pcicdevops_at_dockerhub_password }}
+          repository: pcic/scip-frontend
+          tag_with_ref: true
