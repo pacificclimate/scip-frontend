@@ -123,21 +123,3 @@ After a few minutes of create-react-app building, one should be able
 to access the frontend at:
 
 http://localhost/frontend
-
-and geoserver at:
-
-http://localhost/geoserver
-
-
-## How to update the SCIP demo instance
-
-This application has not yet had a full release, and has no production instances, but there is a semipermanent demo instance running on docker-dev02. You will not need to worry about CORS or proxies when working with this instance, as a proxy is already set up for it.
-
-1. Clone this repository to anywhere on docker-dev02 and check out whatever branch you want to demo 
-2. Build the docker image with `docker build -t scip:your-branch-name -f docker/Dockerfile .`
-3. Make a new dated directory in `/storage/data/projects/comp_support/bc-srif/dev/` for your demo and copy files into it from the most recent existing directory (note these are not the same as the docker-compose files files in this repository)
-4. Update `docker-compose.yaml` in your new directory with the name of the image you built
-5. Update `fe.env` if needed
-6. Do `docker-compose down` in the directory of the current demo to bring down the current containers
-7. Do `docker-compose up -d` in your new directory to launch your containers
-8. Demo will be available at https://services.pacificclimate.org/dev/scip/app/
