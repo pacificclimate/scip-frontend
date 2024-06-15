@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Export REACT_APP__VERSION env var
+      - name: Export REACT_APP_VERSION env var
         run: |
           git fetch --prune --unshallow
           echo "REACT_APP_VERSION=$(git describe --tags --abbrev=0) ($(git rev-parse --abbrev-ref HEAD):$(git log -1 --format=%h))" >> $GITHUB_ENV
@@ -23,4 +23,5 @@ jobs:
           username: ${{ secrets.pcicdevops_at_dockerhub_username }}
           password: ${{ secrets.pcicdevops_at_dockerhub_password }}
           repository: pcic/scip-frontend
+          dockerfile: docker/Dockerfile
           tag_with_ref: true
