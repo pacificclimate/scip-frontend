@@ -11,7 +11,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
 import {getNcwmsMinMax} from '../../data-services/ncwms.js'; 
-import {getIndicatorMapOptions} from '../../data-services/public.js';
 import _ from 'lodash';
 
 import NextTimestampButton from './NextTimestampButton.js';
@@ -27,7 +26,7 @@ import './MapControls.css';
 
 
 
-function MapControls({onChange, mapDataset, onMinMaxChange, datasetMinMax}) {
+function MapControls({onChange, mapDataset}) {
     //access user selections on the Data Display component
     const graphTab = useStore((state) => state.graphTab);
     const dailyIndicator = useStore((state) => state.dailyIndicator);
@@ -40,41 +39,10 @@ function MapControls({onChange, mapDataset, onMinMaxChange, datasetMinMax}) {
     // (data describing the dataset to display is owned by MapDisplay)
     const [timeMetadata, setTimeMetadata] = useState(null);
     const [datasetSeries, setDatasetSeries] = useState([]);
-    const [indicatorConfig, setIndicatorConfig] = useState(null);
     
-    //load the indicator configuration options; only needs to be done once
-    useEffect(() => {
-        getIndicatorMapOptions().then((options) => setIndicatorConfig(options));
-    }, []);
+    //indicator options from the config file
+    const indicatorOptions = useStore((state) => state.indicatorOptions);
     
-    // this useEffect responds to changes in the selected dataset, via the mapDataset
-    // prop. It fetches the minimum and maximum values of the dataset.
-    // It uses the variable configuration file in the variable config yaml, if possible.
-    // If the config is unavailable or doesn't have an entry for the variable,
-    // it requests dataset minmax from ncWMS, which is frequently inaccurate, as a
-    // fallback. We suspect that ncWMS either returns the minmax of only the first
-    // timestamp, which tends to result in, for example, water temperature datasets that
-    // look good in January but are completely maxed out in June.
-    // This function is inefficient, as the dataset minmax is not changed if the
-    // user merely goes to a different timestamp, but it's fast enough we don't
-    // currently care.
-    useEffect(() => {
-        if(mapDataset) {
-            if(indicatorConfig &&
-                _.has(indicatorConfig, [mapDataset.variable, "minimum"]) &&
-                _.has(indicatorConfig, [mapDataset.variable, "maximum"])) {
-                    onMinMaxChange({
-                        min: indicatorConfig[mapDataset.variable].minimum,
-                        max: indicatorConfig[mapDataset.variable].maximum
-                    });
-                }
-            else {
-                getNcwmsMinMax(mapDataset.file, mapDataset.variable).then(data => {
-                    onMinMaxChange(data);
-                });
-            }
-        }
-    }, [mapDataset]);
 
     // this useEffect responds to user changes in selected dataset made on the Data Display
     // component or its children, which it receives via the Zustand store.
@@ -138,7 +106,7 @@ function MapControls({onChange, mapDataset, onMinMaxChange, datasetMinMax}) {
                 }
                 
                 //use indicator-specific colouration if available
-                const config = indicatorConfig?.[indicator]; 
+                const config = indicatorOptions?.[indicator];
                 const palette = config ? config.palette : 'x-Occam';
 
                 // currently data is buggy - datasets that are supposed to 
@@ -404,7 +372,6 @@ function MapControls({onChange, mapDataset, onMinMaxChange, datasetMinMax}) {
               <Row>
                   <ColourLegend 
                     mapDataset={mapDataset}
-                    minmax={datasetMinMax}
                     units={timeMetadata.units} 
                   />
               </Row>
@@ -419,9 +386,7 @@ function MapControls({onChange, mapDataset, onMinMaxChange, datasetMinMax}) {
                 <Col>
                   <LogScaleCheckbox
                     mapDataset={mapDataset}
-                    minmax={datasetMinMax}
                     handleChange={handleLogScale}
-                    indicatorConfig={indicatorConfig}
                   />
                 </Col>
                 <Col>

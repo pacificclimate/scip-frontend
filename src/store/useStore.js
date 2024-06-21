@@ -54,6 +54,12 @@ const useStore = create((set) => {
             // region selection data is consumed by *DataDisplay to generate graphs
             viewOutletIndicators: false,
             setViewOutletIndicators: (view) => set((state) => ({viewOutletIndicators: view})),
+
+            // configuration files that are loaded once (by App) and used by various
+            // components
+            // variable map display options (map colour, log scale, minmax)
+            indicatorOptions: {},
+            setIndicatorOptions: (options) => set((state) => ({indicatorOptions: options}))
         }
     }
 );

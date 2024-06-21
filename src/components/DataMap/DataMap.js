@@ -8,12 +8,16 @@ import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 import { WMSTileLayer, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 import {useState} from 'react';
+import useStore from '../../store/useStore.js';
 import _ from 'lodash';
 
 
-function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, dataset, datasetMinMax}) {
+function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, dataset}) {
   const viewport = BCBaseMap.initialViewport;
   const [cmMap, setCMMap] = useState(null);
+  // indicator display options loaded from a config file - used for max and min
+  const indicatorOptions = useStore((state) => state.indicatorOptions);
+
   
   //convert the geoJSON to a Feature so it can be displayed on the map.
   const boundaryFeature = regionBoundary ? {
@@ -110,8 +114,16 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
     logscale: dataset.logscale,
     }: {};
 
-    if(dataset && datasetMinMax) {
-        wmsParams["colorscalerange"] = `${datasetMinMax.min},${datasetMinMax.max}`;
+    //use indicator-specific minimum and maximum for consistency across climatologies
+    const minmaxAvailable = dataset && indicatorOptions?.[dataset.variable]; 
+
+    //check to see if we have expected minmax available for this indicator
+    if(dataset && indicatorOptions?.[dataset.variable]) {
+        wmsParams["colorscalerange"] =
+          `${indicatorOptions[dataset.variable].minimum},${indicatorOptions[dataset.variable].maximum}`;
+    }
+    else if (dataset) {
+        console.log(`WARNING: missing configuration data for indicator ${dataset.variable}`);
     }
 
   return (

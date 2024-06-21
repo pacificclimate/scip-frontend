@@ -14,14 +14,25 @@ import './App.css';
 import pcic_logo from '../../assets/pcic_logo.png';
 
 import {Container, Row, Col} from 'react-bootstrap';
-import DataDisplay from '../DataDisplay/DataDisplay.js'
-import MapDisplay from '../MapDisplay/MapDisplay.js'
-import AreaDisplay from '../AreaDisplay/AreaDisplay.js'
-import React, {useState} from 'react'
+import DataDisplay from '../DataDisplay/DataDisplay.js';
+import MapDisplay from '../MapDisplay/MapDisplay.js';
+import AreaDisplay from '../AreaDisplay/AreaDisplay.js';
+import React, {useState, useEffect} from 'react';
+import useStore from '../../store/useStore.js';
+import {getIndicatorMapOptions} from '../../data-services/public.js';
 
 function App() {
   const [region, setRegion] = useState(null);
   const [selectedOutlet, setSelectedOutlet] = useState(null);
+
+  //load-once-per-app config files
+  const storeIndicatorOptions = useStore((state) => state.setIndicatorOptions);
+
+  //load config files into zustand for components
+    useEffect(() => {
+
+        getIndicatorMapOptions().then((options) => storeIndicatorOptions(options));
+    }, []);
 
   function handleRegionChange(region, fromOutlet) {
       setRegion(region);
