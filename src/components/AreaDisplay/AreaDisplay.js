@@ -260,9 +260,7 @@ function collateRegions(regions, whitelist) {
             </Row>
           </Container>
       Select a region either using the circle marker tool on the map to place a
-      marker and select everything upstream of it, or from the dropdown watershed and
-      conservation unit menus below. You can narrow down regions shown on the menus
-      by river basin or species.
+      marker and select everything upstream of it or by name from the dropdown menus above.
       The downstream path, if known, is marked in blue. The selected watershed is outlined in black.
     </div>
   );

@@ -24,9 +24,9 @@ emissions:
 map-controls:
     title: Map Controls
     body: |
-        These controls change which indicator data is displayed on the map. 
+        These controls change which indicator data is displayed on the map. The selected climatology and and time period are indicated by the text in the middle of this control.
         The outermost set of buttons change the displayed climatology. There are four climatologies available: historical, early century, mid century, and end of century.
-        The innermost set of buttons change the displayed timestamp for daily or monthly indicators. They are disabled for annual indicators.
+        The innermost set of buttons change the time period withint the climatology for daily or monthly indicators. They are disabled for annual indicators.
         
 model:
     title: Select Global Climate Model
