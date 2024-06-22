@@ -18,7 +18,7 @@ jobs:
           git fetch --prune --unshallow
           echo "REACT_APP_VERSION=$(git describe --tags --abbrev=0) ($(git rev-parse --abbrev-ref HEAD):$(git log -1 --format=%h))" >> $GITHUB_ENV
       - name: Publish to Registry
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.pcicdevops_at_dockerhub_username }}
           password: ${{ secrets.pcicdevops_at_dockerhub_password }}
