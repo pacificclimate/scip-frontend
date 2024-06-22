@@ -1,4 +1,15 @@
-// Handles map state and data fetching.
+// Handles map state and layout.
+// This component mostly passes props around. It should shrink as
+// more state is moved into zustand.
+//
+// MapDisplay "owns" mapDataset and which is set by its child
+// MapControls and consumed by its other child DataMap
+//
+// Its child DataMap also sets selectedOutlet, which MapDisplay
+// passes upwards to App for eventual consumption by AreaDisplay.
+//
+// It receives region (set by AreaDisplay) from its parent
+// App and passes it to its child DataMap.
 
 import './MapDisplay.css';
 import DataMap from '../DataMap/DataMap.js'
@@ -34,6 +45,7 @@ function MapDisplay({region, onSelectOutlet, selectedOutlet}) {
   function handleDatasetChange(dataset) {
       setMapDataset(dataset);
   }
+
 
   return (
     <div className="MapDisplay">

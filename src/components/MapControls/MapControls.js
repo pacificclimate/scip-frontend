@@ -11,7 +11,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
 import {getNcwmsMinMax} from '../../data-services/ncwms.js'; 
-import {getIndicatorMapOptions} from '../../data-services/public.js';
 import _ from 'lodash';
 
 import NextTimestampButton from './NextTimestampButton.js';
@@ -36,29 +35,14 @@ function MapControls({onChange, mapDataset}) {
     const model = useStore((state) => state.model);
     const emission = useStore((state) => state.emission);
     
-    //keep track of user selections on this component
+    //metadata needed to populate controls on this component
+    // (data describing the dataset to display is owned by MapDisplay)
     const [timeMetadata, setTimeMetadata] = useState(null);
-    const [datasetMinMax, setDatasetMinMax] = useState({});
     const [datasetSeries, setDatasetSeries] = useState([]);
-    const [indicatorConfig, setIndicatorConfig] = useState(null);
     
-    //load the indicator configuration options; only needs to be done once
-    useEffect(() => {
-        getIndicatorMapOptions().then((options) => setIndicatorConfig(options));
-    }, []);
+    //indicator options from the config file
+    const indicatorOptions = useStore((state) => state.indicatorOptions);
     
-    // this useEffect responds to changes in the selected dataset, via the mapDataset
-    // prop. It fetches the minimum and maximum values of the dataset and stores them.
-    // It is inefficient - the dataset minimum and maximum do not change if
-    // a user merely goes to the next timestamp, but they will be fetched anyway.
-    // this is such a small request it is not an issue.
-    useEffect(() => {
-        if(mapDataset) {
-            getNcwmsMinMax(mapDataset.file, mapDataset.variable).then(data => {
-                setDatasetMinMax(data);
-            });
-        }
-    }, [mapDataset]);
 
     // this useEffect responds to user changes in selected dataset made on the Data Display
     // component or its children, which it receives via the Zustand store.
@@ -122,7 +106,7 @@ function MapControls({onChange, mapDataset}) {
                 }
                 
                 //use indicator-specific colouration if available
-                const config = indicatorConfig?.[indicator]; 
+                const config = indicatorOptions?.[indicator];
                 const palette = config ? config.palette : 'x-Occam';
 
                 // currently data is buggy - datasets that are supposed to 
@@ -388,7 +372,6 @@ function MapControls({onChange, mapDataset}) {
               <Row>
                   <ColourLegend 
                     mapDataset={mapDataset}
-                    minmax={datasetMinMax}
                     units={timeMetadata.units} 
                   />
               </Row>
@@ -403,9 +386,7 @@ function MapControls({onChange, mapDataset}) {
                 <Col>
                   <LogScaleCheckbox
                     mapDataset={mapDataset}
-                    minmax={datasetMinMax}
                     handleChange={handleLogScale}
-                    indicatorConfig={indicatorConfig}
                   />
                 </Col>
                 <Col>

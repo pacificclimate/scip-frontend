@@ -4,8 +4,9 @@
 
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import useStore from '../../store/useStore.js'
 
-function LogScaleCheckbox({mapDataset, minmax, handleChange, indicatorConfig}) {
+function LogScaleCheckbox({mapDataset, handleChange}) {
 
     // logscaled colour is allowed (can be turned on by user) for only those
     // variables that say so in the configuration file. Additionally, the minimum
@@ -19,10 +20,14 @@ function LogScaleCheckbox({mapDataset, minmax, handleChange, indicatorConfig}) {
     
     //TODO: uncomment this function when data issue is fixed.
     //function allowLogscale() {
-    //    return indicatorConfig?.[mapDataset.variable]?,logscale 
-    //        && minmax.min >= .01; 
+    //    return const options = indicatorOptions?.[mapDataset.variable]?.logscale;
     //}
     function allowLogscale() {return false};
+
+    const indicatorOptions = useStore((state) => state.indicatorOptions);
+    const min = indicatorOptions?.[mapDataset.variable] ?
+        indicatorOptions[mapDataset.variable].minimum : 0;
+
 
     return (
         <Form.Check
@@ -32,7 +37,7 @@ function LogScaleCheckbox({mapDataset, minmax, handleChange, indicatorConfig}) {
             onChange={handleChange}
             inline
             label={"Log scale"}
-            title={minmax.min <= 1 ? "Logscale not possible for datasets containing values less than 1" : "Logarithmic Scale"}
+            title={min <= 1 ? "Logscale not possible for datasets containing values less than 1" : "Logarithmic Scale"}
             disabled={!allowLogscale()}
         />
     );
