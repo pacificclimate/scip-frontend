@@ -9,19 +9,20 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Export REACT_APP_VERSION env var
         run: |
           git fetch --prune --unshallow
           echo "REACT_APP_VERSION=$(git describe --tags --abbrev=0) ($(git rev-parse --abbrev-ref HEAD):$(git log -1 --format=%h))" >> $GITHUB_ENV
       - name: Publish to Registry
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v6
         with:
           username: ${{ secrets.pcicdevops_at_dockerhub_username }}
           password: ${{ secrets.pcicdevops_at_dockerhub_password }}
           repository: pcic/scip-frontend
           dockerfile: docker/Dockerfile
           tag_with_ref: true
+          build_args: REACT_APP_APP_VERSION=${{ env.REACT_APP_APP_VERSION }}
