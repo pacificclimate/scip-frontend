@@ -28,7 +28,7 @@ function OutletToggle({region}) {
           type="switch"
           value={viewOutletIndicators && outletKnown()} 
           onChange={handleChange}
-          label="View Indictors at outlet only"
+          label="View Indicators at outlet only"
         />
     );
     
