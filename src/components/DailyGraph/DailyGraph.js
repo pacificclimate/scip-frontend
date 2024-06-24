@@ -44,6 +44,7 @@ function DailyGraph({ annualData, variableInfo, graphMetadata }) {
       <Plot
         data={makeDataSeries()}
         layout={layout}
+        config={{modeBarButtonsToRemove: ["select2d", "lasso2d", "autoScale2d"]}}
       />
       <GraphDownloadButton
         data={makeDataSeries()}
