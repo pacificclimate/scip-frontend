@@ -23,18 +23,20 @@ function InfoPopup({
   const helpText = useStore((state) => state.helpText);
 
   return (
-    <OverlayTrigger
-      key={`${index}-help-popup`}
-      placement={placement}
-      overlay={
-        <Popover id={helpText[index] ? helpText[index].title : "Loading"}>
-          <Popover.Header>{helpText[index] ? helpText[index].title : "Loading"}</Popover.Header>
-          <Popover.Body>{helpText[index] ? helpText[index].body : "Loading"}</Popover.Body>
-        </Popover>
-      }
-    >
-      {label}
-    </OverlayTrigger>
+    <span className="InfoPopup">
+      <OverlayTrigger
+        key={`${index}-help-popup`}
+        placement={placement}
+        overlay={
+          <Popover id={helpText[index] ? helpText[index].title : "Loading"}>
+            <Popover.Header>{helpText[index] ? helpText[index].title : "Loading"}</Popover.Header>
+            <Popover.Body>{helpText[index] ? helpText[index].body : "Loading"}</Popover.Body>
+          </Popover>
+        }
+      >
+        {label}
+      </OverlayTrigger>
+    </span>
   );
 }
 
