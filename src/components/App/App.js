@@ -60,7 +60,7 @@ function App() {
           <h1>Salmon Climate Impacts Portal</h1>
         </div>
         <div className="Help">
-            <a href={`${process.env.PUBLIC_URL}/general_help.pdf`}>General Help</a>
+            <a href={`${process.env.PUBLIC_URL}/general_help.pdf`} target={"_blank"}>General Help</a>
         </div>
       </div>
       <Container fluid>
