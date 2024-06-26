@@ -22,6 +22,8 @@ import LogScaleCheckbox from './LogScaleCheckbox';
 import PaletteSelector from './PaletteSelector';
 import OpacitySlider from './OpacitySlider';
 
+import InfoPopup from '../InfoPopup/InfoPopup.js';
+
 import './MapControls.css';
 
 
@@ -341,6 +343,7 @@ function MapControls({onChange, mapDataset}) {
     return (
         <div classname="MapControls">
           <div classname="TimeContols">
+            <InfoPopup index={"map-controls"}/>
             <ButtonGroup>
               <PreviousClimatologyButton
                 disabled={!previousClimatologyExists()}

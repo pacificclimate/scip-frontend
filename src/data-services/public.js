@@ -20,3 +20,11 @@ export function getIndicatorMapOptions() {
         .then(response => response.data)
         .then(yaml.safeLoad);
 }
+
+// access and load the config file full of texts for the help popups
+export function getHelpTexts() {
+    const url = `${process.env.PUBLIC_URL}/help.yaml`;
+    return axios.get(url)
+        .then(response => response.data)
+        .then(yaml.safeLoad);
+}

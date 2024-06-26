@@ -50,6 +50,7 @@ function LongTermAverageGraph({ longTermData, variableInfo, graphMetadata }) {
       <Plot
         data={makeLongTermTimeSeries()}
         layout={layout}
+        config={{modeBarButtonsToRemove: ["select2d", "lasso2d", "autoScale2d"]}}
       />
       <GraphDownloadButton
         data={makeLongTermTimeSeries()}

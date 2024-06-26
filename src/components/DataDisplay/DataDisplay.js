@@ -12,6 +12,7 @@ import DailyDataDisplay from '../DailyDataDisplay/DailyDataDisplay.js'
 import PopulationDisplay from '../PopulationDisplay/PopulationDisplay.js'
 import ModelSelector from '../selectors/ModelSelector.js'
 import EmissionSelector from '../selectors/EmissionSelector.js'
+import InfoPopup from '../InfoPopup/InfoPopup.js'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import _ from 'lodash';
@@ -91,19 +92,25 @@ function DataDisplay({region}) {
         </Tabs>
         {rasterMetadata ? 
           <div>
-            <span>Climate Model</span>
+            <span>
+                <InfoPopup index={"model"} />
+                Climate Model
+            </span>
             <ModelSelector 
               metadata={rasterMetadata}
               value={model}
               canReplace={false}
               onChange={storeModel}
               onNoChange={dontSelectModel}
-            /> 
+            />
           </div> : 
           "Loading Available Datasets"}
         {rasterMetadata ?
           <div>
-            <span> Emissions Scenario</span> 
+            <span>
+                <InfoPopup index={"emissions"} />
+                Emissions Scenario
+            </span>
             <EmissionSelector 
               metadata={rasterMetadata}
               value={emission}
