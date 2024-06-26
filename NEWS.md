@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.0.2
+
+*25-June-2024*
+
+- Add in-app and downloadable help, remove extraneous graph controls [#72](https://github.com/pacificclimate/scip-frontend/pull/72)
+- Push a docker image to dockerhub for easy deployment [#73](https://github.com/pacificclimate/scip-frontend/pull/73)
+- Used fixed-per-indicator colour ramps on map [#69](https://github.com/pacificclimate/scip-frontend/pull/69)
+
 ## 1.0.1
 
 *01-Narch-2024*
