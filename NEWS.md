@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.0.3
+
+*10-July-2024*
+
+- Update in-app help PDF. [#79](https://github.com/pacificclimate/scip-frontend/pull/79)
+
 ## 1.0.2
 
 *25-June-2024*
