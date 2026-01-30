@@ -4,30 +4,74 @@
 # coverage of.
 
  - (p)Adams and Momich Lakes-Early Summer Timing
- - Akuklotz
+ - Ain/Skundale/Ian
+ - Alastair
  - Aldrich
+ - Alice
  - Anderson/Seton-Early Summer Timing
  - Asitika
  - Atna
+ - Awun
  - Azuklotz
  - Babine
+ - Banks
  - Bear
+ - Bella Coola River-Late
+ - Bella Coola-Bentinck
+ - Bella Coola-Dean Rivers
+ - Bloomfield
+ - Bolton Creek
+ - Bonilla
  - Border
+ - Boundary Bay
  - Boundary Bay_FA_0.3
  - Bowron-Early Summer Timing
  - Bowser
  - Bulkley
- - Chiliwack-Early Summer Timing 
+ - Bute Inlet
+ - Canoe Creek
+ - Canoona
+ - Cecilia
+ - Cheewat
  - Chilko-Early Summer Timing
  - Chilko-Summer Timing
+ - Chiliwack-Early Summer Timing
  - Christina
  - Chutine
+ - Clayoquot
  - Cultus - Late Timing
+ - Curtis Inlet
  - Damdochax/Winimasik
  - Damshilgwit
  - Dean River
  - Dennis
+ - Deserted
+ - Devon
+ - Docee
+ - Douglas Channel-Kitimat Arm
+ - Douglas-Gardner
+ - East Haida Gwaii
+ - East HG
+ - East Howe Sound-Burrard Inlet
+ - East Vancouver Island & Georgia Strait
+ - East Vancouver Island-Cowichan & Koksilah_FA_0.x
+ - East Vancouver Island-Georgia Strait
+ - East Vancouver Island-Georgia Strait_SU_0.3
+ - East Vancouver Island-Goldstream_FA_0.x
+ - East Vancouver Island-Johnstone Strait
+ - East Vancouver Island-Johnstone Strait-Southern Fjords
+ - East Vancouver Island-Nanaimo & Chemainus_FA_0.x
  - East Vancouver Island-Nanaimo_SP_1.x
+ - East Vancouver Island-North_FA_0.x
+ - East Vancouver Island-Qualicum & Puntledge_FA_0.x
+ - Ecstall
+ - Eccstall/Lower
+ - Elsie/Hoy
+ - End Hill Creek
+ - Evelyn
+ - Fairfax
+ - Fairy
+ - Fanny Cove
  - Footsore/Hodder
  - Francois/Fraser-Summer Timing
  - Fraser Canyon
@@ -35,82 +79,208 @@
  - Fraser River<<bin>>
  - Fraser-Harrison Fall Transplant_FA_0.3<<Bin>>
  - Fred Wright
+ - Freeda/Brodie
+ - Fulmore
+ - Georgia Strait
+ - Georgia Strait Mainland
  - Great Central
- - Harrion-Upstream Migrating-Late Timing
+ - Haida Gwaii-East
+ - Haida Gwaii-North
  - Harrison River
  - Harrison-Downstream Migrating-Late Timing
+ - Harrion-Upstream Migrating-Late Timing
+ - Hecate Lowlands
+ - Hecate Strait Mainland
+ - Hecate Strait-Fjords
+ - Hecate Strait-Lowlands
+ - Henderson
+ - Hesquiat
+ - Heydon
+ - HG-East
+ - HG-Graham Island Lowlands
+ - HG-West
+ - Higgins Lagoon
+ - Hobiton
+ - Homathko_SU_x.x
+ - Homathko-Klinaklini Rivers
+ - Homathko-Klinaklini-Smith-Rivers-Bella Coola-Dean
+ - Howe Sound-Burrard Inlet
+ - Ida/Bonanza
  - Interior Fraser
+ - Jalun
+ - Jansen
  - Johanson
+ - Johnston
+ - Juan de Fuca-Pachena
+ - Kainet Creek
+ - Kakweiken
+ - Kalum-Early Timing
+ - Kalum-Late Timing
  - Kamloops-Early Summer Timing
+ - Kanim
+ - Kdelmashan Creek
+ - Keecha
+ - Kennedy
+ - Kent Inlet Lagoon Creek
+ - Kildidt Lagoon Creek
+ - Kimsquit
  - King Salmon
+ - Kisameet
+ - Kitkiata
+ - Kitiope
+ - Kitsumkalum
  - Kitwancool
+ - Klinaklini_SU_1.3
  - Kluatantan
  - Kluayaz
+ - Koeye
+ - Kooryet
  - Kuthai
+ - Kwakwa Creek
  - Kwinageese
+ - Lakelse
  - Lillooet
  - Lillooet/Harrison-Late Timing
+ - Limestone Creek
  - Little Trapper
+ - Long
+ - Loose
+ - Loughborough
  - Lower Fraser
  - Lower Fraser River_FA_0.3
  - Lower Fraser River_SP_1.3
  - Lower Fraser River_SU_1.3
  - Lower Fraser River-Upper Pitt_SU_1.3
  - Lower Nass
+ - Lower Nass-Portland
  - Lower Skeena
  - Lower Stikine
  - Lower Thompson
+ - Lower Thompson_SP_1.2
+ - Mackenzie
+ - Maggie
  - Maria Slough_SU_0.3
+ - Marie
+ - Mary Cove Creek
+ - Mathers
  - Maxan
  - McDonnell
+ - Megin
+ - Mercer
  - Meziadin
  - Middle & Upper Skeena
+ - Middle Fraser River_SP_1.3
+ - Middle Fraser River_SU_1.3
  - Middle Fraser River-Portage_FA_1.3
+ - Middle Fraser-Fraser Canyon_SP_1.3
  - Middle Skeena
  - Middle Skeena-Mainstem Tributaries
  - Middle-Upper Skeena
+ - Mikado
  - Morice
  - Motase
  - Muchalat
+ - Muriel
+ - Mussel-Kynoch
+ - Nadina/Francois-Early Summer Timing
  - Nahatlatch-Early Summer Timing
+ - Nahwitti
+ - Nahwitti Lowland
+ - Namu
+ - Nass-Portland-Observatory
+ - Nass-Skeena Estuary
+ - Nimpkish
+ - Nitinat
+ - North & Central Coast-Early Timing
+ - North & Central Coast-Late Timing
  - North Barriere-Early Summer Timing
+ - North Haida Gwaii
+ - North Haida Gwaii-Stanley Creek
  - North Thompson
  - North Thompson_SP_1.3
  - North Thompson_SU_1.3
+ - Northeast Vancouver Island
+ - Northern Coastal Fjords
+ - Northern Coast Streams
  - Northern Transboundary Fjords
+ - Northwest Vancouver Island
+ - NW Vancouver Island
+ - O'connell
+ - Okanagan_1.x
+ - Osoyoos
  - Oweegee
  - Owikeno
+ - Owikeno-Late Timing
+ - Park River
  - Pitt-Early Summer Timing
+ - Port John
+ - Portland Canal-Observatory
+ - Portland Inlet
+ - Portland Sound-Observatory Inlet-Lower Nass
+ - Portland Sound-Observatory Inlet-Portland Canal
+ - Power
+ - Powles Creek
+ - Prudhomme
+ - Quatse
  - Quesnel-Summer Timing
+ - Rivers Inlet
+ - Rivers-Smith Inlets
+ - Ryan Creek
+ - Sakinaw
+ - Salter
  - Schoen
- - Seton-Later Timing
+ - Scoular/Kilpatrick
+ - Seton-Late Timing
+ - Shawatlan
+ - Shushartie
  - Shuswap Complex-Early Summer Timing
  - Shuswap Complex-Late Timing
  - Shuswap River_SU_0.3
  - Sicintine
+ - Skeena Estuary
  - Skeena River
  - Skeena River-High Interior
+ - Skidegate
  - Slamgeesh
+ - Smith Inlet
  - South Atnarko Lakes
  - South Thompson
  - South Thompson_SU_0.3
+ - South Thompson_SU_1.3
  - South Thompson-Bessette Creek_SU_1.2
+ - South-Miscellaneous<<Bin>>
+ - Southern Coastal Streams
+ - Southern Coastal Streams-Queen Charlotte Strait-Southern Fjords
+ - Southern Fjords
+ - Southern Mainland-Georgia Strait_FA_0.x
+ - Southern Mainland-Southern Fjords_FA_0.x
+ - Southwest Vancouver Island
  - Spawning
+ - Spencer Creek
+ - Spiller-Fitz Hugh-Burke
  - Sproat
  - Stephens
  - Stikine-Early Timing
  - Stikine-Late Timing
  - Sustut
- - Tahitan
  - Tahlo/Morrison
+ - Tahitan
  - Takla/Trembleur-Early Stuart Timing
  - Takla/Trembleur/Stuart-Summer Timing
  - Taku
  - Taku-Early Timing
  - Taku-Late Timing
  - Taku-Mid Timing
+ - Talamoosa Creek
+ - Tankeeah River
  - Taseko-Early Summer Timing
  - Tatsamenie
+ - Teslin
+ - Transboundary Fjords
+ - Tsimtack/Lakes
+ - Tuno Creek West
+ - Tuwartz
+ - Tzoonie
  - Unuk
  - Unuk River
  - Upper Adams River_SU_x.x
@@ -121,7 +291,21 @@
  - Upper Nass River
  - Upper Skeena
  - Vernon
+ - Village Bay
+ - Wale Creek
  - Wannock
  - Wannock[Owikeno]
+ - West Haida Gwaii
+ - West Vancouver Island
+ - West Vancouver Island-Nootka & Kyoquot_FA_0.x
+ - West Vancouver Island-North_FA_0.x
+ - West Vancouver Island-South_FA_0.x
+ - Whiting
+ - Whiting River
  - Widgeon
+ - William/Brink
+ - Woss
+ - Yakoun
+ - Yeo
+ - Yukon River-Teslin Headwaters
  - Zymoetz
