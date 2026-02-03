@@ -10,7 +10,7 @@ import _ from 'lodash';
 // Functions for accessing the multimeta API, which returns a list of
 // available datafiles, and some metadata about each one
 
-export function getMultimeta(ensemble="scip_fraser_bccoast") {
+export function getMultimeta(ensemble="scip_bccoast_ungauged_fraser") {
     // returns the results of the multimeta API call - a list of available
     // netCDF raster data files and what data each contains
     // other API calls can be made to access this data.
@@ -125,7 +125,7 @@ export function annualCycleDataRequest(area, datafile, variable) {
 
 export function longTermAverageDataRequest(area, variable, model,
                                            emission, timescale, 
-                                           time, ensemble_name="scip_fraser_bccoast") {
+                                           time, ensemble_name="scip_bccoast_ungauged_fraser") {
     const wkt = geoJSONtoWKT(area);
     if (area && wkt.length > MAXAREALENGTH) {
         // send a POST reqiest to accomodate long area string
