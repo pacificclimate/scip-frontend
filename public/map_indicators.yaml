@@ -21,6 +21,12 @@ highQ95_year:
     minimum: 0
     maximum: 250
 
+lowQ05_jjason:
+    logscale: false
+    palette: psu-viridis
+    minimum: 0
+    maximum: 150
+
 lowQ05_year:
     logscale: false
     palette: psu-viridis
