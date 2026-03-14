@@ -19,10 +19,10 @@ function LogScaleCheckbox({mapDataset, handleChange}) {
     // disabled for now.
     
     //TODO: uncomment this function when data issue is fixed.
-    //function allowLogscale() {
-    //    return const options = indicatorOptions?.[mapDataset.variable]?.logscale;
-    //}
-    function allowLogscale() {return false};
+    function allowLogscale() {
+        return indicatorOptions?.[mapDataset.variable]?.logscale;
+    }
+    //function allowLogscale() {return false};
 
     const indicatorOptions = useStore((state) => state.indicatorOptions);
     const min = indicatorOptions?.[mapDataset.variable] ?
