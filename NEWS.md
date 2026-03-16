@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.0.4
+
+*15-March-2026*
+
+- Update with expanded spatial coverage. [#82](https://github.com/pacificclimate/scip-frontend/pull/82)
+
 ## 1.0.3
 
 *10-July-2024*
