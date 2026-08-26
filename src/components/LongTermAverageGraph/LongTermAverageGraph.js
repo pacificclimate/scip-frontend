@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import Plotly from 'plotly.js';
+import Plotly from 'plotly.js-dist-min';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { makeGraphData } from '../../helpers/GraphHelpers.js';
 import { unravelObject } from '../../helpers/APIDataHelpers.js';
