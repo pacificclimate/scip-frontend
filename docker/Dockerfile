@@ -20,7 +20,7 @@ ADD . /app
 WORKDIR /app
 RUN chown node /app
 
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
 COPY --chown=node:node  package.json /app/package.json
 
 RUN npm install --global npm@12 && \
@@ -35,8 +35,8 @@ EXPOSE 3000
 # environment variable of the same name, for consumption
 # by the npm build process in ./entrypoint.sh
 ARG REACT_APP_VERSION
-ENV REACT_APP_VERSION $REACT_APP_VERSION
+ENV REACT_APP_VERSION=$REACT_APP_VERSION
 
 USER node
 RUN npm ci
-ENTRYPOINT docker/entrypoint.sh
+ENTRYPOINT ["./docker/entrypoint.sh"]

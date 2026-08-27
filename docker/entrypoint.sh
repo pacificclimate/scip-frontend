@@ -1,3 +1,6 @@
+#!/bin/sh
+set -e
+
 # We build the app as part of the container startup so that the build process
 # can consume the runtime environment variables. (CRA apps can only access
 # environment variables at build time, not at run time.) This makes starting a
@@ -5,4 +8,4 @@
 # so it doesn't matter.
 
 npm run build
-serve -s build -l 3000
+exec serve -s build -l 3000
