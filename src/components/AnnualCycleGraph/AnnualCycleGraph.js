@@ -8,7 +8,7 @@ import _ from 'lodash';
 // this piecewise loading of plotly avoids an issue where loading
 // the whole thing at once crashe npm due to memory issues.
 // see https://prachij012017.medium.com/react-plotly-crashes-on-npm-start-41e2568ce6e3p
-import Plotly from 'plotly.js';
+import Plotly from 'plotly.js-dist-min';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import GraphDownloadButton from '../GraphDownloadButton/GraphDownloadButton.js';
 import { makeGraphTimeseries } from '../../helpers/GraphHelpers.js';

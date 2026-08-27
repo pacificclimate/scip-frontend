@@ -10,7 +10,6 @@ import {Container, Row, Col} from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import {getMetadata, flattenMetadata} from '../../data-services/pcex-backend.js';
-import {getNcwmsMinMax} from '../../data-services/ncwms.js'; 
 import _ from 'lodash';
 
 import NextTimestampButton from './NextTimestampButton.js';

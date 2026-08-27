@@ -32,7 +32,7 @@ function GraphDownloadButton({ data, layout, metadata }) {
   function fileName() {
     // convert everything that isn't a letter, number, plus, minus, or
     // underscore into underscores
-    const nonFilenameCharacters = /[^a-zA-z0-9\+\-_]/g;
+    const nonFilenameCharacters = /[^a-zA-Z0-9+_-]/g;
     const filename = layout.title.replaceAll(nonFilenameCharacters, '_');
     return filename.concat('.csv');
   }

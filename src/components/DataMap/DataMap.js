@@ -114,8 +114,6 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
     logscale: dataset.logscale,
     }: {};
 
-    //use indicator-specific minimum and maximum for consistency across climatologies
-    const minmaxAvailable = dataset && indicatorOptions?.[dataset.variable]; 
 
     //check to see if we have expected minmax available for this indicator
     if(dataset && indicatorOptions?.[dataset.variable]) {
