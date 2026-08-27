@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.1.0
+
+*27-August-2026*
+
+- Add npm policy, node 24, update deps [#86](https://github.com/pacificclimate/scip-frontend/pull/86)
+
 ## 1.0.4
 
 *15-March-2026*
