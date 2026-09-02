@@ -24,15 +24,38 @@ function MapDisplay({region, onSelectOutlet, selectedOutlet}) {
   const [mapDataset, setMapDataset] = useState(null);
 
   // fetch downstream data from the PCEX API
-    useEffect(() => {
-      if(region && validPoint(region.outlet)) {
-        getDownstream(JSON.parse(region.outlet)).then(data => {
-            setDownstream(data);
-        });
+  useEffect(() => {
+    let requestIsCurrent = true;
+
+    // Remove the previous route as soon as the region changes. This also
+    // ensures a failed request cannot leave a route from an earlier region
+    // visible on the map.
+    setDownstream(null);
+
+    if (region && validPoint(region.outlet)) {
+      try {
+        getDownstream(JSON.parse(region.outlet))
+          .then(data => {
+            if (requestIsCurrent) {
+              setDownstream(data);
+            }
+          })
+          .catch(() => {
+            if (requestIsCurrent) {
+              setDownstream(null);
+            }
+          });
+      } catch {
+        // An invalid outlet should also leave no downstream route displayed.
+        setDownstream(null);
       }
-      else { //region with no valid outlet - display no stream data
-          setDownstream(null);
-      }
+    }
+
+    // Do not allow a slower request for the prior region to redraw its route
+    // after a new region has been selected.
+    return () => {
+      requestIsCurrent = false;
+    };
   }, [region]);
   
 
