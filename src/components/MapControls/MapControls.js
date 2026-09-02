@@ -110,16 +110,9 @@ function MapControls({onChange, mapDataset}) {
                 const config = indicatorOptions?.[indicator];
                 const palette = config ? config.palette : 'x-Occam';
 
-                // currently data is buggy - datasets that are supposed to 
-                // always be greater than zero (stream flow magnitudes)
-                // contain zeros. ncWMS throws an error if asked to display
-                // a dataset with zero values and logarithmic scale colour.
-                // Accordingly, since there are no datasets that can actualle
-                // BE displayed with logairthmic colour scaling right noe, 
-                // logarithmic scaling is disabled.
-                // TODO: uncomment following line when data is fixed.                
-                // const logscale = config ? config.logscale : false;
-                const logscale = false;
+                // Start with logarithmic colour scaling for indicators that
+                // are configured as strictly positive (for example, flow).
+                const logscale = config ? config.logscale : false;
                                 
                 const mapDataLayer = {
                     file: metadata.filepath,

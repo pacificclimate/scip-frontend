@@ -1,4 +1,4 @@
-// thia checkbox allows the user to control whether the raster data 
+// this checkbox allows the user to control whether the raster data
 // is colour-coded on the map with a linear or logairthmic scale.
 // if the data includes values of 0 or below, the colour coding must be linear.
 
