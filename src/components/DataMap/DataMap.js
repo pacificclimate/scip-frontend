@@ -11,6 +11,13 @@ import {useState} from 'react';
 import useStore from '../../store/useStore.js';
 import _ from 'lodash';
 
+// Keep the BC Albers map within the geographic
+// extent it is intended to show; 
+const mapBounds = [
+  [45, -145],
+  [65, -105]
+];
+
 
 function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, dataset}) {
   const viewport = BCBaseMap.initialViewport;
@@ -130,6 +137,9 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
           id={"map"}
           zoom={viewport.zoom}
           center={viewport.center}
+          minZoom={4}
+          maxBounds={mapBounds}
+          maxBoundsViscosity={1.0}
         >
           <SetView view={viewport}/>
           <SimpleGeoJSON data={boundaryFeature} fill={false} color="#000000"/>
@@ -153,11 +163,17 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
           <WMSTileLayer
             url={process.env.REACT_APP_NCWMS_URL}
             format={'image/png'}
+            minZoom={4}
             noWrap={true}
             transparent={true}
             version={'1.1.1'}
             opacity={dataset.opacity}
             params={wmsParams}
+
+            bounds={[
+              [48, -139],
+              [61, -114]
+            ]}
           />
           }
         </BCBaseMap>
