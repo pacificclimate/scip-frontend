@@ -110,9 +110,9 @@ function MapControls({onChange, mapDataset}) {
                 const config = indicatorOptions?.[indicator];
                 const palette = config ? config.palette : 'x-Occam';
 
-                // Start with logarithmic colour scaling for indicators that
-                // are configured as strictly positive (for example, flow).
-                const logscale = config ? config.logscale : false;
+                // Logarithmic scaling remains opt-in, even for indicators
+                // where the configuration permits it.
+                const logscale = false;
                                 
                 const mapDataLayer = {
                     file: metadata.filepath,
