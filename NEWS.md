@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.2.0
+
+*04-September-2026*
+
+- i85, i87 map fixes [#88](https://github.com/pacificclimate/scip-frontend/pull/88)
+
 ## 1.1.0
 
 *27-August-2026*
