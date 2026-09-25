@@ -3,7 +3,7 @@
 // representing the watershed boundary (from watershed object), as well as
 // path to the sea and stream connectivity within the watershed (from PCEX API).
 
-import { BCBaseMap, SetView } from 'pcic-react-leaflet-components';
+import { BCBaseMap, EEZLayer, SetView } from 'pcic-react-leaflet-components';
 import SimpleGeoJSON from '../SimpleGeoJSON/SimpleGeoJSON.js';
 import { WMSTileLayer, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
@@ -141,6 +141,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
           maxBounds={mapBounds}
           maxBoundsViscosity={1.0}
         >
+          <EEZLayer url={process.env.REACT_APP_EEZ_GEOJSON_URL} />
           <SetView view={viewport}/>
           <SimpleGeoJSON data={boundaryFeature} fill={false} color="#000000"/>
           <SimpleGeoJSON data={downstreamFeature} fill={false} color="#6699FF"/>
