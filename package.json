@@ -26,7 +26,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "pcic-react-components": "git+https://github.com/pacificclimate/pcic-react-components.git#3.4.0",
-    "pcic-react-leaflet-components": "git+https://github.com/pacificclimate/pcic-react-leaflet-components.git#3.4.0",
+    "pcic-react-leaflet-components": "git+https://github.com/pacificclimate/pcic-react-leaflet-components.git#4.0.0",
     "plotly.js-dist-min": "2.35.3",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
