@@ -135,6 +135,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
     <div className="DataMap">
         <BCBaseMap
           id={"map"}
+          baseMapTilesUrl={process.env.REACT_APP_BC_BASE_MAP_TILES_URL}
           zoom={viewport.zoom}
           center={viewport.center}
           minZoom={4}
