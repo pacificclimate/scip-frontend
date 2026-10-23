@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.3.1
+
+_23-October-2026_
+
+- fix: add baseMapTilesUrl [#91]https://github.com/pacificclimate/scip-frontend/pull/91
+
 ## 1.3.0
 
 _25-September-2026_
