@@ -1,3 +1,4 @@
+import config from '../config.js';
 // This file contains functions that make data requests of the
 // PCEX API, as well as helper functions that format parameters for or
 // responses from the API.
@@ -15,7 +16,7 @@ export function getMultimeta(ensemble="scip_bccoast_ungauged_fraser") {
     // netCDF raster data files and what data each contains
     // other API calls can be made to access this data.
     return axios.get(
-    process.env.REACT_APP_PCEX_API_URL + "/multimeta",
+    config.REACT_APP_PCEX_API_URL + "/multimeta",
         {
             params: { ensemble_name: ensemble}
         }
@@ -57,7 +58,7 @@ export function flattenMultimeta(response) {
 // get more information on a dataset, so that it can be displayed on the map.
 export function getMetadata(dataset) {
     return axios.get(
-    process.env.REACT_APP_PCEX_API_URL + "/metadata",
+    config.REACT_APP_PCEX_API_URL + "/metadata",
     {
       params: {
         model_id: dataset,
@@ -104,14 +105,14 @@ export function annualCycleDataRequest(area, datafile, variable) {
         formData.append('area', wkt);
         formData.append('variable', variable);
         return axios.post(
-            `${process.env.REACT_APP_PCEX_API_URL}/timeseries`,
+            `${config.REACT_APP_PCEX_API_URL}/timeseries`,
             formData
         ).then(response => response.data);
     }
     else {
         //send a GET request
         return axios.get(
-            `${process.env.REACT_APP_PCEX_API_URL}/timeseries`, {
+            `${config.REACT_APP_PCEX_API_URL}/timeseries`, {
                 params: {
                     id_: datafile,
                     area: wkt,
@@ -138,14 +139,14 @@ export function longTermAverageDataRequest(area, variable, model,
         formData.append('time', time);
         formData.append('area', wkt);
         return axios.post(
-            `${process.env.REACT_APP_PCEX_API_URL}/data`,
+            `${config.REACT_APP_PCEX_API_URL}/data`,
             formData
         ).then(response => response.data);
     }
     else {
         //send a GET request
         return axios.get(
-            `${process.env.REACT_APP_PCEX_API_URL}/data`, {
+            `${config.REACT_APP_PCEX_API_URL}/data`, {
                 params: {
                     ensemble_name,
                     model,
@@ -169,7 +170,7 @@ export function getWatershedStreams(point) {
     // accepts only a specified point, gets data from the same
     // set of files
     return axios.get(
-    process.env.REACT_APP_PCEX_API_URL + "/streamflow/watershed_streams",
+    config.REACT_APP_PCEX_API_URL + "/streamflow/watershed_streams",
         {
             params: {
                 station: geoJSONtoWKT(point),
@@ -184,7 +185,7 @@ export function getDownstream(point) {
     // accepts only a specified point, gets data from the same
     // set of files
     return axios.get(
-    process.env.REACT_APP_PCEX_API_URL + "/streamflow/downstream",
+    config.REACT_APP_PCEX_API_URL + "/streamflow/downstream",
         {
             params: {
                 station: geoJSONtoWKT(point),
@@ -203,7 +204,7 @@ export function getUpstream(point) {
     // watershed, because "watershed" has a more specific meaning in this
     // app.
     return axios.get(
-    process.env.REACT_APP_PCEX_API_URL + "/streamflow/watershed",
+    config.REACT_APP_PCEX_API_URL + "/streamflow/watershed",
         {
             params: {
                 station: point,

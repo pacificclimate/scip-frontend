@@ -1,3 +1,4 @@
+import config from '../config.js';
 // This file contains functions used to make metadata requests of the ncWMS server.
 // Actual map image requests are made by leaflet using leaflet's own code; the 
 // functions in this file are used by the user-facing components of MapControls.
@@ -18,7 +19,7 @@ export function getColourBarURL(palette="default", logscale= false) {
     
     const urlParams = new URLSearchParams(params);
     
-    return process.env.REACT_APP_NCWMS_URL + "?" + urlParams;
+    return config.REACT_APP_NCWMS_URL + "?" + urlParams;
 }
 
 //returns a promise for a JSON object containing the minimum and maximum values of the dataset
@@ -37,7 +38,7 @@ export function getNcwmsMinMax(file, variable) {
     };
     
     return axios.get(
-        process.env.REACT_APP_NCWMS_URL,
+        config.REACT_APP_NCWMS_URL,
         {
             params: params
         }
@@ -56,7 +57,7 @@ export function getNcwmsPalettes(file, variable) {
     };
     
     return axios.get(
-        process.env.REACT_APP_NCWMS_URL,
+        config.REACT_APP_NCWMS_URL,
         {
             params: params
         }
