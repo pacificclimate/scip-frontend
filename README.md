@@ -11,31 +11,19 @@ It relies on four backend data services.
 
 ## How to run SCIP for development using pre-existing PCIC docker instances
 
-This is the easiest way to develop this frontend - use all the data services someone else has already set up! This requires you to be on the PCIC VPN so you can access data services running on docker-dev02.
+Clone the repository and install dependencies with `npm install`. Edit
+`public/config.js` to point at the data services you want to use. This is the
+same configuration file Docker Compose mounts; service URLs are not read from
+shell variables or `.env` files.
 
-Clone the repository and install it with `npm install`. Set the following environmental variables to point to development servers:
+Start the frontend with:
 
 ```bash
-# PCEX API - use an intance that is not in production
-export REACT_APP_PCEX_API_URL=https://services.pacificclimate.org/dev/pcex/api
-
-# SCIP API - use an instance that is not in production
-export REACT_APP_SCIP_API_URL=http://docker-dev02.pcic.uvic.ca:30203/api/
-
-# ncWMS server
-export REACT_APP_NCWMS_URL=https://services.pacificclimate.org/dev/ncwms
-
-#tileserver URL
-export REACT_APP_BC_BASE_MAP_TILES_URL=https://services.pacificclimate.org/tiles/bc-albers-lite/{z}/{x}/{y}.png
-
-#map configs - you will not need to modify these
-export REACT_APP_BASE_MAP=BC
-```
-
-At which point all you should need to do is start the frontend with with:
-```
 npm start
 ```
+
+Open http://localhost:3000/. After editing `public/config.js`, refresh the browser
+to load the updated settings. Some PCIC services require access to the PCIC VPN.
 
 ## How to set up the SCIP frontend and API on bare metal on your workstation
 
@@ -55,71 +43,83 @@ $ poetry run flask run -p 8000
 
 ### Setting up the frontend
 
-Clone the repository and then install it with `npm install`. Before you run it you need to set environment variables to tell it where all the data sources are:
+Install dependencies with `npm install`, then edit `public/config.js`. Set
+`REACT_APP_SCIP_API_URL` to `http://127.0.0.1:8000/api` for your local SCIP API
+and configure the other service URLs in that same file.
 
-```bash
-# PCEX API - use an intance that is not in production
-export REACT_APP_PCEX_API_URL=https://services.pacificclimate.org/dev/pcex/api
-
-# local SCIP API
-export REACT_APP_PCEX_API_URL=https://127.0.0.1:8000/api
-
-#tileserver URL
-export REACT_APP_BC_BASE_MAP_TILES_URL=https://services.pacificclimate.org/tiles/bc-albers-lite/{z}/{x}/{y}.png
-
-#data configs - shouldn't need to modify
-export REACT_APP_BASE_MAP=BC
-```
-
-You should then be able to run the portal with 
-
-```
-npm start
-```
-
-That command automatically opens a browser window pointing at localhost:3000/frontend.
+Start the frontend with `npm start` and open http://localhost:3000/.
 
 ## How to run SCIP in production-style dockers on your workstation
 
 ### Setting up the frontend
 
-Running a nodejs frontend in development vs. production varies
-slightly. In development, one wants full access to the source code,
-whereas in production, one wants the js files to be bundled and
-compressed to minimize network transfer and client RAM usage.
+The Dockerfile uses two stages. The `build` stage installs dependencies and
+compiles the React app. The `runtime` stage uses unprivileged Nginx on Alpine
+to serve the compiled files on port 3000 with SPA routing. Node and npm are
+only needed in the build stage. Containers start without compiling the app.
 
-Do use Node's static server, we do something like this (found in the
-entrypoint.sh script)
-
-```
-# Install Node's static server
-npm install -g serve
-# Build the bundle
-npm run build
-# Serve the files from the build directory on port 3000
-# routing unfound files to index.html (-s)
-serve -l 3000 -s build
-```
-
-You should be able to build the docker container as follows from the
-repository root:
+Build the image from the repository root:
 
 ```bash
-docker build -t scip -f docker/Dockerfile
+docker build -t scip -f docker/Dockerfile .
 ```
 
-### Executing all components
+Set deployment URLs in `public/config.js`. Compose bind-mounts that file
+read-only at `/usr/share/nginx/html/config.js`; Nginx serves it at `/config.js`
+with `Cache-Control: no-store`. The browser loads it before the React bundle.
+Configuration is supplied when the container is created, so the same image can
+run in different environments without recompiling or generating files at startup.
+
+**Public settings only:** Anyone who can access the app can download the entire
+`config.js` file, including settings the app does not use. Never put passwords,
+private API keys, tokens, or URLs containing credentials in it. A read-only mount
+prevents writes; it does not hide the contents. Keep secrets in backend services.
+
+For standalone containers, run from the repository root:
+
+```bash
+docker run --rm -p 3000:3000 \
+  --mount type=bind,src="$(pwd)/public/config.js",dst=/usr/share/nginx/html/config.js,readonly \
+  scip
+```
+
+Supported settings in `window.__SCIP_CONFIG__` are `REACT_APP_PCEX_API_URL`,
+`REACT_APP_SCIP_API_URL`, `REACT_APP_NCWMS_URL`,
+`REACT_APP_BC_BASE_MAP_TILES_URL`, `REACT_APP_EEZ_GEOJSON_URL`,
+`REACT_APP_BASE_MAP`, `PUBLIC_URL`, and `REACT_APP_VERSION`.
+`PUBLIC_URL` controls public data/help links; bundle and HTML asset paths stay
+relative, as specified by `homepage` in `package.json`.
+
+To select a different config file at Compose startup, set `SCIP_CONFIG_FILE`:
+
+```bash
+SCIP_CONFIG_FILE=/absolute/path/to/config.js \
+  docker compose -f docker/docker-compose.yaml up -d
+```
+
+The file must already exist. After editing or replacing it, recreate the
+frontend container and refresh the browser:
+
+```bash
+docker compose -f docker/docker-compose.yaml up -d --force-recreate frontend
+```
+
+Local `npm start` and Docker Compose both use `public/config.js`. The app reads
+service URLs from `window.__SCIP_CONFIG__`, without environment-variable
+fallbacks. For Docker deployments, `SCIP_CONFIG_FILE` can select another file.
+Version metadata can still be baked in with `--build-arg REACT_APP_VERSION=...`;
+`REACT_APP_VERSION` in the config file takes precedence over that metadata.
+
+### Starting the frontend
 
 After building the `scip` docker image, you should be able to run the
-`docker-compose.yaml` setup included in the repository, which creates 3 containers: geoserver,
-scip, and nginx to be the main frontend.
+`docker-compose.yaml` setup included in the repository, which starts the SCIP
+frontend. Its Nginx server serves the app directly on port 3000.
 
 ```bash
-cd docker
-docker-compose up -d
+docker compose -f docker/docker-compose.yaml up -d
 ```
 
-After a few minutes of create-react-app building, one should be able
-to access the frontend at:
+Once the container starts, access the frontend at:
 
-http://localhost/frontend
+http://localhost:3000/

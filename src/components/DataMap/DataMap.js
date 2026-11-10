@@ -1,3 +1,4 @@
+import config from '../../config.js';
 // Displays a leaflet map with an ncWMS data layer. 
 // Upon receiving a watershed, displays a data overlay (ncWMS), and geoJSON objects
 // representing the watershed boundary (from watershed object), as well as
@@ -135,14 +136,14 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
     <div className="DataMap">
         <BCBaseMap
           id={"map"}
-          baseMapTilesUrl={process.env.REACT_APP_BC_BASE_MAP_TILES_URL}
+          baseMapTilesUrl={config.REACT_APP_BC_BASE_MAP_TILES_URL}
           zoom={viewport.zoom}
           center={viewport.center}
           minZoom={4}
           maxBounds={mapBounds}
           maxBoundsViscosity={1.0}
         >
-          <EEZLayer url={process.env.REACT_APP_EEZ_GEOJSON_URL} />
+          <EEZLayer url={config.REACT_APP_EEZ_GEOJSON_URL} />
           <SetView view={viewport}/>
           <SimpleGeoJSON data={boundaryFeature} fill={false} color="#000000"/>
           <SimpleGeoJSON data={downstreamFeature} fill={false} color="#6699FF"/>
@@ -163,7 +164,7 @@ function DataMap({regionBoundary, downstream, onSelectOutlet, selectedOutlet, da
           </FeatureGroup>
           {dataset &&
           <WMSTileLayer
-            url={process.env.REACT_APP_NCWMS_URL}
+            url={config.REACT_APP_NCWMS_URL}
             format={'image/png'}
             minZoom={4}
             noWrap={true}

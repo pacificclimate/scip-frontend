@@ -1,3 +1,4 @@
+import config from '../config.js';
 // This file contains functions that make data requests of the 
 // SCIP API, which handles named locations and salmon populations.
 
@@ -20,7 +21,7 @@ export function getSalmonPopulation(region) {
         formData.append('overlap', wkt);
 
         return axios.post(
-            `${process.env.REACT_APP_SCIP_API_URL}/population`,
+            `${config.REACT_APP_SCIP_API_URL}/population`,
             formData
         ).then(response => response.data);
     }
@@ -28,7 +29,7 @@ export function getSalmonPopulation(region) {
         //send a GET request
         let params = {overlap: wkt};
         return axios.get(
-            `${process.env.REACT_APP_SCIP_API_URL}/population`, { params: params}
+            `${config.REACT_APP_SCIP_API_URL}/population`, { params: params}
         ).then(response=> response.data);
     }
 }
@@ -52,7 +53,7 @@ function getRegions(kind, overlap=null, common_name = null, subgroup = null) {
         }
 
         return axios.post(
-            `${process.env.REACT_APP_SCIP_API_URL}/region`,
+            `${config.REACT_APP_SCIP_API_URL}/region`,
             formData
         ).then(response => response.data);
     }
@@ -69,7 +70,7 @@ function getRegions(kind, overlap=null, common_name = null, subgroup = null) {
             }
         }
         return axios.get(
-            `${process.env.REACT_APP_SCIP_API_URL}/region`, { params: params}
+            `${config.REACT_APP_SCIP_API_URL}/region`, { params: params}
         ).then(response=> response.data);
     }
 }
@@ -88,7 +89,7 @@ export function getConservationUnits(overlap = null, common_name = null, subgrou
 
 export function getTaxons() {
     return axios.get(
-        process.env.REACT_APP_SCIP_API_URL + "/taxon"
+        config.REACT_APP_SCIP_API_URL + "/taxon"
     )
     .then(response => response.data);
 }

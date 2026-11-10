@@ -1,3 +1,4 @@
+import config from '../../config.js';
 // App.js - highest level component of the SCIP system. 
 // Has three children:  
 // AreaDisplay helps the user specify the area of interest (watershed, conservation unit, etc)
@@ -60,7 +61,7 @@ function App() {
           <h1>Salmon Climate Impacts Portal</h1>
         </div>
         <div className="Help">
-            <a href={`${process.env.PUBLIC_URL}/general_help.pdf`} target={"_blank"} rel="noreferrer">General Help</a>
+            <a href={`${config.PUBLIC_URL}/general_help.pdf`} target={"_blank"} rel="noreferrer">General Help</a>
         </div>
       </div>
       <Container fluid>
